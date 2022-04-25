@@ -1,0 +1,44 @@
+name: parhl
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=4.5=1_gnu
+  - attrs=20.2.0=py_0
+  - bzip2=1.0.8=h7b6447c_0
+  - ca-certificates=2021.10.8=ha878542_0
+  - certifi=2021.10.8=py310hff52083_2
+  - importlib-metadata=2.0.0=py_1
+  - importlib_metadata=2.0.0=1
+  - iniconfig=1.1.1=py_0
+  - ld_impl_linux-64=2.35.1=h7274673_9
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.3.0=h5101ec6_17
+  - libgomp=9.3.0=h5101ec6_17
+  - libstdcxx-ng=9.3.0=hd4cf53a_17
+  - libuuid=1.0.3=h7f8727e_2
+  - ncurses=6.3=h7f8727e_2
+  - openssl=1.1.1n=h7f8727e_0
+  - packaging=20.4=py_0
+  - pip=21.2.4=py310h06a4308_0
+  - pluggy=0.12.0=py_0
+  - py=1.9.0=py_0
+  - pyparsing=2.4.7=py_0
+  - pytest=7.1.1=py310h06a4308_0
+  - python=3.10.4=h12debd9_0
+  - python_abi=3.10=2_cp310
+  - readline=8.1.2=h7f8727e_1
+  - setuptools=61.2.0=py310h06a4308_0
+  - six=1.15.0=py_0
+  - sly=0.4=pyhd8ed1ab_0
+  - sqlite=3.38.2=hc218d9a_0
+  - tk=8.6.11=h1ccaba5_0
+  - tomli=1.2.2=pyhd3eb1b0_0
+  - tzdata=2022a=hda174b7_0
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - xz=5.2.5=h7b6447c_0
+  - zipp=3.3.1=py_0
+  - zlib=1.2.12=h7f8727e_2
+prefix: /home/roberto/anaconda3/envs/parhl
