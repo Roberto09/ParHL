@@ -115,6 +115,38 @@ class ParhlParser(Parser):
     def var_id(self, p):
         pass
 
-    @('LPAR CTE_I RPAR', 'LPAR CTE_I RPAR var_id_1')
+    @_('LPAR CTE_I RPAR', 'LPAR CTE_I RPAR var_id_1')
     def var_id_1(self, p):
+        pass
+
+    @_('WHILE LPAR expr RPAR bloque')
+    def while_loop(self, p):
+        pass
+
+    @_('FOR LPAR var SEMICOLON expr SEMICOLON ASSIG RPAR bloque')
+    def for_loop(self, p):
+        pass 
+
+    @_('IF LPAR expr RPAR cond_1')
+    def cond(self, p):
+        pass
+
+    @_('bloque', 'bloque ELSE bloque', 'bloque cond_2')
+    def cond_1(self, p):
+        pass
+
+    @_('ELIF BLOQUE', 'ELIF BLOQUE cond_2')
+    def cond_2(self, p):
+        pass
+
+    @_('LET ID LPAR func_params func_type bloque')
+    def func(self, p):
+        pass
+
+    @_('RPAR', 'func_params_1')
+    def func_params(self, p):
+        pass
+
+    @_('ID COLON type RPAR', 'ID COLON TYPE COMMA func_params_1')
+    def func_params_1(self, p):
         pass
