@@ -14,7 +14,9 @@ class ParhlParser(Parser):
     # @_('')
     # def empty(self, p):
     #     pass
-
+    @_('estatuto globales', 'estatuto')
+    def globales(self, p)
+    
     @_('SEMICOLON','NEWLINE')
     def eos(self, p):
         pass
@@ -39,8 +41,12 @@ class ParhlParser(Parser):
     def tens_id_1(self, p):
         pass
 
-    @_('LKEY estatuto RKEY')
+    @_('LKEY bloque_1 RKEY')
     def bloque(self, p):
+        pass
+
+    @_('bloque_1 bloque_1', 'estatuto', 'retorno')
+    def bloque_1(self, p):
         pass
 
     @_('INT', 'FLOAT', 'STRING', 'BOOL', 'GPU_INT', 'GPU_FLOAT','GPU_BOOL')
@@ -149,4 +155,16 @@ class ParhlParser(Parser):
 
     @_('ID COLON type RPAR', 'ID COLON TYPE COMMA func_params_1')
     def func_params_1(self, p):
+        pass
+
+    @_('type', 'VOID')
+    def func_type(self, p):
+        pass
+
+    @_('RETURN expr eos')
+    def retorno(self, p):
+        pass
+    
+    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos', 'cond eos', 'func_call eos', 'func eos', 'eos')
+    def estatuto(self, p):
         pass
