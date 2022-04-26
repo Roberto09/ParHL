@@ -94,7 +94,8 @@ class ParhlLexer(Lexer):
     # Misc
     COLON = r"\:"
     COMMA = r"\,"
-    ENDL = r"[\n\;]+"
+    SEMICOLON = r"\;"
+    NEWLINE = r"\n"
     ID = r"[a-zA-Z_][a-zA-Z0-9_]*"
     
     def FLOAT_V(self, t):
