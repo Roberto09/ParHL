@@ -26,7 +26,7 @@ class ParhlLexer(Lexer):
         # Operators
         PLUS, MINUS, DIV, MULT, EXP, MOD, EQ, ASSIG, NOT_EQ, GEQT, LEQT, GT, LT, L_PAREN, R_PAREN,  
         # Misc
-        COLON, COMMA, ENDL, ID,
+        COLON, SEMICOLON, COMMA, NEWLINE, ID,        
     }
 
     # String containing ignored characters
