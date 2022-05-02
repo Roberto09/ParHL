@@ -15,13 +15,14 @@ class ParhlParser(Parser):
     # def empty(self, p):
     #     pass
     @_('estatuto globales', 'estatuto')
-    def globales(self, p)
+    def globales(self, p):
+        pass
     
     @_('SEMICOLON','NEWLINE')
     def eos(self, p):
         pass
     
-    @_('INT_v','FLOAT_V', 'BOOL_V', 'STRING_v')
+    @_('INT_V','FLOAT_V', 'BOOL_V', 'STRING_V')
     def cte(self, p):
         pass
 
@@ -50,14 +51,14 @@ class ParhlParser(Parser):
         pass
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
-    def type(self, p):
+    def cte_type(self, p):
         pass
     
     @_('t_expr', 't_expr OR expr')
     def expr(self, p):
         pass
 
-    @_('g_expr', 'g_exp AND t_expr')
+    @_('g_expr', 'g_expr AND t_expr')
     def t_expr(self, p):
         pass
 
@@ -89,6 +90,22 @@ class ParhlParser(Parser):
     def factor_1(self, p):
         pass
 
+    @_('READ_LINE L_PAREN R_PAREN')
+    def read_line(self, p):
+        pass
+    
+    @_('PRINT L_PAREN func_call_1')
+    def print(self, p):
+        pass
+
+    @_('READ_FILE L_PAREN R_PAREN')
+    def read_file(self, p):
+        pass
+
+    @_('WRITE_FILE L_PAREN func_call_1')
+    def write_file(self, p):
+        pass
+
     @_('ID L_PAREN func_call_1')
     def func_call(self, p):
         pass
@@ -109,11 +126,11 @@ class ParhlParser(Parser):
     def var_1(self, p):
         pass
 
-    @_('LET var_id COLON type')
+    @_('LET var_id COLON cte_type')
     def var_2(self, p):
         pass
 
-    @_('ASSIG expr', 'ASSIG expr COMMA var_1', 'COMMMA var_1')
+    @_('ASSIG expr', 'ASSIG expr COMMA var_1', 'COMMA var_1')
     def var_3(self, p):
         pass
 
@@ -121,7 +138,7 @@ class ParhlParser(Parser):
     def var_id(self, p):
         pass
 
-    @_('L_PAREN CTE_I R_PAREN', 'L_PAREN CTE_I R_PAREN var_id_1')
+    @_('L_PAREN INT_V R_PAREN', 'L_PAREN INT_V R_PAREN var_id_1')
     def var_id_1(self, p):
         pass
 
@@ -141,7 +158,7 @@ class ParhlParser(Parser):
     def cond_1(self, p):
         pass
 
-    @_('ELSE_IF BLOQUE', 'ELSE_IF BLOQUE cond_2')
+    @_('ELSE_IF bloque', 'ELSE_IF bloque cond_2')
     def cond_2(self, p):
         pass
 
@@ -153,18 +170,19 @@ class ParhlParser(Parser):
     def func_params(self, p):
         pass
 
-    @_('ID COLON type R_PAREN', 'ID COLON TYPE COMMA func_params_1')
+    @_('ID COLON cte_type R_PAREN', 'ID COLON cte_type COMMA func_params_1')
     def func_params_1(self, p):
         pass
 
-    @_('type', 'VOID')
+    @_('cte_type', 'VOID')
     def func_type(self, p):
         pass
 
     @_('RETURN expr eos')
     def retorno(self, p):
         pass
-    
-    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos', 'cond eos', 'func_call eos', 'func eos', 'eos')
+
+    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos',
+        'cond eos', 'func_call eos', 'func eos', 'read_line eos', 'print eos', 'read_file eos', 'write_file eos','eos')
     def estatuto(self, p):
         pass

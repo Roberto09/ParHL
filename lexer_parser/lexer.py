@@ -4,7 +4,7 @@ class ParhlLexer(Lexer):
     # Set of token names. This is always required
     tokens = {
         # Variables / Funcs
-        LET, RETURN,
+        LET, RETURN, VOID,
         # Loops
         FOR, WHILE,
         # Conditionals
@@ -17,8 +17,6 @@ class ParhlLexer(Lexer):
         FLOAT_V, INT_V, STRING_V, BOOL_V,
         # IO
         PRINT, READ_LINE, READ_FILE, WRITE_FILE,
-        # Strings
-        QUOTE,
         # Arrays
         L_BRACKET, R_BRACKET,
         # Scopes
@@ -38,6 +36,7 @@ class ParhlLexer(Lexer):
     # Variables
     LET = r"let"
     RETURN = r"return"
+    VOID = r"void"
     # Loops
     FOR = r"for"
     WHILE = r"while"
@@ -67,8 +66,6 @@ class ParhlLexer(Lexer):
     READ_LINE = r"read_line"
     READ_FILE = r"read_file"
     WRITE_FILE = r"write_file"
-    # Strings
-    QUOTE = r"\""
     # Arrays
     L_BRACKET = r"\["
     R_BRACKET = r"\]"
