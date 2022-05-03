@@ -113,6 +113,7 @@ class ParhlLexer(Lexer):
     
     def NEWLINE(self, t): 
         self.lineno = self.lineno + 1
+        return t
 
     def error(self, t):
         print('Line %d: Bad character %r' % (self.lineno, t.value[0]))

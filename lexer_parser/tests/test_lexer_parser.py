@@ -1,7 +1,6 @@
 import pytest
 from ..lexer import ParhlLexer
 
-
 def write_tokens_to_file_testing(toks_file, out_file):
     with open(toks_file, 'r') as my_code:
         data = my_code.read()

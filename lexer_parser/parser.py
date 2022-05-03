@@ -10,10 +10,6 @@ class ParhlParser(Parser):
     def globales(self, p):
         pass
 
-    @_('SEMICOLON','NEWLINE')
-    def eos(self, p):
-        pass
-    
     @_('INT_V','FLOAT_V', 'BOOL_V', 'STRING_V')
     def cte(self, p):
         pass
@@ -178,6 +174,12 @@ class ParhlParser(Parser):
         'write_file eos', 'func_call eos', 'func eos','eos')
     def estatuto(self, p):
         pass
+
+
+    @_('SEMICOLON','NEWLINE')
+    def eos(self, p):
+        pass
+    
 
     @_('')
     def empty(self, p):
