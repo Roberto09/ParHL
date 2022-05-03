@@ -2,22 +2,14 @@ from sly import Parser
 from lexer import ParhlLexer
 
 class ParhlParser(Parser):
+    debugfile = 'parser.out'
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
-    # Grammar rules and actions
-    # """PROGRAM"""
-    # @_('PROGRAM ID ";" program2 bloque1')
-    # def program1(self, p):
-    #     return "program parsed"
-
-    # @_('')
-    # def empty(self, p):
-    #     pass
-    @_('estatuto globales', 'estatuto')
+    @_('estatuto globales', 'empty')
     def globales(self, p):
         pass
-    
+
     @_('SEMICOLON','NEWLINE')
     def eos(self, p):
         pass
@@ -46,7 +38,7 @@ class ParhlParser(Parser):
     def bloque(self, p):
         pass
 
-    @_('bloque_1 bloque_1', 'estatuto', 'retorno')
+    @_('estatuto bloque_1', 'retorno bloque_1', 'empty')
     def bloque_1(self, p):
         pass
 
@@ -95,9 +87,8 @@ class ParhlParser(Parser):
         pass
     
     @_('PRINT L_PAREN func_call_1')
-    def print(self, p):
+    def print_rule(self, p):
         pass
-
     @_('READ_FILE L_PAREN R_PAREN')
     def read_file(self, p):
         pass
@@ -113,7 +104,7 @@ class ParhlParser(Parser):
     @_('R_PAREN', 'expr R_PAREN', 'expr COMMA func_call_1')
     def func_call_1(self, p):
         pass
-    
+
     @_('ID ASSIG expr')
     def asignacion(self, p):
         pass
@@ -121,12 +112,12 @@ class ParhlParser(Parser):
     @_('LET var_1')
     def var(self, p):
         pass
-    
+
     @_('var_2', 'var_2 var_3')
     def var_1(self, p):
         pass
 
-    @_('LET var_id COLON cte_type')
+    @_('var_id COLON cte_type')
     def var_2(self, p):
         pass
 
@@ -182,7 +173,12 @@ class ParhlParser(Parser):
     def retorno(self, p):
         pass
 
-    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos',
-        'cond eos', 'func_call eos', 'func eos', 'read_line eos', 'print eos', 'read_file eos', 'write_file eos','eos')
+    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos', 
+        'cond eos', 'read_line eos', 'print_rule eos', 'read_file eos', 
+        'write_file eos', 'func_call eos', 'func eos','eos')
     def estatuto(self, p):
+        pass
+
+    @_('')
+    def empty(self, p):
         pass

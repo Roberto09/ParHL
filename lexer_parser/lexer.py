@@ -110,6 +110,9 @@ class ParhlLexer(Lexer):
     def BOOL_V(self, t):
         t.value = t.value == "True"
         return t
+    
+    def NEWLINE(self, t): 
+        self.lineno = self.lineno + 1
 
     def error(self, t):
         print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
