@@ -1,5 +1,4 @@
 import pytest
-from ..lexer import ParhlLexer
 from ..structs.var_dir import FuncDir
 from uuid import uuid4 as gen_id
 
