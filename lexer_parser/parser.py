@@ -6,7 +6,7 @@ class ParhlParser(Parser):
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
-    @_('estatuto globales', 'estatutos', 'empty')
+    @_('estatuto globales', 'estatutos', 'estatutos_de_bloque', 'empty')
     def globales(self, p):
         pass
 
@@ -85,6 +85,7 @@ class ParhlParser(Parser):
     @_('PRINT L_PAREN func_call_1')
     def print_rule(self, p):
         pass
+
     @_('READ_FILE L_PAREN R_PAREN')
     def read_file(self, p):
         pass
@@ -133,31 +134,39 @@ class ParhlParser(Parser):
     def while_loop(self, p):
         pass
 
-    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON ASSIG R_PAREN bloque')
+    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON asignacion R_PAREN bloque')
     def for_loop(self, p):
         pass
-
-    @_('IF L_PAREN expr R_PAREN cond_1')
+    
+    @_('IF L_PAREN expr R_PAREN bloque cond_prima')
     def cond(self, p):
         pass
 
-    @_('bloque', 'bloque ignored_newlines ELSE bloque', 'bloque ignored_newlines cond_2')
-    def cond_1(self, p):
+    @_('empty', 'cond_else', 'cond_else_if')
+    def cond_prima(self, p):
+        pass
+    
+    @_('ELSE bloque')
+    def cond_else(self, p):
         pass
 
-    @_('ELSE_IF bloque', 'ELSE_IF bloque ignored_newlines cond_2')
-    def cond_2(self, p):
+    @_('else_if', 'else_if cond_else_if')
+    def cond_else_if(self, p):
+        pass
+    
+    @_('ELSE_IF L_PAREN expr R_PAREN bloque')
+    def else_if(self, p):
         pass
 
-    @_('LET ID L_PAREN func_params func_type bloque')
+    @_('LET ID L_PAREN func_params R_PAREN COLON func_type bloque')
     def func(self, p):
         pass
 
-    @_('R_PAREN', 'func_params_1')
+    @_('empty', 'func_params_1')
     def func_params(self, p):
         pass
 
-    @_('ID COLON cte_type R_PAREN', 'ID COLON cte_type COMMA func_params_1')
+    @_('ID COLON cte_type ', 'ID COLON cte_type COMMA func_params_1')
     def func_params_1(self, p):
         pass
 
@@ -169,15 +178,18 @@ class ParhlParser(Parser):
     def retorno(self, p):
         pass
 
-    @_('var', 'asignacion', 'while_loop', 'for_loop', 
-        'cond', 'read_line', 'print_rule', 'read_file', 
-        'write_file', 'func_call', 'func')
-    def estatutos(self, p):
-        pass
-
-    @_('estatutos eos', 'eos')
+    @_('estatutos eos', 'estatutos_de_bloque NEWLINE', 'NEWLINE')
     def estatuto(self, p):
         pass
+
+    @_('var', 'asignacion', 'read_line', 'print_rule', 'read_file', 
+        'write_file', 'func_call')
+    def estatutos(self, p):
+        pass
+    
+    @_('while_loop', 'for_loop', 'cond', 'func')
+    def estatutos_de_bloque(self, p):
+        pass;
 
     @_('SEMICOLON','NEWLINE')
     def eos(self, p):
