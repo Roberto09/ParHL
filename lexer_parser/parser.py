@@ -6,7 +6,7 @@ class ParhlParser(Parser):
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
-    @_('estatuto globales', 'empty')
+    @_('estatuto globales', 'estatutos', 'empty')
     def globales(self, p):
         pass
 
@@ -30,7 +30,7 @@ class ParhlParser(Parser):
     def tens_id_1(self, p):
         pass
 
-    @_('L_BRACE bloque_1 R_BRACE')
+    @_('ignored_newlines L_BRACE bloque_1 R_BRACE')
     def bloque(self, p):
         pass
 
@@ -125,7 +125,7 @@ class ParhlParser(Parser):
     def var_id(self, p):
         pass
 
-    @_('L_PAREN INT_V R_PAREN', 'L_PAREN INT_V R_PAREN var_id_1')
+    @_('L_BRACKET INT_V R_BRACKET', 'L_BRACKET INT_V R_BRACKET var_id_1')
     def var_id_1(self, p):
         pass
 
@@ -135,17 +135,17 @@ class ParhlParser(Parser):
 
     @_('FOR L_PAREN var SEMICOLON expr SEMICOLON ASSIG R_PAREN bloque')
     def for_loop(self, p):
-        pass 
+        pass
 
     @_('IF L_PAREN expr R_PAREN cond_1')
     def cond(self, p):
         pass
 
-    @_('bloque', 'bloque ELSE bloque', 'bloque cond_2')
+    @_('bloque', 'bloque ignored_newlines ELSE bloque', 'bloque ignored_newlines cond_2')
     def cond_1(self, p):
         pass
 
-    @_('ELSE_IF bloque', 'ELSE_IF bloque cond_2')
+    @_('ELSE_IF bloque', 'ELSE_IF bloque ignored_newlines cond_2')
     def cond_2(self, p):
         pass
 
@@ -169,18 +169,24 @@ class ParhlParser(Parser):
     def retorno(self, p):
         pass
 
-    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos', 
-        'cond eos', 'read_line eos', 'print_rule eos', 'read_file eos', 
-        'write_file eos', 'func_call eos', 'func eos','eos')
-    def estatuto(self, p):
+    @_('var', 'asignacion', 'while_loop', 'for_loop', 
+        'cond', 'read_line', 'print_rule', 'read_file', 
+        'write_file', 'func_call', 'func')
+    def estatutos(self, p):
         pass
 
+    @_('estatutos eos', 'eos')
+    def estatuto(self, p):
+        pass
 
     @_('SEMICOLON','NEWLINE')
     def eos(self, p):
         pass
     
-
     @_('')
     def empty(self, p):
+        pass
+    
+    @_('NEWLINE ignored_newlines', 'empty')
+    def ignored_newlines(self, p):
         pass
