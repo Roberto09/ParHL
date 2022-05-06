@@ -187,7 +187,7 @@ class ParhlParser(Parser):
     def estatutos(self, p):
         pass
     
-    @_('while_loop', 'for_loop', 'cond', 'func')
+    @_('while_loop', 'for_loop', 'cond', 'cond_else', 'cond_else_if', 'func')
     def estatutos_de_bloque(self, p):
         pass;
 
