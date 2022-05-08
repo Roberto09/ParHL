@@ -110,15 +110,15 @@ class ParhlParser(Parser):
     def var(self, p):
         pass
 
-    @_('var_2', 'var_2 var_3')
+    @_('var_2', 'var_2 COMMA var_1')
     def var_1(self, p):
         pass
 
-    @_('var_id COLON const_type')
+    @_('var_3', 'var_3 ASSIG expr')
     def var_2(self, p):
         pass
 
-    @_('ASSIG expr', 'ASSIG expr COMMA var_1', 'COMMA var_1')
+    @_('var_id COLON const_type')
     def var_3(self, p):
         pass
 
