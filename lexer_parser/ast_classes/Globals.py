@@ -1,6 +1,6 @@
 from lexer_parser.ast_classes.Node import Node
 
-class Global(Node):
+class Globals(Node):
   def __init__(self, estatuto, global_1):
     super().__init__('Global')
     self.estatuto = estatuto
@@ -8,5 +8,5 @@ class Global(Node):
   
   def gen():
     self.estatuto.gen()
-    if(self.global_1):
+    if hasattr(self, 'global_1'):
       self.global_1.gen()
