@@ -13,4 +13,4 @@ class BinExpr(Node):
       right.gen()
       # newType = SemanticCube.get_type(op, left, right)
       # malloc temp : newType
-      # quadruple('OR', left, right, temp)
+      # quadruple(op, left, right, temp)
