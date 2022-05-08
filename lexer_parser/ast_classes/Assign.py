@@ -7,10 +7,12 @@ class Assign(Node):
     self.expr = expr
   
   def gen():
+    expr.gen()
     # var = FuncDir.getVar(id)
     # exp = FuncDor.getVar(exp)
-    # newType = SemanticCube.get_type('ASSIG', var.type, exp.type)
-    # malloc temp : newType
+    # Check expr can be assigned to var
+    # SemanticCube.get_type('ASSIG', var.type, exp.type)
+
     # quadruple('=', exp, None, var)
-    print('Gen Assin')
+    
 
