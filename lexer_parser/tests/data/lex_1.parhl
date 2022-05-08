@@ -4,6 +4,32 @@ print(y)
 if(True){
     x := 10
 }
-else{
-    x := 20;
+
+if(False)
+{
+    read_line()
+} else {
+    read_file()
 }
+
+if(a=b) {
+
+} else if(a > b) {
+    write_file()
+}
+
+
+while(a > 0) {
+    b:= a or d;
+}
+
+for(let a : int := 0; a < 10; a:= a+1) {
+    y:= y * a;
+}
+
+let foo(a : string ) : int {
+    print("hello")
+    return 2
+} 
+
+foo("name")
