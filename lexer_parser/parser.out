@@ -1,0 +1,4176 @@
+Grammar:
+
+Rule 0     S' -> globals
+Rule 1     globals -> empty
+Rule 2     globals -> block_statements
+Rule 3     globals -> statements
+Rule 4     globals -> statement globals
+Rule 5     const -> STRING_V
+Rule 6     const -> BOOL_V
+Rule 7     const -> FLOAT_V
+Rule 8     const -> INT_V
+Rule 9     tens -> L_BRACKET expr tens_1
+Rule 10    tens_1 -> COMMA expr tens_1
+Rule 11    tens_1 -> R_BRACKET
+Rule 12    tens_id -> ID tens_id_1
+Rule 13    tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1
+Rule 14    tens_id_1 -> L_BRACKET expr R_BRACKET
+Rule 15    block -> ignored_newlines L_BRACE block_1 R_BRACE
+Rule 16    block_1 -> empty
+Rule 17    block_1 -> ret block_1
+Rule 18    block_1 -> statement block_1
+Rule 19    const_type -> GPU_BOOL_T
+Rule 20    const_type -> GPU_FLOAT_T
+Rule 21    const_type -> GPU_INT_T
+Rule 22    const_type -> BOOL_T
+Rule 23    const_type -> STRING_T
+Rule 24    const_type -> FLOAT_T
+Rule 25    const_type -> INT_T
+Rule 26    expr -> t_expr OR expr
+Rule 27    expr -> t_expr
+Rule 28    t_expr -> g_expr AND t_expr
+Rule 29    t_expr -> g_expr
+Rule 30    g_expr -> m_expr comparison m_expr
+Rule 31    g_expr -> m_expr
+Rule 32    comparison -> LEQT
+Rule 33    comparison -> GEQT
+Rule 34    comparison -> LT
+Rule 35    comparison -> GT
+Rule 36    comparison -> NOT_EQ
+Rule 37    comparison -> EQ
+Rule 38    m_expr -> term MINUS m_expr
+Rule 39    m_expr -> term PLUS m_expr
+Rule 40    m_expr -> term
+Rule 41    term -> exp_factor MOD term
+Rule 42    term -> exp_factor DIV term
+Rule 43    term -> exp_factor MULT term
+Rule 44    term -> exp_factor
+Rule 45    exp_factor -> factor EXP exp_factor
+Rule 46    exp_factor -> factor
+Rule 47    factor -> MINUS factor_1
+Rule 48    factor -> PLUS factor_1
+Rule 49    factor -> NOT factor_1
+Rule 50    factor -> factor_1
+Rule 51    factor_1 -> tens_id
+Rule 52    factor_1 -> tens
+Rule 53    factor_1 -> func_call
+Rule 54    factor_1 -> ID
+Rule 55    factor_1 -> const
+Rule 56    factor_1 -> L_PAREN expr R_PAREN
+Rule 57    read_line -> READ_LINE L_PAREN R_PAREN
+Rule 58    print_rule -> PRINT L_PAREN func_call_1
+Rule 59    read_file -> READ_FILE L_PAREN R_PAREN
+Rule 60    write_file -> WRITE_FILE L_PAREN func_call_1
+Rule 61    func_call -> ID L_PAREN func_call_1
+Rule 62    func_call_1 -> expr COMMA func_call_1
+Rule 63    func_call_1 -> expr R_PAREN
+Rule 64    func_call_1 -> R_PAREN
+Rule 65    assign -> ID ASSIG expr
+Rule 66    var -> LET var_1
+Rule 67    var_1 -> var_2 COMMA var_1
+Rule 68    var_1 -> var_2
+Rule 69    var_2 -> var_3 ASSIG expr
+Rule 70    var_2 -> var_3
+Rule 71    var_3 -> var_id COLON const_type
+Rule 72    var_id -> ID var_id_1
+Rule 73    var_id -> ID
+Rule 74    var_id_1 -> L_BRACKET INT_V R_BRACKET var_id_1
+Rule 75    var_id_1 -> L_BRACKET INT_V R_BRACKET
+Rule 76    while_loop -> WHILE L_PAREN expr R_PAREN block
+Rule 77    for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+Rule 78    cond -> IF L_PAREN expr R_PAREN block cond_prima
+Rule 79    cond_prima -> cond_else_if
+Rule 80    cond_prima -> cond_else
+Rule 81    cond_prima -> empty
+Rule 82    cond_else -> ELSE block
+Rule 83    cond_else_if -> else_if cond_else_if
+Rule 84    cond_else_if -> else_if
+Rule 85    else_if -> ELSE_IF L_PAREN expr R_PAREN block
+Rule 86    func -> LET ID L_PAREN func_params R_PAREN COLON func_type block
+Rule 87    func_params -> func_params_1
+Rule 88    func_params -> empty
+Rule 89    func_params_1 -> ID COLON const_type COMMA func_params_1
+Rule 90    func_params_1 -> ID COLON const_type
+Rule 91    func_type -> VOID
+Rule 92    func_type -> const_type
+Rule 93    ret -> RETURN expr eos
+Rule 94    statement -> NEWLINE
+Rule 95    statement -> block_statements NEWLINE
+Rule 96    statement -> statements eos
+Rule 97    statements -> func_call
+Rule 98    statements -> write_file
+Rule 99    statements -> read_file
+Rule 100   statements -> print_rule
+Rule 101   statements -> read_line
+Rule 102   statements -> assign
+Rule 103   statements -> var
+Rule 104   block_statements -> func
+Rule 105   block_statements -> cond_else_if
+Rule 106   block_statements -> cond_else
+Rule 107   block_statements -> cond
+Rule 108   block_statements -> for_loop
+Rule 109   block_statements -> while_loop
+Rule 110   eos -> NEWLINE
+Rule 111   eos -> SEMICOLON
+Rule 112   empty -> <empty>
+Rule 113   ignored_newlines -> empty
+Rule 114   ignored_newlines -> NEWLINE ignored_newlines
+
+Terminals, with rules where they appear:
+
+AND                  : 28
+ASSIG                : 65 69
+BOOL_T               : 22
+BOOL_V               : 6
+COLON                : 71 86 89 90
+COMMA                : 10 62 67 89
+DIV                  : 42
+ELSE                 : 82
+ELSE_IF              : 85
+EQ                   : 37
+EXP                  : 45
+FLOAT_T              : 24
+FLOAT_V              : 7
+FOR                  : 77
+GEQT                 : 33
+GPU_BOOL_T           : 19
+GPU_FLOAT_T          : 20
+GPU_INT_T            : 21
+GT                   : 35
+ID                   : 12 54 61 65 72 73 86 89 90
+IF                   : 78
+INT_T                : 25
+INT_V                : 8 74 75
+LEQT                 : 32
+LET                  : 66 86
+LT                   : 34
+L_BRACE              : 15
+L_BRACKET            : 9 13 14 74 75
+L_PAREN              : 56 57 58 59 60 61 76 77 78 85 86
+MINUS                : 38 47
+MOD                  : 41
+MULT                 : 43
+NEWLINE              : 94 95 110 114
+NOT                  : 49
+NOT_EQ               : 36
+OR                   : 26
+PLUS                 : 39 48
+PRINT                : 58
+READ_FILE            : 59
+READ_LINE            : 57
+RETURN               : 93
+R_BRACE              : 15
+R_BRACKET            : 11 13 14 74 75
+R_PAREN              : 56 57 59 63 64 76 77 78 85 86
+SEMICOLON            : 77 77 111
+STRING_T             : 23
+STRING_V             : 5
+VOID                 : 91
+WHILE                : 76
+WRITE_FILE           : 60
+error                : 
+
+Nonterminals, with rules where they appear:
+
+assign               : 77 102
+block                : 76 77 78 82 85 86
+block_1              : 15 17 18
+block_statements     : 2 95
+comparison           : 30
+cond                 : 107
+cond_else            : 80 106
+cond_else_if         : 79 83 105
+cond_prima           : 78
+const                : 55
+const_type           : 71 89 90 92
+else_if              : 83 84
+empty                : 1 16 81 88 113
+eos                  : 93 96
+exp_factor           : 41 42 43 44 45
+expr                 : 9 10 13 14 26 56 62 63 65 69 76 77 78 85 93
+factor               : 45 46
+factor_1             : 47 48 49 50
+for_loop             : 108
+func                 : 104
+func_call            : 53 97
+func_call_1          : 58 60 61 62
+func_params          : 86
+func_params_1        : 87 89
+func_type            : 86
+g_expr               : 28 29
+globals              : 4 0
+ignored_newlines     : 15 114
+m_expr               : 30 30 31 38 39
+print_rule           : 100
+read_file            : 99
+read_line            : 101
+ret                  : 17
+statement            : 4 18
+statements           : 3 96
+t_expr               : 26 27 28
+tens                 : 52
+tens_1               : 9 10
+tens_id              : 51
+tens_id_1            : 12 13
+term                 : 38 39 40 41 42 43
+var                  : 77 103
+var_1                : 66 67
+var_2                : 67 68
+var_3                : 69 70
+var_id               : 71
+var_id_1             : 72 74
+while_loop           : 109
+write_file           : 98
+
+
+state 0
+
+    (0) S' -> . globals
+    (1) globals -> . empty
+    (2) globals -> . block_statements
+    (3) globals -> . statements
+    (4) globals -> . statement globals
+    (112) empty -> .
+    (104) block_statements -> . func
+    (105) block_statements -> . cond_else_if
+    (106) block_statements -> . cond_else
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (97) statements -> . func_call
+    (98) statements -> . write_file
+    (99) statements -> . read_file
+    (100) statements -> . print_rule
+    (101) statements -> . read_line
+    (102) statements -> . assign
+    (103) statements -> . var
+    (94) statement -> . NEWLINE
+    (95) statement -> . block_statements NEWLINE
+    (96) statement -> . statements eos
+    (86) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (78) cond -> . IF L_PAREN expr R_PAREN block cond_prima
+    (77) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (76) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (61) func_call -> . ID L_PAREN func_call_1
+    (60) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (59) read_file -> . READ_FILE L_PAREN R_PAREN
+    (58) print_rule -> . PRINT L_PAREN func_call_1
+    (57) read_line -> . READ_LINE L_PAREN R_PAREN
+    (65) assign -> . ID ASSIG expr
+    (66) var -> . LET var_1
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    $end            reduce using rule 112 (empty -> .)
+    NEWLINE         shift and go to state 19
+    LET             shift and go to state 20
+    ELSE            shift and go to state 23
+    IF              shift and go to state 24
+    FOR             shift and go to state 25
+    WHILE           shift and go to state 26
+    ID              shift and go to state 21
+    WRITE_FILE      shift and go to state 27
+    READ_FILE       shift and go to state 28
+    PRINT           shift and go to state 29
+    READ_LINE       shift and go to state 30
+    ELSE_IF         shift and go to state 31
+
+    globals                        shift and go to state 1
+    empty                          shift and go to state 2
+    block_statements               shift and go to state 3
+    statements                     shift and go to state 4
+    statement                      shift and go to state 5
+    func                           shift and go to state 6
+    cond_else_if                   shift and go to state 7
+    cond_else                      shift and go to state 8
+    cond                           shift and go to state 9
+    for_loop                       shift and go to state 10
+    while_loop                     shift and go to state 11
+    func_call                      shift and go to state 12
+    write_file                     shift and go to state 13
+    read_file                      shift and go to state 14
+    print_rule                     shift and go to state 15
+    read_line                      shift and go to state 16
+    assign                         shift and go to state 17
+    var                            shift and go to state 18
+    else_if                        shift and go to state 22
+
+state 1
+
+    (0) S' -> globals .
+
+
+state 2
+
+    (1) globals -> empty .
+    $end            reduce using rule 1 (globals -> empty .)
+
+
+state 3
+
+    (2) globals -> block_statements .
+    (95) statement -> block_statements . NEWLINE
+    $end            reduce using rule 2 (globals -> block_statements .)
+    NEWLINE         shift and go to state 32
+
+
+state 4
+
+    (3) globals -> statements .
+    (96) statement -> statements . eos
+    (110) eos -> . NEWLINE
+    (111) eos -> . SEMICOLON
+    $end            reduce using rule 3 (globals -> statements .)
+    NEWLINE         shift and go to state 34
+    SEMICOLON       shift and go to state 35
+
+    eos                            shift and go to state 33
+
+state 5
+
+    (4) globals -> statement . globals
+    (1) globals -> . empty
+    (2) globals -> . block_statements
+    (3) globals -> . statements
+    (4) globals -> . statement globals
+    (112) empty -> .
+    (104) block_statements -> . func
+    (105) block_statements -> . cond_else_if
+    (106) block_statements -> . cond_else
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (97) statements -> . func_call
+    (98) statements -> . write_file
+    (99) statements -> . read_file
+    (100) statements -> . print_rule
+    (101) statements -> . read_line
+    (102) statements -> . assign
+    (103) statements -> . var
+    (94) statement -> . NEWLINE
+    (95) statement -> . block_statements NEWLINE
+    (96) statement -> . statements eos
+    (86) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (78) cond -> . IF L_PAREN expr R_PAREN block cond_prima
+    (77) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (76) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (61) func_call -> . ID L_PAREN func_call_1
+    (60) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (59) read_file -> . READ_FILE L_PAREN R_PAREN
+    (58) print_rule -> . PRINT L_PAREN func_call_1
+    (57) read_line -> . READ_LINE L_PAREN R_PAREN
+    (65) assign -> . ID ASSIG expr
+    (66) var -> . LET var_1
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    $end            reduce using rule 112 (empty -> .)
+    NEWLINE         shift and go to state 19
+    LET             shift and go to state 20
+    ELSE            shift and go to state 23
+    IF              shift and go to state 24
+    FOR             shift and go to state 25
+    WHILE           shift and go to state 26
+    ID              shift and go to state 21
+    WRITE_FILE      shift and go to state 27
+    READ_FILE       shift and go to state 28
+    PRINT           shift and go to state 29
+    READ_LINE       shift and go to state 30
+    ELSE_IF         shift and go to state 31
+
+    statement                      shift and go to state 5
+    globals                        shift and go to state 36
+    empty                          shift and go to state 2
+    block_statements               shift and go to state 3
+    statements                     shift and go to state 4
+    func                           shift and go to state 6
+    cond_else_if                   shift and go to state 7
+    cond_else                      shift and go to state 8
+    cond                           shift and go to state 9
+    for_loop                       shift and go to state 10
+    while_loop                     shift and go to state 11
+    func_call                      shift and go to state 12
+    write_file                     shift and go to state 13
+    read_file                      shift and go to state 14
+    print_rule                     shift and go to state 15
+    read_line                      shift and go to state 16
+    assign                         shift and go to state 17
+    var                            shift and go to state 18
+    else_if                        shift and go to state 22
+
+state 6
+
+    (104) block_statements -> func .
+    NEWLINE         reduce using rule 104 (block_statements -> func .)
+    $end            reduce using rule 104 (block_statements -> func .)
+
+
+state 7
+
+    (105) block_statements -> cond_else_if .
+    NEWLINE         reduce using rule 105 (block_statements -> cond_else_if .)
+    $end            reduce using rule 105 (block_statements -> cond_else_if .)
+
+
+state 8
+
+    (106) block_statements -> cond_else .
+    NEWLINE         reduce using rule 106 (block_statements -> cond_else .)
+    $end            reduce using rule 106 (block_statements -> cond_else .)
+
+
+state 9
+
+    (107) block_statements -> cond .
+    NEWLINE         reduce using rule 107 (block_statements -> cond .)
+    $end            reduce using rule 107 (block_statements -> cond .)
+
+
+state 10
+
+    (108) block_statements -> for_loop .
+    NEWLINE         reduce using rule 108 (block_statements -> for_loop .)
+    $end            reduce using rule 108 (block_statements -> for_loop .)
+
+
+state 11
+
+    (109) block_statements -> while_loop .
+    NEWLINE         reduce using rule 109 (block_statements -> while_loop .)
+    $end            reduce using rule 109 (block_statements -> while_loop .)
+
+
+state 12
+
+    (97) statements -> func_call .
+    NEWLINE         reduce using rule 97 (statements -> func_call .)
+    SEMICOLON       reduce using rule 97 (statements -> func_call .)
+    $end            reduce using rule 97 (statements -> func_call .)
+
+
+state 13
+
+    (98) statements -> write_file .
+    NEWLINE         reduce using rule 98 (statements -> write_file .)
+    SEMICOLON       reduce using rule 98 (statements -> write_file .)
+    $end            reduce using rule 98 (statements -> write_file .)
+
+
+state 14
+
+    (99) statements -> read_file .
+    NEWLINE         reduce using rule 99 (statements -> read_file .)
+    SEMICOLON       reduce using rule 99 (statements -> read_file .)
+    $end            reduce using rule 99 (statements -> read_file .)
+
+
+state 15
+
+    (100) statements -> print_rule .
+    NEWLINE         reduce using rule 100 (statements -> print_rule .)
+    SEMICOLON       reduce using rule 100 (statements -> print_rule .)
+    $end            reduce using rule 100 (statements -> print_rule .)
+
+
+state 16
+
+    (101) statements -> read_line .
+    NEWLINE         reduce using rule 101 (statements -> read_line .)
+    SEMICOLON       reduce using rule 101 (statements -> read_line .)
+    $end            reduce using rule 101 (statements -> read_line .)
+
+
+state 17
+
+    (102) statements -> assign .
+    NEWLINE         reduce using rule 102 (statements -> assign .)
+    SEMICOLON       reduce using rule 102 (statements -> assign .)
+    $end            reduce using rule 102 (statements -> assign .)
+
+
+state 18
+
+    (103) statements -> var .
+    NEWLINE         reduce using rule 103 (statements -> var .)
+    SEMICOLON       reduce using rule 103 (statements -> var .)
+    $end            reduce using rule 103 (statements -> var .)
+
+
+state 19
+
+    (94) statement -> NEWLINE .
+    NEWLINE         reduce using rule 94 (statement -> NEWLINE .)
+    LET             reduce using rule 94 (statement -> NEWLINE .)
+    ELSE            reduce using rule 94 (statement -> NEWLINE .)
+    IF              reduce using rule 94 (statement -> NEWLINE .)
+    FOR             reduce using rule 94 (statement -> NEWLINE .)
+    WHILE           reduce using rule 94 (statement -> NEWLINE .)
+    ID              reduce using rule 94 (statement -> NEWLINE .)
+    WRITE_FILE      reduce using rule 94 (statement -> NEWLINE .)
+    READ_FILE       reduce using rule 94 (statement -> NEWLINE .)
+    PRINT           reduce using rule 94 (statement -> NEWLINE .)
+    READ_LINE       reduce using rule 94 (statement -> NEWLINE .)
+    ELSE_IF         reduce using rule 94 (statement -> NEWLINE .)
+    $end            reduce using rule 94 (statement -> NEWLINE .)
+    RETURN          reduce using rule 94 (statement -> NEWLINE .)
+    R_BRACE         reduce using rule 94 (statement -> NEWLINE .)
+
+
+state 20
+
+    (86) func -> LET . ID L_PAREN func_params R_PAREN COLON func_type block
+    (66) var -> LET . var_1
+    (67) var_1 -> . var_2 COMMA var_1
+    (68) var_1 -> . var_2
+    (69) var_2 -> . var_3 ASSIG expr
+    (70) var_2 -> . var_3
+    (71) var_3 -> . var_id COLON const_type
+    (72) var_id -> . ID var_id_1
+    (73) var_id -> . ID
+    ID              shift and go to state 37
+
+    var_1                          shift and go to state 38
+    var_2                          shift and go to state 39
+    var_3                          shift and go to state 40
+    var_id                         shift and go to state 41
+
+state 21
+
+    (61) func_call -> ID . L_PAREN func_call_1
+    (65) assign -> ID . ASSIG expr
+    L_PAREN         shift and go to state 42
+    ASSIG           shift and go to state 43
+
+
+state 22
+
+    (83) cond_else_if -> else_if . cond_else_if
+    (84) cond_else_if -> else_if .
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    NEWLINE         reduce using rule 84 (cond_else_if -> else_if .)
+    $end            reduce using rule 84 (cond_else_if -> else_if .)
+    ELSE_IF         shift and go to state 31
+
+    else_if                        shift and go to state 22
+    cond_else_if                   shift and go to state 44
+
+state 23
+
+    (82) cond_else -> ELSE . block
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 45
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 24
+
+    (78) cond -> IF . L_PAREN expr R_PAREN block cond_prima
+    L_PAREN         shift and go to state 49
+
+
+state 25
+
+    (77) for_loop -> FOR . L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    L_PAREN         shift and go to state 50
+
+
+state 26
+
+    (76) while_loop -> WHILE . L_PAREN expr R_PAREN block
+    L_PAREN         shift and go to state 51
+
+
+state 27
+
+    (60) write_file -> WRITE_FILE . L_PAREN func_call_1
+    L_PAREN         shift and go to state 52
+
+
+state 28
+
+    (59) read_file -> READ_FILE . L_PAREN R_PAREN
+    L_PAREN         shift and go to state 53
+
+
+state 29
+
+    (58) print_rule -> PRINT . L_PAREN func_call_1
+    L_PAREN         shift and go to state 54
+
+
+state 30
+
+    (57) read_line -> READ_LINE . L_PAREN R_PAREN
+    L_PAREN         shift and go to state 55
+
+
+state 31
+
+    (85) else_if -> ELSE_IF . L_PAREN expr R_PAREN block
+    L_PAREN         shift and go to state 56
+
+
+state 32
+
+    (95) statement -> block_statements NEWLINE .
+    NEWLINE         reduce using rule 95 (statement -> block_statements NEWLINE .)
+    LET             reduce using rule 95 (statement -> block_statements NEWLINE .)
+    ELSE            reduce using rule 95 (statement -> block_statements NEWLINE .)
+    IF              reduce using rule 95 (statement -> block_statements NEWLINE .)
+    FOR             reduce using rule 95 (statement -> block_statements NEWLINE .)
+    WHILE           reduce using rule 95 (statement -> block_statements NEWLINE .)
+    ID              reduce using rule 95 (statement -> block_statements NEWLINE .)
+    WRITE_FILE      reduce using rule 95 (statement -> block_statements NEWLINE .)
+    READ_FILE       reduce using rule 95 (statement -> block_statements NEWLINE .)
+    PRINT           reduce using rule 95 (statement -> block_statements NEWLINE .)
+    READ_LINE       reduce using rule 95 (statement -> block_statements NEWLINE .)
+    ELSE_IF         reduce using rule 95 (statement -> block_statements NEWLINE .)
+    $end            reduce using rule 95 (statement -> block_statements NEWLINE .)
+    RETURN          reduce using rule 95 (statement -> block_statements NEWLINE .)
+    R_BRACE         reduce using rule 95 (statement -> block_statements NEWLINE .)
+
+
+state 33
+
+    (96) statement -> statements eos .
+    NEWLINE         reduce using rule 96 (statement -> statements eos .)
+    LET             reduce using rule 96 (statement -> statements eos .)
+    ELSE            reduce using rule 96 (statement -> statements eos .)
+    IF              reduce using rule 96 (statement -> statements eos .)
+    FOR             reduce using rule 96 (statement -> statements eos .)
+    WHILE           reduce using rule 96 (statement -> statements eos .)
+    ID              reduce using rule 96 (statement -> statements eos .)
+    WRITE_FILE      reduce using rule 96 (statement -> statements eos .)
+    READ_FILE       reduce using rule 96 (statement -> statements eos .)
+    PRINT           reduce using rule 96 (statement -> statements eos .)
+    READ_LINE       reduce using rule 96 (statement -> statements eos .)
+    ELSE_IF         reduce using rule 96 (statement -> statements eos .)
+    $end            reduce using rule 96 (statement -> statements eos .)
+    RETURN          reduce using rule 96 (statement -> statements eos .)
+    R_BRACE         reduce using rule 96 (statement -> statements eos .)
+
+
+state 34
+
+    (110) eos -> NEWLINE .
+    NEWLINE         reduce using rule 110 (eos -> NEWLINE .)
+    LET             reduce using rule 110 (eos -> NEWLINE .)
+    ELSE            reduce using rule 110 (eos -> NEWLINE .)
+    IF              reduce using rule 110 (eos -> NEWLINE .)
+    FOR             reduce using rule 110 (eos -> NEWLINE .)
+    WHILE           reduce using rule 110 (eos -> NEWLINE .)
+    ID              reduce using rule 110 (eos -> NEWLINE .)
+    WRITE_FILE      reduce using rule 110 (eos -> NEWLINE .)
+    READ_FILE       reduce using rule 110 (eos -> NEWLINE .)
+    PRINT           reduce using rule 110 (eos -> NEWLINE .)
+    READ_LINE       reduce using rule 110 (eos -> NEWLINE .)
+    ELSE_IF         reduce using rule 110 (eos -> NEWLINE .)
+    $end            reduce using rule 110 (eos -> NEWLINE .)
+    RETURN          reduce using rule 110 (eos -> NEWLINE .)
+    R_BRACE         reduce using rule 110 (eos -> NEWLINE .)
+
+
+state 35
+
+    (111) eos -> SEMICOLON .
+    NEWLINE         reduce using rule 111 (eos -> SEMICOLON .)
+    LET             reduce using rule 111 (eos -> SEMICOLON .)
+    ELSE            reduce using rule 111 (eos -> SEMICOLON .)
+    IF              reduce using rule 111 (eos -> SEMICOLON .)
+    FOR             reduce using rule 111 (eos -> SEMICOLON .)
+    WHILE           reduce using rule 111 (eos -> SEMICOLON .)
+    ID              reduce using rule 111 (eos -> SEMICOLON .)
+    WRITE_FILE      reduce using rule 111 (eos -> SEMICOLON .)
+    READ_FILE       reduce using rule 111 (eos -> SEMICOLON .)
+    PRINT           reduce using rule 111 (eos -> SEMICOLON .)
+    READ_LINE       reduce using rule 111 (eos -> SEMICOLON .)
+    ELSE_IF         reduce using rule 111 (eos -> SEMICOLON .)
+    $end            reduce using rule 111 (eos -> SEMICOLON .)
+    RETURN          reduce using rule 111 (eos -> SEMICOLON .)
+    R_BRACE         reduce using rule 111 (eos -> SEMICOLON .)
+
+
+state 36
+
+    (4) globals -> statement globals .
+    $end            reduce using rule 4 (globals -> statement globals .)
+
+
+state 37
+
+    (86) func -> LET ID . L_PAREN func_params R_PAREN COLON func_type block
+    (72) var_id -> ID . var_id_1
+    (73) var_id -> ID .
+    (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
+    (75) var_id_1 -> . L_BRACKET INT_V R_BRACKET
+    L_PAREN         shift and go to state 57
+    COLON           reduce using rule 73 (var_id -> ID .)
+    L_BRACKET       shift and go to state 59
+
+    var_id_1                       shift and go to state 58
+
+state 38
+
+    (66) var -> LET var_1 .
+    NEWLINE         reduce using rule 66 (var -> LET var_1 .)
+    SEMICOLON       reduce using rule 66 (var -> LET var_1 .)
+    $end            reduce using rule 66 (var -> LET var_1 .)
+
+
+state 39
+
+    (67) var_1 -> var_2 . COMMA var_1
+    (68) var_1 -> var_2 .
+    COMMA           shift and go to state 60
+    NEWLINE         reduce using rule 68 (var_1 -> var_2 .)
+    SEMICOLON       reduce using rule 68 (var_1 -> var_2 .)
+    $end            reduce using rule 68 (var_1 -> var_2 .)
+
+
+state 40
+
+    (69) var_2 -> var_3 . ASSIG expr
+    (70) var_2 -> var_3 .
+    ASSIG           shift and go to state 61
+    COMMA           reduce using rule 70 (var_2 -> var_3 .)
+    NEWLINE         reduce using rule 70 (var_2 -> var_3 .)
+    SEMICOLON       reduce using rule 70 (var_2 -> var_3 .)
+    $end            reduce using rule 70 (var_2 -> var_3 .)
+
+
+state 41
+
+    (71) var_3 -> var_id . COLON const_type
+    COLON           shift and go to state 62
+
+
+state 42
+
+    (61) func_call -> ID L_PAREN . func_call_1
+    (62) func_call_1 -> . expr COMMA func_call_1
+    (63) func_call_1 -> . expr R_PAREN
+    (64) func_call_1 -> . R_PAREN
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    R_PAREN         shift and go to state 67
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    func_call_1                    shift and go to state 65
+    expr                           shift and go to state 66
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 43
+
+    (65) assign -> ID ASSIG . expr
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 87
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 44
+
+    (83) cond_else_if -> else_if cond_else_if .
+    NEWLINE         reduce using rule 83 (cond_else_if -> else_if cond_else_if .)
+    $end            reduce using rule 83 (cond_else_if -> else_if cond_else_if .)
+
+
+state 45
+
+    (82) cond_else -> ELSE block .
+    NEWLINE         reduce using rule 82 (cond_else -> ELSE block .)
+    $end            reduce using rule 82 (cond_else -> ELSE block .)
+
+
+state 46
+
+    (15) block -> ignored_newlines . L_BRACE block_1 R_BRACE
+    L_BRACE         shift and go to state 88
+
+
+state 47
+
+    (113) ignored_newlines -> empty .
+    L_BRACE         reduce using rule 113 (ignored_newlines -> empty .)
+
+
+state 48
+
+    (114) ignored_newlines -> NEWLINE . ignored_newlines
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    ignored_newlines               shift and go to state 89
+    empty                          shift and go to state 47
+
+state 49
+
+    (78) cond -> IF L_PAREN . expr R_PAREN block cond_prima
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 90
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 50
+
+    (77) for_loop -> FOR L_PAREN . var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (66) var -> . LET var_1
+    LET             shift and go to state 92
+
+    var                            shift and go to state 91
+
+state 51
+
+    (76) while_loop -> WHILE L_PAREN . expr R_PAREN block
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 93
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 52
+
+    (60) write_file -> WRITE_FILE L_PAREN . func_call_1
+    (62) func_call_1 -> . expr COMMA func_call_1
+    (63) func_call_1 -> . expr R_PAREN
+    (64) func_call_1 -> . R_PAREN
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    R_PAREN         shift and go to state 67
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    func_call_1                    shift and go to state 94
+    expr                           shift and go to state 66
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 53
+
+    (59) read_file -> READ_FILE L_PAREN . R_PAREN
+    R_PAREN         shift and go to state 95
+
+
+state 54
+
+    (58) print_rule -> PRINT L_PAREN . func_call_1
+    (62) func_call_1 -> . expr COMMA func_call_1
+    (63) func_call_1 -> . expr R_PAREN
+    (64) func_call_1 -> . R_PAREN
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    R_PAREN         shift and go to state 67
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    func_call_1                    shift and go to state 96
+    expr                           shift and go to state 66
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 55
+
+    (57) read_line -> READ_LINE L_PAREN . R_PAREN
+    R_PAREN         shift and go to state 97
+
+
+state 56
+
+    (85) else_if -> ELSE_IF L_PAREN . expr R_PAREN block
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 98
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 57
+
+    (86) func -> LET ID L_PAREN . func_params R_PAREN COLON func_type block
+    (87) func_params -> . func_params_1
+    (88) func_params -> . empty
+    (89) func_params_1 -> . ID COLON const_type COMMA func_params_1
+    (90) func_params_1 -> . ID COLON const_type
+    (112) empty -> .
+    ID              shift and go to state 99
+    R_PAREN         reduce using rule 112 (empty -> .)
+
+    func_params                    shift and go to state 100
+    func_params_1                  shift and go to state 101
+    empty                          shift and go to state 102
+
+state 58
+
+    (72) var_id -> ID var_id_1 .
+    COLON           reduce using rule 72 (var_id -> ID var_id_1 .)
+
+
+state 59
+
+    (74) var_id_1 -> L_BRACKET . INT_V R_BRACKET var_id_1
+    (75) var_id_1 -> L_BRACKET . INT_V R_BRACKET
+    INT_V           shift and go to state 103
+
+
+state 60
+
+    (67) var_1 -> var_2 COMMA . var_1
+    (67) var_1 -> . var_2 COMMA var_1
+    (68) var_1 -> . var_2
+    (69) var_2 -> . var_3 ASSIG expr
+    (70) var_2 -> . var_3
+    (71) var_3 -> . var_id COLON const_type
+    (72) var_id -> . ID var_id_1
+    (73) var_id -> . ID
+    ID              shift and go to state 105
+
+    var_2                          shift and go to state 39
+    var_1                          shift and go to state 104
+    var_3                          shift and go to state 40
+    var_id                         shift and go to state 41
+
+state 61
+
+    (69) var_2 -> var_3 ASSIG . expr
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 106
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 62
+
+    (71) var_3 -> var_id COLON . const_type
+    (19) const_type -> . GPU_BOOL_T
+    (20) const_type -> . GPU_FLOAT_T
+    (21) const_type -> . GPU_INT_T
+    (22) const_type -> . BOOL_T
+    (23) const_type -> . STRING_T
+    (24) const_type -> . FLOAT_T
+    (25) const_type -> . INT_T
+    GPU_BOOL_T      shift and go to state 108
+    GPU_FLOAT_T     shift and go to state 109
+    GPU_INT_T       shift and go to state 110
+    BOOL_T          shift and go to state 111
+    STRING_T        shift and go to state 112
+    FLOAT_T         shift and go to state 113
+    INT_T           shift and go to state 114
+
+    const_type                     shift and go to state 107
+
+state 63
+
+    (54) factor_1 -> ID .
+    (12) tens_id -> ID . tens_id_1
+    (61) func_call -> ID . L_PAREN func_call_1
+    (13) tens_id_1 -> . L_BRACKET expr R_BRACKET tens_id_1
+    (14) tens_id_1 -> . L_BRACKET expr R_BRACKET
+    EXP             reduce using rule 54 (factor_1 -> ID .)
+    MOD             reduce using rule 54 (factor_1 -> ID .)
+    DIV             reduce using rule 54 (factor_1 -> ID .)
+    MULT            reduce using rule 54 (factor_1 -> ID .)
+    MINUS           reduce using rule 54 (factor_1 -> ID .)
+    PLUS            reduce using rule 54 (factor_1 -> ID .)
+    LEQT            reduce using rule 54 (factor_1 -> ID .)
+    GEQT            reduce using rule 54 (factor_1 -> ID .)
+    LT              reduce using rule 54 (factor_1 -> ID .)
+    GT              reduce using rule 54 (factor_1 -> ID .)
+    NOT_EQ          reduce using rule 54 (factor_1 -> ID .)
+    EQ              reduce using rule 54 (factor_1 -> ID .)
+    AND             reduce using rule 54 (factor_1 -> ID .)
+    OR              reduce using rule 54 (factor_1 -> ID .)
+    COMMA           reduce using rule 54 (factor_1 -> ID .)
+    R_PAREN         reduce using rule 54 (factor_1 -> ID .)
+    NEWLINE         reduce using rule 54 (factor_1 -> ID .)
+    SEMICOLON       reduce using rule 54 (factor_1 -> ID .)
+    $end            reduce using rule 54 (factor_1 -> ID .)
+    R_BRACKET       reduce using rule 54 (factor_1 -> ID .)
+    L_PAREN         shift and go to state 42
+    L_BRACKET       shift and go to state 116
+
+    tens_id_1                      shift and go to state 115
+
+state 64
+
+    (56) factor_1 -> L_PAREN . expr R_PAREN
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 117
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 65
+
+    (61) func_call -> ID L_PAREN func_call_1 .
+    NEWLINE         reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    SEMICOLON       reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    $end            reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    EXP             reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    MOD             reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    DIV             reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    MULT            reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    MINUS           reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    PLUS            reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    LEQT            reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    GEQT            reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    LT              reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    GT              reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    NOT_EQ          reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    EQ              reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    AND             reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    OR              reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    COMMA           reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    R_PAREN         reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+    R_BRACKET       reduce using rule 61 (func_call -> ID L_PAREN func_call_1 .)
+
+
+state 66
+
+    (62) func_call_1 -> expr . COMMA func_call_1
+    (63) func_call_1 -> expr . R_PAREN
+    COMMA           shift and go to state 118
+    R_PAREN         shift and go to state 119
+
+
+state 67
+
+    (64) func_call_1 -> R_PAREN .
+    NEWLINE         reduce using rule 64 (func_call_1 -> R_PAREN .)
+    SEMICOLON       reduce using rule 64 (func_call_1 -> R_PAREN .)
+    $end            reduce using rule 64 (func_call_1 -> R_PAREN .)
+    EXP             reduce using rule 64 (func_call_1 -> R_PAREN .)
+    MOD             reduce using rule 64 (func_call_1 -> R_PAREN .)
+    DIV             reduce using rule 64 (func_call_1 -> R_PAREN .)
+    MULT            reduce using rule 64 (func_call_1 -> R_PAREN .)
+    MINUS           reduce using rule 64 (func_call_1 -> R_PAREN .)
+    PLUS            reduce using rule 64 (func_call_1 -> R_PAREN .)
+    LEQT            reduce using rule 64 (func_call_1 -> R_PAREN .)
+    GEQT            reduce using rule 64 (func_call_1 -> R_PAREN .)
+    LT              reduce using rule 64 (func_call_1 -> R_PAREN .)
+    GT              reduce using rule 64 (func_call_1 -> R_PAREN .)
+    NOT_EQ          reduce using rule 64 (func_call_1 -> R_PAREN .)
+    EQ              reduce using rule 64 (func_call_1 -> R_PAREN .)
+    AND             reduce using rule 64 (func_call_1 -> R_PAREN .)
+    OR              reduce using rule 64 (func_call_1 -> R_PAREN .)
+    COMMA           reduce using rule 64 (func_call_1 -> R_PAREN .)
+    R_PAREN         reduce using rule 64 (func_call_1 -> R_PAREN .)
+    R_BRACKET       reduce using rule 64 (func_call_1 -> R_PAREN .)
+
+
+state 68
+
+    (26) expr -> t_expr . OR expr
+    (27) expr -> t_expr .
+    OR              shift and go to state 120
+    COMMA           reduce using rule 27 (expr -> t_expr .)
+    R_PAREN         reduce using rule 27 (expr -> t_expr .)
+    NEWLINE         reduce using rule 27 (expr -> t_expr .)
+    SEMICOLON       reduce using rule 27 (expr -> t_expr .)
+    $end            reduce using rule 27 (expr -> t_expr .)
+    R_BRACKET       reduce using rule 27 (expr -> t_expr .)
+
+
+state 69
+
+    (28) t_expr -> g_expr . AND t_expr
+    (29) t_expr -> g_expr .
+    AND             shift and go to state 121
+    OR              reduce using rule 29 (t_expr -> g_expr .)
+    COMMA           reduce using rule 29 (t_expr -> g_expr .)
+    R_PAREN         reduce using rule 29 (t_expr -> g_expr .)
+    NEWLINE         reduce using rule 29 (t_expr -> g_expr .)
+    SEMICOLON       reduce using rule 29 (t_expr -> g_expr .)
+    $end            reduce using rule 29 (t_expr -> g_expr .)
+    R_BRACKET       reduce using rule 29 (t_expr -> g_expr .)
+
+
+state 70
+
+    (30) g_expr -> m_expr . comparison m_expr
+    (31) g_expr -> m_expr .
+    (32) comparison -> . LEQT
+    (33) comparison -> . GEQT
+    (34) comparison -> . LT
+    (35) comparison -> . GT
+    (36) comparison -> . NOT_EQ
+    (37) comparison -> . EQ
+    AND             reduce using rule 31 (g_expr -> m_expr .)
+    OR              reduce using rule 31 (g_expr -> m_expr .)
+    COMMA           reduce using rule 31 (g_expr -> m_expr .)
+    R_PAREN         reduce using rule 31 (g_expr -> m_expr .)
+    NEWLINE         reduce using rule 31 (g_expr -> m_expr .)
+    SEMICOLON       reduce using rule 31 (g_expr -> m_expr .)
+    $end            reduce using rule 31 (g_expr -> m_expr .)
+    R_BRACKET       reduce using rule 31 (g_expr -> m_expr .)
+    LEQT            shift and go to state 123
+    GEQT            shift and go to state 124
+    LT              shift and go to state 125
+    GT              shift and go to state 126
+    NOT_EQ          shift and go to state 127
+    EQ              shift and go to state 128
+
+    comparison                     shift and go to state 122
+
+state 71
+
+    (38) m_expr -> term . MINUS m_expr
+    (39) m_expr -> term . PLUS m_expr
+    (40) m_expr -> term .
+    MINUS           shift and go to state 129
+    PLUS            shift and go to state 130
+    LEQT            reduce using rule 40 (m_expr -> term .)
+    GEQT            reduce using rule 40 (m_expr -> term .)
+    LT              reduce using rule 40 (m_expr -> term .)
+    GT              reduce using rule 40 (m_expr -> term .)
+    NOT_EQ          reduce using rule 40 (m_expr -> term .)
+    EQ              reduce using rule 40 (m_expr -> term .)
+    AND             reduce using rule 40 (m_expr -> term .)
+    OR              reduce using rule 40 (m_expr -> term .)
+    COMMA           reduce using rule 40 (m_expr -> term .)
+    R_PAREN         reduce using rule 40 (m_expr -> term .)
+    NEWLINE         reduce using rule 40 (m_expr -> term .)
+    SEMICOLON       reduce using rule 40 (m_expr -> term .)
+    $end            reduce using rule 40 (m_expr -> term .)
+    R_BRACKET       reduce using rule 40 (m_expr -> term .)
+
+
+state 72
+
+    (47) factor -> MINUS . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    factor_1                       shift and go to state 131
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 73
+
+    (48) factor -> PLUS . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    factor_1                       shift and go to state 132
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 74
+
+    (41) term -> exp_factor . MOD term
+    (42) term -> exp_factor . DIV term
+    (43) term -> exp_factor . MULT term
+    (44) term -> exp_factor .
+    MOD             shift and go to state 133
+    DIV             shift and go to state 134
+    MULT            shift and go to state 135
+    MINUS           reduce using rule 44 (term -> exp_factor .)
+    PLUS            reduce using rule 44 (term -> exp_factor .)
+    LEQT            reduce using rule 44 (term -> exp_factor .)
+    GEQT            reduce using rule 44 (term -> exp_factor .)
+    LT              reduce using rule 44 (term -> exp_factor .)
+    GT              reduce using rule 44 (term -> exp_factor .)
+    NOT_EQ          reduce using rule 44 (term -> exp_factor .)
+    EQ              reduce using rule 44 (term -> exp_factor .)
+    AND             reduce using rule 44 (term -> exp_factor .)
+    OR              reduce using rule 44 (term -> exp_factor .)
+    COMMA           reduce using rule 44 (term -> exp_factor .)
+    R_PAREN         reduce using rule 44 (term -> exp_factor .)
+    NEWLINE         reduce using rule 44 (term -> exp_factor .)
+    SEMICOLON       reduce using rule 44 (term -> exp_factor .)
+    $end            reduce using rule 44 (term -> exp_factor .)
+    R_BRACKET       reduce using rule 44 (term -> exp_factor .)
+
+
+state 75
+
+    (45) exp_factor -> factor . EXP exp_factor
+    (46) exp_factor -> factor .
+    EXP             shift and go to state 136
+    MOD             reduce using rule 46 (exp_factor -> factor .)
+    DIV             reduce using rule 46 (exp_factor -> factor .)
+    MULT            reduce using rule 46 (exp_factor -> factor .)
+    MINUS           reduce using rule 46 (exp_factor -> factor .)
+    PLUS            reduce using rule 46 (exp_factor -> factor .)
+    LEQT            reduce using rule 46 (exp_factor -> factor .)
+    GEQT            reduce using rule 46 (exp_factor -> factor .)
+    LT              reduce using rule 46 (exp_factor -> factor .)
+    GT              reduce using rule 46 (exp_factor -> factor .)
+    NOT_EQ          reduce using rule 46 (exp_factor -> factor .)
+    EQ              reduce using rule 46 (exp_factor -> factor .)
+    AND             reduce using rule 46 (exp_factor -> factor .)
+    OR              reduce using rule 46 (exp_factor -> factor .)
+    COMMA           reduce using rule 46 (exp_factor -> factor .)
+    R_PAREN         reduce using rule 46 (exp_factor -> factor .)
+    NEWLINE         reduce using rule 46 (exp_factor -> factor .)
+    SEMICOLON       reduce using rule 46 (exp_factor -> factor .)
+    $end            reduce using rule 46 (exp_factor -> factor .)
+    R_BRACKET       reduce using rule 46 (exp_factor -> factor .)
+
+
+state 76
+
+    (50) factor -> factor_1 .
+    EXP             reduce using rule 50 (factor -> factor_1 .)
+    MOD             reduce using rule 50 (factor -> factor_1 .)
+    DIV             reduce using rule 50 (factor -> factor_1 .)
+    MULT            reduce using rule 50 (factor -> factor_1 .)
+    MINUS           reduce using rule 50 (factor -> factor_1 .)
+    PLUS            reduce using rule 50 (factor -> factor_1 .)
+    LEQT            reduce using rule 50 (factor -> factor_1 .)
+    GEQT            reduce using rule 50 (factor -> factor_1 .)
+    LT              reduce using rule 50 (factor -> factor_1 .)
+    GT              reduce using rule 50 (factor -> factor_1 .)
+    NOT_EQ          reduce using rule 50 (factor -> factor_1 .)
+    EQ              reduce using rule 50 (factor -> factor_1 .)
+    AND             reduce using rule 50 (factor -> factor_1 .)
+    OR              reduce using rule 50 (factor -> factor_1 .)
+    COMMA           reduce using rule 50 (factor -> factor_1 .)
+    R_PAREN         reduce using rule 50 (factor -> factor_1 .)
+    NEWLINE         reduce using rule 50 (factor -> factor_1 .)
+    SEMICOLON       reduce using rule 50 (factor -> factor_1 .)
+    $end            reduce using rule 50 (factor -> factor_1 .)
+    R_BRACKET       reduce using rule 50 (factor -> factor_1 .)
+
+
+state 77
+
+    (49) factor -> NOT . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    factor_1                       shift and go to state 137
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 78
+
+    (51) factor_1 -> tens_id .
+    EXP             reduce using rule 51 (factor_1 -> tens_id .)
+    MOD             reduce using rule 51 (factor_1 -> tens_id .)
+    DIV             reduce using rule 51 (factor_1 -> tens_id .)
+    MULT            reduce using rule 51 (factor_1 -> tens_id .)
+    MINUS           reduce using rule 51 (factor_1 -> tens_id .)
+    PLUS            reduce using rule 51 (factor_1 -> tens_id .)
+    LEQT            reduce using rule 51 (factor_1 -> tens_id .)
+    GEQT            reduce using rule 51 (factor_1 -> tens_id .)
+    LT              reduce using rule 51 (factor_1 -> tens_id .)
+    GT              reduce using rule 51 (factor_1 -> tens_id .)
+    NOT_EQ          reduce using rule 51 (factor_1 -> tens_id .)
+    EQ              reduce using rule 51 (factor_1 -> tens_id .)
+    AND             reduce using rule 51 (factor_1 -> tens_id .)
+    OR              reduce using rule 51 (factor_1 -> tens_id .)
+    COMMA           reduce using rule 51 (factor_1 -> tens_id .)
+    R_PAREN         reduce using rule 51 (factor_1 -> tens_id .)
+    NEWLINE         reduce using rule 51 (factor_1 -> tens_id .)
+    SEMICOLON       reduce using rule 51 (factor_1 -> tens_id .)
+    $end            reduce using rule 51 (factor_1 -> tens_id .)
+    R_BRACKET       reduce using rule 51 (factor_1 -> tens_id .)
+
+
+state 79
+
+    (52) factor_1 -> tens .
+    EXP             reduce using rule 52 (factor_1 -> tens .)
+    MOD             reduce using rule 52 (factor_1 -> tens .)
+    DIV             reduce using rule 52 (factor_1 -> tens .)
+    MULT            reduce using rule 52 (factor_1 -> tens .)
+    MINUS           reduce using rule 52 (factor_1 -> tens .)
+    PLUS            reduce using rule 52 (factor_1 -> tens .)
+    LEQT            reduce using rule 52 (factor_1 -> tens .)
+    GEQT            reduce using rule 52 (factor_1 -> tens .)
+    LT              reduce using rule 52 (factor_1 -> tens .)
+    GT              reduce using rule 52 (factor_1 -> tens .)
+    NOT_EQ          reduce using rule 52 (factor_1 -> tens .)
+    EQ              reduce using rule 52 (factor_1 -> tens .)
+    AND             reduce using rule 52 (factor_1 -> tens .)
+    OR              reduce using rule 52 (factor_1 -> tens .)
+    COMMA           reduce using rule 52 (factor_1 -> tens .)
+    R_PAREN         reduce using rule 52 (factor_1 -> tens .)
+    NEWLINE         reduce using rule 52 (factor_1 -> tens .)
+    SEMICOLON       reduce using rule 52 (factor_1 -> tens .)
+    $end            reduce using rule 52 (factor_1 -> tens .)
+    R_BRACKET       reduce using rule 52 (factor_1 -> tens .)
+
+
+state 80
+
+    (53) factor_1 -> func_call .
+    EXP             reduce using rule 53 (factor_1 -> func_call .)
+    MOD             reduce using rule 53 (factor_1 -> func_call .)
+    DIV             reduce using rule 53 (factor_1 -> func_call .)
+    MULT            reduce using rule 53 (factor_1 -> func_call .)
+    MINUS           reduce using rule 53 (factor_1 -> func_call .)
+    PLUS            reduce using rule 53 (factor_1 -> func_call .)
+    LEQT            reduce using rule 53 (factor_1 -> func_call .)
+    GEQT            reduce using rule 53 (factor_1 -> func_call .)
+    LT              reduce using rule 53 (factor_1 -> func_call .)
+    GT              reduce using rule 53 (factor_1 -> func_call .)
+    NOT_EQ          reduce using rule 53 (factor_1 -> func_call .)
+    EQ              reduce using rule 53 (factor_1 -> func_call .)
+    AND             reduce using rule 53 (factor_1 -> func_call .)
+    OR              reduce using rule 53 (factor_1 -> func_call .)
+    COMMA           reduce using rule 53 (factor_1 -> func_call .)
+    R_PAREN         reduce using rule 53 (factor_1 -> func_call .)
+    NEWLINE         reduce using rule 53 (factor_1 -> func_call .)
+    SEMICOLON       reduce using rule 53 (factor_1 -> func_call .)
+    $end            reduce using rule 53 (factor_1 -> func_call .)
+    R_BRACKET       reduce using rule 53 (factor_1 -> func_call .)
+
+
+state 81
+
+    (55) factor_1 -> const .
+    EXP             reduce using rule 55 (factor_1 -> const .)
+    MOD             reduce using rule 55 (factor_1 -> const .)
+    DIV             reduce using rule 55 (factor_1 -> const .)
+    MULT            reduce using rule 55 (factor_1 -> const .)
+    MINUS           reduce using rule 55 (factor_1 -> const .)
+    PLUS            reduce using rule 55 (factor_1 -> const .)
+    LEQT            reduce using rule 55 (factor_1 -> const .)
+    GEQT            reduce using rule 55 (factor_1 -> const .)
+    LT              reduce using rule 55 (factor_1 -> const .)
+    GT              reduce using rule 55 (factor_1 -> const .)
+    NOT_EQ          reduce using rule 55 (factor_1 -> const .)
+    EQ              reduce using rule 55 (factor_1 -> const .)
+    AND             reduce using rule 55 (factor_1 -> const .)
+    OR              reduce using rule 55 (factor_1 -> const .)
+    COMMA           reduce using rule 55 (factor_1 -> const .)
+    R_PAREN         reduce using rule 55 (factor_1 -> const .)
+    NEWLINE         reduce using rule 55 (factor_1 -> const .)
+    SEMICOLON       reduce using rule 55 (factor_1 -> const .)
+    $end            reduce using rule 55 (factor_1 -> const .)
+    R_BRACKET       reduce using rule 55 (factor_1 -> const .)
+
+
+state 82
+
+    (9) tens -> L_BRACKET . expr tens_1
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 138
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 83
+
+    (5) const -> STRING_V .
+    EXP             reduce using rule 5 (const -> STRING_V .)
+    MOD             reduce using rule 5 (const -> STRING_V .)
+    DIV             reduce using rule 5 (const -> STRING_V .)
+    MULT            reduce using rule 5 (const -> STRING_V .)
+    MINUS           reduce using rule 5 (const -> STRING_V .)
+    PLUS            reduce using rule 5 (const -> STRING_V .)
+    LEQT            reduce using rule 5 (const -> STRING_V .)
+    GEQT            reduce using rule 5 (const -> STRING_V .)
+    LT              reduce using rule 5 (const -> STRING_V .)
+    GT              reduce using rule 5 (const -> STRING_V .)
+    NOT_EQ          reduce using rule 5 (const -> STRING_V .)
+    EQ              reduce using rule 5 (const -> STRING_V .)
+    AND             reduce using rule 5 (const -> STRING_V .)
+    OR              reduce using rule 5 (const -> STRING_V .)
+    COMMA           reduce using rule 5 (const -> STRING_V .)
+    R_PAREN         reduce using rule 5 (const -> STRING_V .)
+    NEWLINE         reduce using rule 5 (const -> STRING_V .)
+    SEMICOLON       reduce using rule 5 (const -> STRING_V .)
+    $end            reduce using rule 5 (const -> STRING_V .)
+    R_BRACKET       reduce using rule 5 (const -> STRING_V .)
+
+
+state 84
+
+    (6) const -> BOOL_V .
+    EXP             reduce using rule 6 (const -> BOOL_V .)
+    MOD             reduce using rule 6 (const -> BOOL_V .)
+    DIV             reduce using rule 6 (const -> BOOL_V .)
+    MULT            reduce using rule 6 (const -> BOOL_V .)
+    MINUS           reduce using rule 6 (const -> BOOL_V .)
+    PLUS            reduce using rule 6 (const -> BOOL_V .)
+    LEQT            reduce using rule 6 (const -> BOOL_V .)
+    GEQT            reduce using rule 6 (const -> BOOL_V .)
+    LT              reduce using rule 6 (const -> BOOL_V .)
+    GT              reduce using rule 6 (const -> BOOL_V .)
+    NOT_EQ          reduce using rule 6 (const -> BOOL_V .)
+    EQ              reduce using rule 6 (const -> BOOL_V .)
+    AND             reduce using rule 6 (const -> BOOL_V .)
+    OR              reduce using rule 6 (const -> BOOL_V .)
+    COMMA           reduce using rule 6 (const -> BOOL_V .)
+    R_PAREN         reduce using rule 6 (const -> BOOL_V .)
+    NEWLINE         reduce using rule 6 (const -> BOOL_V .)
+    SEMICOLON       reduce using rule 6 (const -> BOOL_V .)
+    $end            reduce using rule 6 (const -> BOOL_V .)
+    R_BRACKET       reduce using rule 6 (const -> BOOL_V .)
+
+
+state 85
+
+    (7) const -> FLOAT_V .
+    EXP             reduce using rule 7 (const -> FLOAT_V .)
+    MOD             reduce using rule 7 (const -> FLOAT_V .)
+    DIV             reduce using rule 7 (const -> FLOAT_V .)
+    MULT            reduce using rule 7 (const -> FLOAT_V .)
+    MINUS           reduce using rule 7 (const -> FLOAT_V .)
+    PLUS            reduce using rule 7 (const -> FLOAT_V .)
+    LEQT            reduce using rule 7 (const -> FLOAT_V .)
+    GEQT            reduce using rule 7 (const -> FLOAT_V .)
+    LT              reduce using rule 7 (const -> FLOAT_V .)
+    GT              reduce using rule 7 (const -> FLOAT_V .)
+    NOT_EQ          reduce using rule 7 (const -> FLOAT_V .)
+    EQ              reduce using rule 7 (const -> FLOAT_V .)
+    AND             reduce using rule 7 (const -> FLOAT_V .)
+    OR              reduce using rule 7 (const -> FLOAT_V .)
+    COMMA           reduce using rule 7 (const -> FLOAT_V .)
+    R_PAREN         reduce using rule 7 (const -> FLOAT_V .)
+    NEWLINE         reduce using rule 7 (const -> FLOAT_V .)
+    SEMICOLON       reduce using rule 7 (const -> FLOAT_V .)
+    $end            reduce using rule 7 (const -> FLOAT_V .)
+    R_BRACKET       reduce using rule 7 (const -> FLOAT_V .)
+
+
+state 86
+
+    (8) const -> INT_V .
+    EXP             reduce using rule 8 (const -> INT_V .)
+    MOD             reduce using rule 8 (const -> INT_V .)
+    DIV             reduce using rule 8 (const -> INT_V .)
+    MULT            reduce using rule 8 (const -> INT_V .)
+    MINUS           reduce using rule 8 (const -> INT_V .)
+    PLUS            reduce using rule 8 (const -> INT_V .)
+    LEQT            reduce using rule 8 (const -> INT_V .)
+    GEQT            reduce using rule 8 (const -> INT_V .)
+    LT              reduce using rule 8 (const -> INT_V .)
+    GT              reduce using rule 8 (const -> INT_V .)
+    NOT_EQ          reduce using rule 8 (const -> INT_V .)
+    EQ              reduce using rule 8 (const -> INT_V .)
+    AND             reduce using rule 8 (const -> INT_V .)
+    OR              reduce using rule 8 (const -> INT_V .)
+    COMMA           reduce using rule 8 (const -> INT_V .)
+    R_PAREN         reduce using rule 8 (const -> INT_V .)
+    NEWLINE         reduce using rule 8 (const -> INT_V .)
+    SEMICOLON       reduce using rule 8 (const -> INT_V .)
+    $end            reduce using rule 8 (const -> INT_V .)
+    R_BRACKET       reduce using rule 8 (const -> INT_V .)
+
+
+state 87
+
+    (65) assign -> ID ASSIG expr .
+    NEWLINE         reduce using rule 65 (assign -> ID ASSIG expr .)
+    SEMICOLON       reduce using rule 65 (assign -> ID ASSIG expr .)
+    $end            reduce using rule 65 (assign -> ID ASSIG expr .)
+    R_PAREN         reduce using rule 65 (assign -> ID ASSIG expr .)
+
+
+state 88
+
+    (15) block -> ignored_newlines L_BRACE . block_1 R_BRACE
+    (16) block_1 -> . empty
+    (17) block_1 -> . ret block_1
+    (18) block_1 -> . statement block_1
+    (112) empty -> .
+    (93) ret -> . RETURN expr eos
+    (94) statement -> . NEWLINE
+    (95) statement -> . block_statements NEWLINE
+    (96) statement -> . statements eos
+    (104) block_statements -> . func
+    (105) block_statements -> . cond_else_if
+    (106) block_statements -> . cond_else
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (97) statements -> . func_call
+    (98) statements -> . write_file
+    (99) statements -> . read_file
+    (100) statements -> . print_rule
+    (101) statements -> . read_line
+    (102) statements -> . assign
+    (103) statements -> . var
+    (86) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (78) cond -> . IF L_PAREN expr R_PAREN block cond_prima
+    (77) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (76) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (61) func_call -> . ID L_PAREN func_call_1
+    (60) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (59) read_file -> . READ_FILE L_PAREN R_PAREN
+    (58) print_rule -> . PRINT L_PAREN func_call_1
+    (57) read_line -> . READ_LINE L_PAREN R_PAREN
+    (65) assign -> . ID ASSIG expr
+    (66) var -> . LET var_1
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    R_BRACE         reduce using rule 112 (empty -> .)
+    RETURN          shift and go to state 143
+    NEWLINE         shift and go to state 19
+    LET             shift and go to state 20
+    ELSE            shift and go to state 23
+    IF              shift and go to state 24
+    FOR             shift and go to state 25
+    WHILE           shift and go to state 26
+    ID              shift and go to state 21
+    WRITE_FILE      shift and go to state 27
+    READ_FILE       shift and go to state 28
+    PRINT           shift and go to state 29
+    READ_LINE       shift and go to state 30
+    ELSE_IF         shift and go to state 31
+
+    block_1                        shift and go to state 139
+    empty                          shift and go to state 140
+    ret                            shift and go to state 141
+    statement                      shift and go to state 142
+    block_statements               shift and go to state 144
+    statements                     shift and go to state 145
+    func                           shift and go to state 6
+    cond_else_if                   shift and go to state 7
+    cond_else                      shift and go to state 8
+    cond                           shift and go to state 9
+    for_loop                       shift and go to state 10
+    while_loop                     shift and go to state 11
+    func_call                      shift and go to state 12
+    write_file                     shift and go to state 13
+    read_file                      shift and go to state 14
+    print_rule                     shift and go to state 15
+    read_line                      shift and go to state 16
+    assign                         shift and go to state 17
+    var                            shift and go to state 18
+    else_if                        shift and go to state 22
+
+state 89
+
+    (114) ignored_newlines -> NEWLINE ignored_newlines .
+    L_BRACE         reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
+
+
+state 90
+
+    (78) cond -> IF L_PAREN expr . R_PAREN block cond_prima
+    R_PAREN         shift and go to state 146
+
+
+state 91
+
+    (77) for_loop -> FOR L_PAREN var . SEMICOLON expr SEMICOLON assign R_PAREN block
+    SEMICOLON       shift and go to state 147
+
+
+state 92
+
+    (66) var -> LET . var_1
+    (67) var_1 -> . var_2 COMMA var_1
+    (68) var_1 -> . var_2
+    (69) var_2 -> . var_3 ASSIG expr
+    (70) var_2 -> . var_3
+    (71) var_3 -> . var_id COLON const_type
+    (72) var_id -> . ID var_id_1
+    (73) var_id -> . ID
+    ID              shift and go to state 105
+
+    var_1                          shift and go to state 38
+    var_2                          shift and go to state 39
+    var_3                          shift and go to state 40
+    var_id                         shift and go to state 41
+
+state 93
+
+    (76) while_loop -> WHILE L_PAREN expr . R_PAREN block
+    R_PAREN         shift and go to state 148
+
+
+state 94
+
+    (60) write_file -> WRITE_FILE L_PAREN func_call_1 .
+    NEWLINE         reduce using rule 60 (write_file -> WRITE_FILE L_PAREN func_call_1 .)
+    SEMICOLON       reduce using rule 60 (write_file -> WRITE_FILE L_PAREN func_call_1 .)
+    $end            reduce using rule 60 (write_file -> WRITE_FILE L_PAREN func_call_1 .)
+
+
+state 95
+
+    (59) read_file -> READ_FILE L_PAREN R_PAREN .
+    NEWLINE         reduce using rule 59 (read_file -> READ_FILE L_PAREN R_PAREN .)
+    SEMICOLON       reduce using rule 59 (read_file -> READ_FILE L_PAREN R_PAREN .)
+    $end            reduce using rule 59 (read_file -> READ_FILE L_PAREN R_PAREN .)
+
+
+state 96
+
+    (58) print_rule -> PRINT L_PAREN func_call_1 .
+    NEWLINE         reduce using rule 58 (print_rule -> PRINT L_PAREN func_call_1 .)
+    SEMICOLON       reduce using rule 58 (print_rule -> PRINT L_PAREN func_call_1 .)
+    $end            reduce using rule 58 (print_rule -> PRINT L_PAREN func_call_1 .)
+
+
+state 97
+
+    (57) read_line -> READ_LINE L_PAREN R_PAREN .
+    NEWLINE         reduce using rule 57 (read_line -> READ_LINE L_PAREN R_PAREN .)
+    SEMICOLON       reduce using rule 57 (read_line -> READ_LINE L_PAREN R_PAREN .)
+    $end            reduce using rule 57 (read_line -> READ_LINE L_PAREN R_PAREN .)
+
+
+state 98
+
+    (85) else_if -> ELSE_IF L_PAREN expr . R_PAREN block
+    R_PAREN         shift and go to state 149
+
+
+state 99
+
+    (89) func_params_1 -> ID . COLON const_type COMMA func_params_1
+    (90) func_params_1 -> ID . COLON const_type
+    COLON           shift and go to state 150
+
+
+state 100
+
+    (86) func -> LET ID L_PAREN func_params . R_PAREN COLON func_type block
+    R_PAREN         shift and go to state 151
+
+
+state 101
+
+    (87) func_params -> func_params_1 .
+    R_PAREN         reduce using rule 87 (func_params -> func_params_1 .)
+
+
+state 102
+
+    (88) func_params -> empty .
+    R_PAREN         reduce using rule 88 (func_params -> empty .)
+
+
+state 103
+
+    (74) var_id_1 -> L_BRACKET INT_V . R_BRACKET var_id_1
+    (75) var_id_1 -> L_BRACKET INT_V . R_BRACKET
+    R_BRACKET       shift and go to state 152
+
+
+state 104
+
+    (67) var_1 -> var_2 COMMA var_1 .
+    NEWLINE         reduce using rule 67 (var_1 -> var_2 COMMA var_1 .)
+    SEMICOLON       reduce using rule 67 (var_1 -> var_2 COMMA var_1 .)
+    $end            reduce using rule 67 (var_1 -> var_2 COMMA var_1 .)
+
+
+state 105
+
+    (72) var_id -> ID . var_id_1
+    (73) var_id -> ID .
+    (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
+    (75) var_id_1 -> . L_BRACKET INT_V R_BRACKET
+    COLON           reduce using rule 73 (var_id -> ID .)
+    L_BRACKET       shift and go to state 59
+
+    var_id_1                       shift and go to state 58
+
+state 106
+
+    (69) var_2 -> var_3 ASSIG expr .
+    COMMA           reduce using rule 69 (var_2 -> var_3 ASSIG expr .)
+    NEWLINE         reduce using rule 69 (var_2 -> var_3 ASSIG expr .)
+    SEMICOLON       reduce using rule 69 (var_2 -> var_3 ASSIG expr .)
+    $end            reduce using rule 69 (var_2 -> var_3 ASSIG expr .)
+
+
+state 107
+
+    (71) var_3 -> var_id COLON const_type .
+    ASSIG           reduce using rule 71 (var_3 -> var_id COLON const_type .)
+    COMMA           reduce using rule 71 (var_3 -> var_id COLON const_type .)
+    NEWLINE         reduce using rule 71 (var_3 -> var_id COLON const_type .)
+    SEMICOLON       reduce using rule 71 (var_3 -> var_id COLON const_type .)
+    $end            reduce using rule 71 (var_3 -> var_id COLON const_type .)
+
+
+state 108
+
+    (19) const_type -> GPU_BOOL_T .
+    ASSIG           reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    COMMA           reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    NEWLINE         reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    SEMICOLON       reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    $end            reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    R_PAREN         reduce using rule 19 (const_type -> GPU_BOOL_T .)
+    L_BRACE         reduce using rule 19 (const_type -> GPU_BOOL_T .)
+
+
+state 109
+
+    (20) const_type -> GPU_FLOAT_T .
+    ASSIG           reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    COMMA           reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    NEWLINE         reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    SEMICOLON       reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    $end            reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    R_PAREN         reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+    L_BRACE         reduce using rule 20 (const_type -> GPU_FLOAT_T .)
+
+
+state 110
+
+    (21) const_type -> GPU_INT_T .
+    ASSIG           reduce using rule 21 (const_type -> GPU_INT_T .)
+    COMMA           reduce using rule 21 (const_type -> GPU_INT_T .)
+    NEWLINE         reduce using rule 21 (const_type -> GPU_INT_T .)
+    SEMICOLON       reduce using rule 21 (const_type -> GPU_INT_T .)
+    $end            reduce using rule 21 (const_type -> GPU_INT_T .)
+    R_PAREN         reduce using rule 21 (const_type -> GPU_INT_T .)
+    L_BRACE         reduce using rule 21 (const_type -> GPU_INT_T .)
+
+
+state 111
+
+    (22) const_type -> BOOL_T .
+    ASSIG           reduce using rule 22 (const_type -> BOOL_T .)
+    COMMA           reduce using rule 22 (const_type -> BOOL_T .)
+    NEWLINE         reduce using rule 22 (const_type -> BOOL_T .)
+    SEMICOLON       reduce using rule 22 (const_type -> BOOL_T .)
+    $end            reduce using rule 22 (const_type -> BOOL_T .)
+    R_PAREN         reduce using rule 22 (const_type -> BOOL_T .)
+    L_BRACE         reduce using rule 22 (const_type -> BOOL_T .)
+
+
+state 112
+
+    (23) const_type -> STRING_T .
+    ASSIG           reduce using rule 23 (const_type -> STRING_T .)
+    COMMA           reduce using rule 23 (const_type -> STRING_T .)
+    NEWLINE         reduce using rule 23 (const_type -> STRING_T .)
+    SEMICOLON       reduce using rule 23 (const_type -> STRING_T .)
+    $end            reduce using rule 23 (const_type -> STRING_T .)
+    R_PAREN         reduce using rule 23 (const_type -> STRING_T .)
+    L_BRACE         reduce using rule 23 (const_type -> STRING_T .)
+
+
+state 113
+
+    (24) const_type -> FLOAT_T .
+    ASSIG           reduce using rule 24 (const_type -> FLOAT_T .)
+    COMMA           reduce using rule 24 (const_type -> FLOAT_T .)
+    NEWLINE         reduce using rule 24 (const_type -> FLOAT_T .)
+    SEMICOLON       reduce using rule 24 (const_type -> FLOAT_T .)
+    $end            reduce using rule 24 (const_type -> FLOAT_T .)
+    R_PAREN         reduce using rule 24 (const_type -> FLOAT_T .)
+    L_BRACE         reduce using rule 24 (const_type -> FLOAT_T .)
+
+
+state 114
+
+    (25) const_type -> INT_T .
+    ASSIG           reduce using rule 25 (const_type -> INT_T .)
+    COMMA           reduce using rule 25 (const_type -> INT_T .)
+    NEWLINE         reduce using rule 25 (const_type -> INT_T .)
+    SEMICOLON       reduce using rule 25 (const_type -> INT_T .)
+    $end            reduce using rule 25 (const_type -> INT_T .)
+    R_PAREN         reduce using rule 25 (const_type -> INT_T .)
+    L_BRACE         reduce using rule 25 (const_type -> INT_T .)
+
+
+state 115
+
+    (12) tens_id -> ID tens_id_1 .
+    EXP             reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    MOD             reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    DIV             reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    MULT            reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    MINUS           reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    PLUS            reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    LEQT            reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    GEQT            reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    LT              reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    GT              reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    NOT_EQ          reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    EQ              reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    AND             reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    OR              reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    COMMA           reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    R_PAREN         reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    NEWLINE         reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    SEMICOLON       reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    $end            reduce using rule 12 (tens_id -> ID tens_id_1 .)
+    R_BRACKET       reduce using rule 12 (tens_id -> ID tens_id_1 .)
+
+
+state 116
+
+    (13) tens_id_1 -> L_BRACKET . expr R_BRACKET tens_id_1
+    (14) tens_id_1 -> L_BRACKET . expr R_BRACKET
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 153
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 117
+
+    (56) factor_1 -> L_PAREN expr . R_PAREN
+    R_PAREN         shift and go to state 154
+
+
+state 118
+
+    (62) func_call_1 -> expr COMMA . func_call_1
+    (62) func_call_1 -> . expr COMMA func_call_1
+    (63) func_call_1 -> . expr R_PAREN
+    (64) func_call_1 -> . R_PAREN
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    R_PAREN         shift and go to state 67
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 66
+    func_call_1                    shift and go to state 155
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 119
+
+    (63) func_call_1 -> expr R_PAREN .
+    NEWLINE         reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    SEMICOLON       reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    $end            reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    EXP             reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    MOD             reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    DIV             reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    MULT            reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    MINUS           reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    PLUS            reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    LEQT            reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    GEQT            reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    LT              reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    GT              reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    NOT_EQ          reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    EQ              reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    AND             reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    OR              reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    COMMA           reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    R_PAREN         reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+    R_BRACKET       reduce using rule 63 (func_call_1 -> expr R_PAREN .)
+
+
+state 120
+
+    (26) expr -> t_expr OR . expr
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    t_expr                         shift and go to state 68
+    expr                           shift and go to state 156
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 121
+
+    (28) t_expr -> g_expr AND . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    g_expr                         shift and go to state 69
+    t_expr                         shift and go to state 157
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 122
+
+    (30) g_expr -> m_expr comparison . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    m_expr                         shift and go to state 158
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 123
+
+    (32) comparison -> LEQT .
+    MINUS           reduce using rule 32 (comparison -> LEQT .)
+    PLUS            reduce using rule 32 (comparison -> LEQT .)
+    NOT             reduce using rule 32 (comparison -> LEQT .)
+    ID              reduce using rule 32 (comparison -> LEQT .)
+    L_PAREN         reduce using rule 32 (comparison -> LEQT .)
+    L_BRACKET       reduce using rule 32 (comparison -> LEQT .)
+    STRING_V        reduce using rule 32 (comparison -> LEQT .)
+    BOOL_V          reduce using rule 32 (comparison -> LEQT .)
+    FLOAT_V         reduce using rule 32 (comparison -> LEQT .)
+    INT_V           reduce using rule 32 (comparison -> LEQT .)
+
+
+state 124
+
+    (33) comparison -> GEQT .
+    MINUS           reduce using rule 33 (comparison -> GEQT .)
+    PLUS            reduce using rule 33 (comparison -> GEQT .)
+    NOT             reduce using rule 33 (comparison -> GEQT .)
+    ID              reduce using rule 33 (comparison -> GEQT .)
+    L_PAREN         reduce using rule 33 (comparison -> GEQT .)
+    L_BRACKET       reduce using rule 33 (comparison -> GEQT .)
+    STRING_V        reduce using rule 33 (comparison -> GEQT .)
+    BOOL_V          reduce using rule 33 (comparison -> GEQT .)
+    FLOAT_V         reduce using rule 33 (comparison -> GEQT .)
+    INT_V           reduce using rule 33 (comparison -> GEQT .)
+
+
+state 125
+
+    (34) comparison -> LT .
+    MINUS           reduce using rule 34 (comparison -> LT .)
+    PLUS            reduce using rule 34 (comparison -> LT .)
+    NOT             reduce using rule 34 (comparison -> LT .)
+    ID              reduce using rule 34 (comparison -> LT .)
+    L_PAREN         reduce using rule 34 (comparison -> LT .)
+    L_BRACKET       reduce using rule 34 (comparison -> LT .)
+    STRING_V        reduce using rule 34 (comparison -> LT .)
+    BOOL_V          reduce using rule 34 (comparison -> LT .)
+    FLOAT_V         reduce using rule 34 (comparison -> LT .)
+    INT_V           reduce using rule 34 (comparison -> LT .)
+
+
+state 126
+
+    (35) comparison -> GT .
+    MINUS           reduce using rule 35 (comparison -> GT .)
+    PLUS            reduce using rule 35 (comparison -> GT .)
+    NOT             reduce using rule 35 (comparison -> GT .)
+    ID              reduce using rule 35 (comparison -> GT .)
+    L_PAREN         reduce using rule 35 (comparison -> GT .)
+    L_BRACKET       reduce using rule 35 (comparison -> GT .)
+    STRING_V        reduce using rule 35 (comparison -> GT .)
+    BOOL_V          reduce using rule 35 (comparison -> GT .)
+    FLOAT_V         reduce using rule 35 (comparison -> GT .)
+    INT_V           reduce using rule 35 (comparison -> GT .)
+
+
+state 127
+
+    (36) comparison -> NOT_EQ .
+    MINUS           reduce using rule 36 (comparison -> NOT_EQ .)
+    PLUS            reduce using rule 36 (comparison -> NOT_EQ .)
+    NOT             reduce using rule 36 (comparison -> NOT_EQ .)
+    ID              reduce using rule 36 (comparison -> NOT_EQ .)
+    L_PAREN         reduce using rule 36 (comparison -> NOT_EQ .)
+    L_BRACKET       reduce using rule 36 (comparison -> NOT_EQ .)
+    STRING_V        reduce using rule 36 (comparison -> NOT_EQ .)
+    BOOL_V          reduce using rule 36 (comparison -> NOT_EQ .)
+    FLOAT_V         reduce using rule 36 (comparison -> NOT_EQ .)
+    INT_V           reduce using rule 36 (comparison -> NOT_EQ .)
+
+
+state 128
+
+    (37) comparison -> EQ .
+    MINUS           reduce using rule 37 (comparison -> EQ .)
+    PLUS            reduce using rule 37 (comparison -> EQ .)
+    NOT             reduce using rule 37 (comparison -> EQ .)
+    ID              reduce using rule 37 (comparison -> EQ .)
+    L_PAREN         reduce using rule 37 (comparison -> EQ .)
+    L_BRACKET       reduce using rule 37 (comparison -> EQ .)
+    STRING_V        reduce using rule 37 (comparison -> EQ .)
+    BOOL_V          reduce using rule 37 (comparison -> EQ .)
+    FLOAT_V         reduce using rule 37 (comparison -> EQ .)
+    INT_V           reduce using rule 37 (comparison -> EQ .)
+
+
+state 129
+
+    (38) m_expr -> term MINUS . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    term                           shift and go to state 71
+    m_expr                         shift and go to state 159
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 130
+
+    (39) m_expr -> term PLUS . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    term                           shift and go to state 71
+    m_expr                         shift and go to state 160
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 131
+
+    (47) factor -> MINUS factor_1 .
+    EXP             reduce using rule 47 (factor -> MINUS factor_1 .)
+    MOD             reduce using rule 47 (factor -> MINUS factor_1 .)
+    DIV             reduce using rule 47 (factor -> MINUS factor_1 .)
+    MULT            reduce using rule 47 (factor -> MINUS factor_1 .)
+    MINUS           reduce using rule 47 (factor -> MINUS factor_1 .)
+    PLUS            reduce using rule 47 (factor -> MINUS factor_1 .)
+    LEQT            reduce using rule 47 (factor -> MINUS factor_1 .)
+    GEQT            reduce using rule 47 (factor -> MINUS factor_1 .)
+    LT              reduce using rule 47 (factor -> MINUS factor_1 .)
+    GT              reduce using rule 47 (factor -> MINUS factor_1 .)
+    NOT_EQ          reduce using rule 47 (factor -> MINUS factor_1 .)
+    EQ              reduce using rule 47 (factor -> MINUS factor_1 .)
+    AND             reduce using rule 47 (factor -> MINUS factor_1 .)
+    OR              reduce using rule 47 (factor -> MINUS factor_1 .)
+    COMMA           reduce using rule 47 (factor -> MINUS factor_1 .)
+    R_PAREN         reduce using rule 47 (factor -> MINUS factor_1 .)
+    NEWLINE         reduce using rule 47 (factor -> MINUS factor_1 .)
+    SEMICOLON       reduce using rule 47 (factor -> MINUS factor_1 .)
+    $end            reduce using rule 47 (factor -> MINUS factor_1 .)
+    R_BRACKET       reduce using rule 47 (factor -> MINUS factor_1 .)
+
+
+state 132
+
+    (48) factor -> PLUS factor_1 .
+    EXP             reduce using rule 48 (factor -> PLUS factor_1 .)
+    MOD             reduce using rule 48 (factor -> PLUS factor_1 .)
+    DIV             reduce using rule 48 (factor -> PLUS factor_1 .)
+    MULT            reduce using rule 48 (factor -> PLUS factor_1 .)
+    MINUS           reduce using rule 48 (factor -> PLUS factor_1 .)
+    PLUS            reduce using rule 48 (factor -> PLUS factor_1 .)
+    LEQT            reduce using rule 48 (factor -> PLUS factor_1 .)
+    GEQT            reduce using rule 48 (factor -> PLUS factor_1 .)
+    LT              reduce using rule 48 (factor -> PLUS factor_1 .)
+    GT              reduce using rule 48 (factor -> PLUS factor_1 .)
+    NOT_EQ          reduce using rule 48 (factor -> PLUS factor_1 .)
+    EQ              reduce using rule 48 (factor -> PLUS factor_1 .)
+    AND             reduce using rule 48 (factor -> PLUS factor_1 .)
+    OR              reduce using rule 48 (factor -> PLUS factor_1 .)
+    COMMA           reduce using rule 48 (factor -> PLUS factor_1 .)
+    R_PAREN         reduce using rule 48 (factor -> PLUS factor_1 .)
+    NEWLINE         reduce using rule 48 (factor -> PLUS factor_1 .)
+    SEMICOLON       reduce using rule 48 (factor -> PLUS factor_1 .)
+    $end            reduce using rule 48 (factor -> PLUS factor_1 .)
+    R_BRACKET       reduce using rule 48 (factor -> PLUS factor_1 .)
+
+
+state 133
+
+    (41) term -> exp_factor MOD . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    exp_factor                     shift and go to state 74
+    term                           shift and go to state 161
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 134
+
+    (42) term -> exp_factor DIV . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    exp_factor                     shift and go to state 74
+    term                           shift and go to state 162
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 135
+
+    (43) term -> exp_factor MULT . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    exp_factor                     shift and go to state 74
+    term                           shift and go to state 163
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 136
+
+    (45) exp_factor -> factor EXP . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    factor                         shift and go to state 75
+    exp_factor                     shift and go to state 164
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 137
+
+    (49) factor -> NOT factor_1 .
+    EXP             reduce using rule 49 (factor -> NOT factor_1 .)
+    MOD             reduce using rule 49 (factor -> NOT factor_1 .)
+    DIV             reduce using rule 49 (factor -> NOT factor_1 .)
+    MULT            reduce using rule 49 (factor -> NOT factor_1 .)
+    MINUS           reduce using rule 49 (factor -> NOT factor_1 .)
+    PLUS            reduce using rule 49 (factor -> NOT factor_1 .)
+    LEQT            reduce using rule 49 (factor -> NOT factor_1 .)
+    GEQT            reduce using rule 49 (factor -> NOT factor_1 .)
+    LT              reduce using rule 49 (factor -> NOT factor_1 .)
+    GT              reduce using rule 49 (factor -> NOT factor_1 .)
+    NOT_EQ          reduce using rule 49 (factor -> NOT factor_1 .)
+    EQ              reduce using rule 49 (factor -> NOT factor_1 .)
+    AND             reduce using rule 49 (factor -> NOT factor_1 .)
+    OR              reduce using rule 49 (factor -> NOT factor_1 .)
+    COMMA           reduce using rule 49 (factor -> NOT factor_1 .)
+    R_PAREN         reduce using rule 49 (factor -> NOT factor_1 .)
+    NEWLINE         reduce using rule 49 (factor -> NOT factor_1 .)
+    SEMICOLON       reduce using rule 49 (factor -> NOT factor_1 .)
+    $end            reduce using rule 49 (factor -> NOT factor_1 .)
+    R_BRACKET       reduce using rule 49 (factor -> NOT factor_1 .)
+
+
+state 138
+
+    (9) tens -> L_BRACKET expr . tens_1
+    (10) tens_1 -> . COMMA expr tens_1
+    (11) tens_1 -> . R_BRACKET
+    COMMA           shift and go to state 166
+    R_BRACKET       shift and go to state 167
+
+    tens_1                         shift and go to state 165
+
+state 139
+
+    (15) block -> ignored_newlines L_BRACE block_1 . R_BRACE
+    R_BRACE         shift and go to state 168
+
+
+state 140
+
+    (16) block_1 -> empty .
+    R_BRACE         reduce using rule 16 (block_1 -> empty .)
+
+
+state 141
+
+    (17) block_1 -> ret . block_1
+    (16) block_1 -> . empty
+    (17) block_1 -> . ret block_1
+    (18) block_1 -> . statement block_1
+    (112) empty -> .
+    (93) ret -> . RETURN expr eos
+    (94) statement -> . NEWLINE
+    (95) statement -> . block_statements NEWLINE
+    (96) statement -> . statements eos
+    (104) block_statements -> . func
+    (105) block_statements -> . cond_else_if
+    (106) block_statements -> . cond_else
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (97) statements -> . func_call
+    (98) statements -> . write_file
+    (99) statements -> . read_file
+    (100) statements -> . print_rule
+    (101) statements -> . read_line
+    (102) statements -> . assign
+    (103) statements -> . var
+    (86) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (78) cond -> . IF L_PAREN expr R_PAREN block cond_prima
+    (77) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (76) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (61) func_call -> . ID L_PAREN func_call_1
+    (60) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (59) read_file -> . READ_FILE L_PAREN R_PAREN
+    (58) print_rule -> . PRINT L_PAREN func_call_1
+    (57) read_line -> . READ_LINE L_PAREN R_PAREN
+    (65) assign -> . ID ASSIG expr
+    (66) var -> . LET var_1
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    R_BRACE         reduce using rule 112 (empty -> .)
+    RETURN          shift and go to state 143
+    NEWLINE         shift and go to state 19
+    LET             shift and go to state 20
+    ELSE            shift and go to state 23
+    IF              shift and go to state 24
+    FOR             shift and go to state 25
+    WHILE           shift and go to state 26
+    ID              shift and go to state 21
+    WRITE_FILE      shift and go to state 27
+    READ_FILE       shift and go to state 28
+    PRINT           shift and go to state 29
+    READ_LINE       shift and go to state 30
+    ELSE_IF         shift and go to state 31
+
+    ret                            shift and go to state 141
+    block_1                        shift and go to state 169
+    empty                          shift and go to state 140
+    statement                      shift and go to state 142
+    block_statements               shift and go to state 144
+    statements                     shift and go to state 145
+    func                           shift and go to state 6
+    cond_else_if                   shift and go to state 7
+    cond_else                      shift and go to state 8
+    cond                           shift and go to state 9
+    for_loop                       shift and go to state 10
+    while_loop                     shift and go to state 11
+    func_call                      shift and go to state 12
+    write_file                     shift and go to state 13
+    read_file                      shift and go to state 14
+    print_rule                     shift and go to state 15
+    read_line                      shift and go to state 16
+    assign                         shift and go to state 17
+    var                            shift and go to state 18
+    else_if                        shift and go to state 22
+
+state 142
+
+    (18) block_1 -> statement . block_1
+    (16) block_1 -> . empty
+    (17) block_1 -> . ret block_1
+    (18) block_1 -> . statement block_1
+    (112) empty -> .
+    (93) ret -> . RETURN expr eos
+    (94) statement -> . NEWLINE
+    (95) statement -> . block_statements NEWLINE
+    (96) statement -> . statements eos
+    (104) block_statements -> . func
+    (105) block_statements -> . cond_else_if
+    (106) block_statements -> . cond_else
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (97) statements -> . func_call
+    (98) statements -> . write_file
+    (99) statements -> . read_file
+    (100) statements -> . print_rule
+    (101) statements -> . read_line
+    (102) statements -> . assign
+    (103) statements -> . var
+    (86) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (78) cond -> . IF L_PAREN expr R_PAREN block cond_prima
+    (77) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (76) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (61) func_call -> . ID L_PAREN func_call_1
+    (60) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (59) read_file -> . READ_FILE L_PAREN R_PAREN
+    (58) print_rule -> . PRINT L_PAREN func_call_1
+    (57) read_line -> . READ_LINE L_PAREN R_PAREN
+    (65) assign -> . ID ASSIG expr
+    (66) var -> . LET var_1
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    R_BRACE         reduce using rule 112 (empty -> .)
+    RETURN          shift and go to state 143
+    NEWLINE         shift and go to state 19
+    LET             shift and go to state 20
+    ELSE            shift and go to state 23
+    IF              shift and go to state 24
+    FOR             shift and go to state 25
+    WHILE           shift and go to state 26
+    ID              shift and go to state 21
+    WRITE_FILE      shift and go to state 27
+    READ_FILE       shift and go to state 28
+    PRINT           shift and go to state 29
+    READ_LINE       shift and go to state 30
+    ELSE_IF         shift and go to state 31
+
+    statement                      shift and go to state 142
+    block_1                        shift and go to state 170
+    empty                          shift and go to state 140
+    ret                            shift and go to state 141
+    block_statements               shift and go to state 144
+    statements                     shift and go to state 145
+    func                           shift and go to state 6
+    cond_else_if                   shift and go to state 7
+    cond_else                      shift and go to state 8
+    cond                           shift and go to state 9
+    for_loop                       shift and go to state 10
+    while_loop                     shift and go to state 11
+    func_call                      shift and go to state 12
+    write_file                     shift and go to state 13
+    read_file                      shift and go to state 14
+    print_rule                     shift and go to state 15
+    read_line                      shift and go to state 16
+    assign                         shift and go to state 17
+    var                            shift and go to state 18
+    else_if                        shift and go to state 22
+
+state 143
+
+    (93) ret -> RETURN . expr eos
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 171
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 144
+
+    (95) statement -> block_statements . NEWLINE
+    NEWLINE         shift and go to state 32
+
+
+state 145
+
+    (96) statement -> statements . eos
+    (110) eos -> . NEWLINE
+    (111) eos -> . SEMICOLON
+    NEWLINE         shift and go to state 34
+    SEMICOLON       shift and go to state 35
+
+    eos                            shift and go to state 33
+
+state 146
+
+    (78) cond -> IF L_PAREN expr R_PAREN . block cond_prima
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 172
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 147
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON . expr SEMICOLON assign R_PAREN block
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 173
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 148
+
+    (76) while_loop -> WHILE L_PAREN expr R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 174
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 149
+
+    (85) else_if -> ELSE_IF L_PAREN expr R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 175
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 150
+
+    (89) func_params_1 -> ID COLON . const_type COMMA func_params_1
+    (90) func_params_1 -> ID COLON . const_type
+    (19) const_type -> . GPU_BOOL_T
+    (20) const_type -> . GPU_FLOAT_T
+    (21) const_type -> . GPU_INT_T
+    (22) const_type -> . BOOL_T
+    (23) const_type -> . STRING_T
+    (24) const_type -> . FLOAT_T
+    (25) const_type -> . INT_T
+    GPU_BOOL_T      shift and go to state 108
+    GPU_FLOAT_T     shift and go to state 109
+    GPU_INT_T       shift and go to state 110
+    BOOL_T          shift and go to state 111
+    STRING_T        shift and go to state 112
+    FLOAT_T         shift and go to state 113
+    INT_T           shift and go to state 114
+
+    const_type                     shift and go to state 176
+
+state 151
+
+    (86) func -> LET ID L_PAREN func_params R_PAREN . COLON func_type block
+    COLON           shift and go to state 177
+
+
+state 152
+
+    (74) var_id_1 -> L_BRACKET INT_V R_BRACKET . var_id_1
+    (75) var_id_1 -> L_BRACKET INT_V R_BRACKET .
+    (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
+    (75) var_id_1 -> . L_BRACKET INT_V R_BRACKET
+    COLON           reduce using rule 75 (var_id_1 -> L_BRACKET INT_V R_BRACKET .)
+    L_BRACKET       shift and go to state 59
+
+    var_id_1                       shift and go to state 178
+
+state 153
+
+    (13) tens_id_1 -> L_BRACKET expr . R_BRACKET tens_id_1
+    (14) tens_id_1 -> L_BRACKET expr . R_BRACKET
+    R_BRACKET       shift and go to state 179
+
+
+state 154
+
+    (56) factor_1 -> L_PAREN expr R_PAREN .
+    EXP             reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    MOD             reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    DIV             reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    MULT            reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    MINUS           reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    PLUS            reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    LEQT            reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    GEQT            reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    LT              reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    GT              reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    NOT_EQ          reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    EQ              reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    AND             reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    OR              reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    COMMA           reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    R_PAREN         reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    NEWLINE         reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    SEMICOLON       reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    $end            reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+    R_BRACKET       reduce using rule 56 (factor_1 -> L_PAREN expr R_PAREN .)
+
+
+state 155
+
+    (62) func_call_1 -> expr COMMA func_call_1 .
+    NEWLINE         reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    SEMICOLON       reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    $end            reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    EXP             reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    MOD             reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    DIV             reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    MULT            reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    MINUS           reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    PLUS            reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    LEQT            reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    GEQT            reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    LT              reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    GT              reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    NOT_EQ          reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    EQ              reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    AND             reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    OR              reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    COMMA           reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    R_PAREN         reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+    R_BRACKET       reduce using rule 62 (func_call_1 -> expr COMMA func_call_1 .)
+
+
+state 156
+
+    (26) expr -> t_expr OR expr .
+    COMMA           reduce using rule 26 (expr -> t_expr OR expr .)
+    R_PAREN         reduce using rule 26 (expr -> t_expr OR expr .)
+    NEWLINE         reduce using rule 26 (expr -> t_expr OR expr .)
+    SEMICOLON       reduce using rule 26 (expr -> t_expr OR expr .)
+    $end            reduce using rule 26 (expr -> t_expr OR expr .)
+    R_BRACKET       reduce using rule 26 (expr -> t_expr OR expr .)
+
+
+state 157
+
+    (28) t_expr -> g_expr AND t_expr .
+    OR              reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    COMMA           reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    R_PAREN         reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    NEWLINE         reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    SEMICOLON       reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    $end            reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+    R_BRACKET       reduce using rule 28 (t_expr -> g_expr AND t_expr .)
+
+
+state 158
+
+    (30) g_expr -> m_expr comparison m_expr .
+    AND             reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    OR              reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    COMMA           reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    R_PAREN         reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    NEWLINE         reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    SEMICOLON       reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    $end            reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+    R_BRACKET       reduce using rule 30 (g_expr -> m_expr comparison m_expr .)
+
+
+state 159
+
+    (38) m_expr -> term MINUS m_expr .
+    LEQT            reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    GEQT            reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    LT              reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    GT              reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    NOT_EQ          reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    EQ              reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    AND             reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    OR              reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    COMMA           reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    R_PAREN         reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    NEWLINE         reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    SEMICOLON       reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    $end            reduce using rule 38 (m_expr -> term MINUS m_expr .)
+    R_BRACKET       reduce using rule 38 (m_expr -> term MINUS m_expr .)
+
+
+state 160
+
+    (39) m_expr -> term PLUS m_expr .
+    LEQT            reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    GEQT            reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    LT              reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    GT              reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    NOT_EQ          reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    EQ              reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    AND             reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    OR              reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    COMMA           reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    R_PAREN         reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    NEWLINE         reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    SEMICOLON       reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    $end            reduce using rule 39 (m_expr -> term PLUS m_expr .)
+    R_BRACKET       reduce using rule 39 (m_expr -> term PLUS m_expr .)
+
+
+state 161
+
+    (41) term -> exp_factor MOD term .
+    MINUS           reduce using rule 41 (term -> exp_factor MOD term .)
+    PLUS            reduce using rule 41 (term -> exp_factor MOD term .)
+    LEQT            reduce using rule 41 (term -> exp_factor MOD term .)
+    GEQT            reduce using rule 41 (term -> exp_factor MOD term .)
+    LT              reduce using rule 41 (term -> exp_factor MOD term .)
+    GT              reduce using rule 41 (term -> exp_factor MOD term .)
+    NOT_EQ          reduce using rule 41 (term -> exp_factor MOD term .)
+    EQ              reduce using rule 41 (term -> exp_factor MOD term .)
+    AND             reduce using rule 41 (term -> exp_factor MOD term .)
+    OR              reduce using rule 41 (term -> exp_factor MOD term .)
+    COMMA           reduce using rule 41 (term -> exp_factor MOD term .)
+    R_PAREN         reduce using rule 41 (term -> exp_factor MOD term .)
+    NEWLINE         reduce using rule 41 (term -> exp_factor MOD term .)
+    SEMICOLON       reduce using rule 41 (term -> exp_factor MOD term .)
+    $end            reduce using rule 41 (term -> exp_factor MOD term .)
+    R_BRACKET       reduce using rule 41 (term -> exp_factor MOD term .)
+
+
+state 162
+
+    (42) term -> exp_factor DIV term .
+    MINUS           reduce using rule 42 (term -> exp_factor DIV term .)
+    PLUS            reduce using rule 42 (term -> exp_factor DIV term .)
+    LEQT            reduce using rule 42 (term -> exp_factor DIV term .)
+    GEQT            reduce using rule 42 (term -> exp_factor DIV term .)
+    LT              reduce using rule 42 (term -> exp_factor DIV term .)
+    GT              reduce using rule 42 (term -> exp_factor DIV term .)
+    NOT_EQ          reduce using rule 42 (term -> exp_factor DIV term .)
+    EQ              reduce using rule 42 (term -> exp_factor DIV term .)
+    AND             reduce using rule 42 (term -> exp_factor DIV term .)
+    OR              reduce using rule 42 (term -> exp_factor DIV term .)
+    COMMA           reduce using rule 42 (term -> exp_factor DIV term .)
+    R_PAREN         reduce using rule 42 (term -> exp_factor DIV term .)
+    NEWLINE         reduce using rule 42 (term -> exp_factor DIV term .)
+    SEMICOLON       reduce using rule 42 (term -> exp_factor DIV term .)
+    $end            reduce using rule 42 (term -> exp_factor DIV term .)
+    R_BRACKET       reduce using rule 42 (term -> exp_factor DIV term .)
+
+
+state 163
+
+    (43) term -> exp_factor MULT term .
+    MINUS           reduce using rule 43 (term -> exp_factor MULT term .)
+    PLUS            reduce using rule 43 (term -> exp_factor MULT term .)
+    LEQT            reduce using rule 43 (term -> exp_factor MULT term .)
+    GEQT            reduce using rule 43 (term -> exp_factor MULT term .)
+    LT              reduce using rule 43 (term -> exp_factor MULT term .)
+    GT              reduce using rule 43 (term -> exp_factor MULT term .)
+    NOT_EQ          reduce using rule 43 (term -> exp_factor MULT term .)
+    EQ              reduce using rule 43 (term -> exp_factor MULT term .)
+    AND             reduce using rule 43 (term -> exp_factor MULT term .)
+    OR              reduce using rule 43 (term -> exp_factor MULT term .)
+    COMMA           reduce using rule 43 (term -> exp_factor MULT term .)
+    R_PAREN         reduce using rule 43 (term -> exp_factor MULT term .)
+    NEWLINE         reduce using rule 43 (term -> exp_factor MULT term .)
+    SEMICOLON       reduce using rule 43 (term -> exp_factor MULT term .)
+    $end            reduce using rule 43 (term -> exp_factor MULT term .)
+    R_BRACKET       reduce using rule 43 (term -> exp_factor MULT term .)
+
+
+state 164
+
+    (45) exp_factor -> factor EXP exp_factor .
+    MOD             reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    DIV             reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    MULT            reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    MINUS           reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    PLUS            reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    LEQT            reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    GEQT            reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    LT              reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    GT              reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    NOT_EQ          reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    EQ              reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    AND             reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    OR              reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    COMMA           reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    R_PAREN         reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    NEWLINE         reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    SEMICOLON       reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    $end            reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+    R_BRACKET       reduce using rule 45 (exp_factor -> factor EXP exp_factor .)
+
+
+state 165
+
+    (9) tens -> L_BRACKET expr tens_1 .
+    EXP             reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    MOD             reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    DIV             reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    MULT            reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    MINUS           reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    PLUS            reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    LEQT            reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    GEQT            reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    LT              reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    GT              reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    NOT_EQ          reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    EQ              reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    AND             reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    OR              reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    COMMA           reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    R_PAREN         reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    NEWLINE         reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    SEMICOLON       reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    $end            reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+    R_BRACKET       reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
+
+
+state 166
+
+    (10) tens_1 -> COMMA . expr tens_1
+    (26) expr -> . t_expr OR expr
+    (27) expr -> . t_expr
+    (28) t_expr -> . g_expr AND t_expr
+    (29) t_expr -> . g_expr
+    (30) g_expr -> . m_expr comparison m_expr
+    (31) g_expr -> . m_expr
+    (38) m_expr -> . term MINUS m_expr
+    (39) m_expr -> . term PLUS m_expr
+    (40) m_expr -> . term
+    (41) term -> . exp_factor MOD term
+    (42) term -> . exp_factor DIV term
+    (43) term -> . exp_factor MULT term
+    (44) term -> . exp_factor
+    (45) exp_factor -> . factor EXP exp_factor
+    (46) exp_factor -> . factor
+    (47) factor -> . MINUS factor_1
+    (48) factor -> . PLUS factor_1
+    (49) factor -> . NOT factor_1
+    (50) factor -> . factor_1
+    (51) factor_1 -> . tens_id
+    (52) factor_1 -> . tens
+    (53) factor_1 -> . func_call
+    (54) factor_1 -> . ID
+    (55) factor_1 -> . const
+    (56) factor_1 -> . L_PAREN expr R_PAREN
+    (12) tens_id -> . ID tens_id_1
+    (9) tens -> . L_BRACKET expr tens_1
+    (61) func_call -> . ID L_PAREN func_call_1
+    (5) const -> . STRING_V
+    (6) const -> . BOOL_V
+    (7) const -> . FLOAT_V
+    (8) const -> . INT_V
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 73
+    NOT             shift and go to state 77
+    ID              shift and go to state 63
+    L_PAREN         shift and go to state 64
+    L_BRACKET       shift and go to state 82
+    STRING_V        shift and go to state 83
+    BOOL_V          shift and go to state 84
+    FLOAT_V         shift and go to state 85
+    INT_V           shift and go to state 86
+
+    expr                           shift and go to state 180
+    t_expr                         shift and go to state 68
+    g_expr                         shift and go to state 69
+    m_expr                         shift and go to state 70
+    term                           shift and go to state 71
+    exp_factor                     shift and go to state 74
+    factor                         shift and go to state 75
+    factor_1                       shift and go to state 76
+    tens_id                        shift and go to state 78
+    tens                           shift and go to state 79
+    func_call                      shift and go to state 80
+    const                          shift and go to state 81
+
+state 167
+
+    (11) tens_1 -> R_BRACKET .
+    EXP             reduce using rule 11 (tens_1 -> R_BRACKET .)
+    MOD             reduce using rule 11 (tens_1 -> R_BRACKET .)
+    DIV             reduce using rule 11 (tens_1 -> R_BRACKET .)
+    MULT            reduce using rule 11 (tens_1 -> R_BRACKET .)
+    MINUS           reduce using rule 11 (tens_1 -> R_BRACKET .)
+    PLUS            reduce using rule 11 (tens_1 -> R_BRACKET .)
+    LEQT            reduce using rule 11 (tens_1 -> R_BRACKET .)
+    GEQT            reduce using rule 11 (tens_1 -> R_BRACKET .)
+    LT              reduce using rule 11 (tens_1 -> R_BRACKET .)
+    GT              reduce using rule 11 (tens_1 -> R_BRACKET .)
+    NOT_EQ          reduce using rule 11 (tens_1 -> R_BRACKET .)
+    EQ              reduce using rule 11 (tens_1 -> R_BRACKET .)
+    AND             reduce using rule 11 (tens_1 -> R_BRACKET .)
+    OR              reduce using rule 11 (tens_1 -> R_BRACKET .)
+    COMMA           reduce using rule 11 (tens_1 -> R_BRACKET .)
+    R_PAREN         reduce using rule 11 (tens_1 -> R_BRACKET .)
+    NEWLINE         reduce using rule 11 (tens_1 -> R_BRACKET .)
+    SEMICOLON       reduce using rule 11 (tens_1 -> R_BRACKET .)
+    $end            reduce using rule 11 (tens_1 -> R_BRACKET .)
+    R_BRACKET       reduce using rule 11 (tens_1 -> R_BRACKET .)
+
+
+state 168
+
+    (15) block -> ignored_newlines L_BRACE block_1 R_BRACE .
+    NEWLINE         reduce using rule 15 (block -> ignored_newlines L_BRACE block_1 R_BRACE .)
+    $end            reduce using rule 15 (block -> ignored_newlines L_BRACE block_1 R_BRACE .)
+    ELSE            reduce using rule 15 (block -> ignored_newlines L_BRACE block_1 R_BRACE .)
+    ELSE_IF         reduce using rule 15 (block -> ignored_newlines L_BRACE block_1 R_BRACE .)
+
+
+state 169
+
+    (17) block_1 -> ret block_1 .
+    R_BRACE         reduce using rule 17 (block_1 -> ret block_1 .)
+
+
+state 170
+
+    (18) block_1 -> statement block_1 .
+    R_BRACE         reduce using rule 18 (block_1 -> statement block_1 .)
+
+
+state 171
+
+    (93) ret -> RETURN expr . eos
+    (110) eos -> . NEWLINE
+    (111) eos -> . SEMICOLON
+    NEWLINE         shift and go to state 34
+    SEMICOLON       shift and go to state 35
+
+    eos                            shift and go to state 181
+
+state 172
+
+    (78) cond -> IF L_PAREN expr R_PAREN block . cond_prima
+    (79) cond_prima -> . cond_else_if
+    (80) cond_prima -> . cond_else
+    (81) cond_prima -> . empty
+    (83) cond_else_if -> . else_if cond_else_if
+    (84) cond_else_if -> . else_if
+    (82) cond_else -> . ELSE block
+    (112) empty -> .
+    (85) else_if -> . ELSE_IF L_PAREN expr R_PAREN block
+    ELSE            shift and go to state 23
+    NEWLINE         reduce using rule 112 (empty -> .)
+    $end            reduce using rule 112 (empty -> .)
+    ELSE_IF         shift and go to state 31
+
+    cond_prima                     shift and go to state 182
+    cond_else_if                   shift and go to state 183
+    cond_else                      shift and go to state 184
+    empty                          shift and go to state 185
+    else_if                        shift and go to state 22
+
+state 173
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON expr . SEMICOLON assign R_PAREN block
+    SEMICOLON       shift and go to state 186
+
+
+state 174
+
+    (76) while_loop -> WHILE L_PAREN expr R_PAREN block .
+    NEWLINE         reduce using rule 76 (while_loop -> WHILE L_PAREN expr R_PAREN block .)
+    $end            reduce using rule 76 (while_loop -> WHILE L_PAREN expr R_PAREN block .)
+
+
+state 175
+
+    (85) else_if -> ELSE_IF L_PAREN expr R_PAREN block .
+    ELSE_IF         reduce using rule 85 (else_if -> ELSE_IF L_PAREN expr R_PAREN block .)
+    NEWLINE         reduce using rule 85 (else_if -> ELSE_IF L_PAREN expr R_PAREN block .)
+    $end            reduce using rule 85 (else_if -> ELSE_IF L_PAREN expr R_PAREN block .)
+
+
+state 176
+
+    (89) func_params_1 -> ID COLON const_type . COMMA func_params_1
+    (90) func_params_1 -> ID COLON const_type .
+    COMMA           shift and go to state 187
+    R_PAREN         reduce using rule 90 (func_params_1 -> ID COLON const_type .)
+
+
+state 177
+
+    (86) func -> LET ID L_PAREN func_params R_PAREN COLON . func_type block
+    (91) func_type -> . VOID
+    (92) func_type -> . const_type
+    (19) const_type -> . GPU_BOOL_T
+    (20) const_type -> . GPU_FLOAT_T
+    (21) const_type -> . GPU_INT_T
+    (22) const_type -> . BOOL_T
+    (23) const_type -> . STRING_T
+    (24) const_type -> . FLOAT_T
+    (25) const_type -> . INT_T
+    VOID            shift and go to state 189
+    GPU_BOOL_T      shift and go to state 108
+    GPU_FLOAT_T     shift and go to state 109
+    GPU_INT_T       shift and go to state 110
+    BOOL_T          shift and go to state 111
+    STRING_T        shift and go to state 112
+    FLOAT_T         shift and go to state 113
+    INT_T           shift and go to state 114
+
+    func_type                      shift and go to state 188
+    const_type                     shift and go to state 190
+
+state 178
+
+    (74) var_id_1 -> L_BRACKET INT_V R_BRACKET var_id_1 .
+    COLON           reduce using rule 74 (var_id_1 -> L_BRACKET INT_V R_BRACKET var_id_1 .)
+
+
+state 179
+
+    (13) tens_id_1 -> L_BRACKET expr R_BRACKET . tens_id_1
+    (14) tens_id_1 -> L_BRACKET expr R_BRACKET .
+    (13) tens_id_1 -> . L_BRACKET expr R_BRACKET tens_id_1
+    (14) tens_id_1 -> . L_BRACKET expr R_BRACKET
+    EXP             reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    MOD             reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    DIV             reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    MULT            reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    MINUS           reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    PLUS            reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    LEQT            reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    GEQT            reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    LT              reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    GT              reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    NOT_EQ          reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    EQ              reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    AND             reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    OR              reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    COMMA           reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    R_PAREN         reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    NEWLINE         reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    SEMICOLON       reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    $end            reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    R_BRACKET       reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
+    L_BRACKET       shift and go to state 116
+
+    tens_id_1                      shift and go to state 191
+
+state 180
+
+    (10) tens_1 -> COMMA expr . tens_1
+    (10) tens_1 -> . COMMA expr tens_1
+    (11) tens_1 -> . R_BRACKET
+    COMMA           shift and go to state 166
+    R_BRACKET       shift and go to state 167
+
+    tens_1                         shift and go to state 192
+
+state 181
+
+    (93) ret -> RETURN expr eos .
+    RETURN          reduce using rule 93 (ret -> RETURN expr eos .)
+    NEWLINE         reduce using rule 93 (ret -> RETURN expr eos .)
+    LET             reduce using rule 93 (ret -> RETURN expr eos .)
+    ELSE            reduce using rule 93 (ret -> RETURN expr eos .)
+    IF              reduce using rule 93 (ret -> RETURN expr eos .)
+    FOR             reduce using rule 93 (ret -> RETURN expr eos .)
+    WHILE           reduce using rule 93 (ret -> RETURN expr eos .)
+    ID              reduce using rule 93 (ret -> RETURN expr eos .)
+    WRITE_FILE      reduce using rule 93 (ret -> RETURN expr eos .)
+    READ_FILE       reduce using rule 93 (ret -> RETURN expr eos .)
+    PRINT           reduce using rule 93 (ret -> RETURN expr eos .)
+    READ_LINE       reduce using rule 93 (ret -> RETURN expr eos .)
+    ELSE_IF         reduce using rule 93 (ret -> RETURN expr eos .)
+    R_BRACE         reduce using rule 93 (ret -> RETURN expr eos .)
+
+
+state 182
+
+    (78) cond -> IF L_PAREN expr R_PAREN block cond_prima .
+    NEWLINE         reduce using rule 78 (cond -> IF L_PAREN expr R_PAREN block cond_prima .)
+    $end            reduce using rule 78 (cond -> IF L_PAREN expr R_PAREN block cond_prima .)
+
+
+state 183
+
+    (79) cond_prima -> cond_else_if .
+    NEWLINE         reduce using rule 79 (cond_prima -> cond_else_if .)
+    $end            reduce using rule 79 (cond_prima -> cond_else_if .)
+
+
+state 184
+
+    (80) cond_prima -> cond_else .
+    NEWLINE         reduce using rule 80 (cond_prima -> cond_else .)
+    $end            reduce using rule 80 (cond_prima -> cond_else .)
+
+
+state 185
+
+    (81) cond_prima -> empty .
+    NEWLINE         reduce using rule 81 (cond_prima -> empty .)
+    $end            reduce using rule 81 (cond_prima -> empty .)
+
+
+state 186
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON . assign R_PAREN block
+    (65) assign -> . ID ASSIG expr
+    ID              shift and go to state 194
+
+    assign                         shift and go to state 193
+
+state 187
+
+    (89) func_params_1 -> ID COLON const_type COMMA . func_params_1
+    (89) func_params_1 -> . ID COLON const_type COMMA func_params_1
+    (90) func_params_1 -> . ID COLON const_type
+    ID              shift and go to state 99
+
+    func_params_1                  shift and go to state 195
+
+state 188
+
+    (86) func -> LET ID L_PAREN func_params R_PAREN COLON func_type . block
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 196
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 189
+
+    (91) func_type -> VOID .
+    NEWLINE         reduce using rule 91 (func_type -> VOID .)
+    L_BRACE         reduce using rule 91 (func_type -> VOID .)
+
+
+state 190
+
+    (92) func_type -> const_type .
+    NEWLINE         reduce using rule 92 (func_type -> const_type .)
+    L_BRACE         reduce using rule 92 (func_type -> const_type .)
+
+
+state 191
+
+    (13) tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .
+    EXP             reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    MOD             reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    DIV             reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    MULT            reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    MINUS           reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    PLUS            reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    LEQT            reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    GEQT            reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    LT              reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    GT              reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    NOT_EQ          reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    EQ              reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    AND             reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    OR              reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    COMMA           reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    R_PAREN         reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    NEWLINE         reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    SEMICOLON       reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    $end            reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+    R_BRACKET       reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
+
+
+state 192
+
+    (10) tens_1 -> COMMA expr tens_1 .
+    EXP             reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    MOD             reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    DIV             reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    MULT            reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    MINUS           reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    PLUS            reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    LEQT            reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    GEQT            reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    LT              reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    GT              reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    NOT_EQ          reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    EQ              reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    AND             reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    OR              reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    COMMA           reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    R_PAREN         reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    NEWLINE         reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    SEMICOLON       reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    $end            reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+    R_BRACKET       reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
+
+
+state 193
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign . R_PAREN block
+    R_PAREN         shift and go to state 197
+
+
+state 194
+
+    (65) assign -> ID . ASSIG expr
+    ASSIG           shift and go to state 43
+
+
+state 195
+
+    (89) func_params_1 -> ID COLON const_type COMMA func_params_1 .
+    R_PAREN         reduce using rule 89 (func_params_1 -> ID COLON const_type COMMA func_params_1 .)
+
+
+state 196
+
+    (86) func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .
+    NEWLINE         reduce using rule 86 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    $end            reduce using rule 86 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+
+
+state 197
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE block_1 R_BRACE
+    (113) ignored_newlines -> . empty
+    (114) ignored_newlines -> . NEWLINE ignored_newlines
+    (112) empty -> .
+    NEWLINE         shift and go to state 48
+    L_BRACE         reduce using rule 112 (empty -> .)
+
+    block                          shift and go to state 198
+    ignored_newlines               shift and go to state 46
+    empty                          shift and go to state 47
+
+state 198
+
+    (77) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block .
+    NEWLINE         reduce using rule 77 (for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block .)
+    $end            reduce using rule 77 (for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block .)
