@@ -6,12 +6,12 @@ class ParhlParser(Parser):
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
-    @_('estatuto globales', 'estatutos', 'estatutos_de_bloque', 'empty')
-    def globales(self, p):
+    @_('statement globals', 'statements', 'block_statements', 'empty')
+    def globals(self, p):
         pass
 
     @_('INT_V','FLOAT_V', 'BOOL_V', 'STRING_V')
-    def cte(self, p):
+    def const(self, p):
         pass
 
     @_('L_BRACKET expr tens_1')
@@ -30,16 +30,16 @@ class ParhlParser(Parser):
     def tens_id_1(self, p):
         pass
 
-    @_('ignored_newlines L_BRACE bloque_1 R_BRACE')
-    def bloque(self, p):
+    @_('ignored_newlines L_BRACE block_1 R_BRACE')
+    def block(self, p):
         pass
 
-    @_('estatuto bloque_1', 'retorno bloque_1', 'empty')
-    def bloque_1(self, p):
+    @_('statement block_1', 'ret block_1', 'empty')
+    def block_1(self, p):
         pass
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
-    def cte_type(self, p):
+    def const_type(self, p):
         pass
     
     @_('t_expr', 't_expr OR expr')
@@ -74,7 +74,7 @@ class ParhlParser(Parser):
     def factor(self, p):
         pass
 
-    @_('L_PAREN expr R_PAREN', 'cte', 'ID', 'func_call', 'tens', 'tens_id')
+    @_('L_PAREN expr R_PAREN', 'const', 'ID', 'func_call', 'tens', 'tens_id')
     def factor_1(self, p):
         pass
 
@@ -103,7 +103,7 @@ class ParhlParser(Parser):
         pass
 
     @_('ID ASSIG expr')
-    def asignacion(self, p):
+    def assign(self, p):
         pass
     
     @_('LET var_1')
@@ -114,7 +114,7 @@ class ParhlParser(Parser):
     def var_1(self, p):
         pass
 
-    @_('var_id COLON cte_type')
+    @_('var_id COLON const_type')
     def var_2(self, p):
         pass
 
@@ -130,15 +130,15 @@ class ParhlParser(Parser):
     def var_id_1(self, p):
         pass
 
-    @_('WHILE L_PAREN expr R_PAREN bloque')
+    @_('WHILE L_PAREN expr R_PAREN block')
     def while_loop(self, p):
         pass
 
-    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON asignacion R_PAREN bloque')
+    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block')
     def for_loop(self, p):
         pass
     
-    @_('IF L_PAREN expr R_PAREN bloque cond_prima')
+    @_('IF L_PAREN expr R_PAREN block cond_prima')
     def cond(self, p):
         pass
 
@@ -146,7 +146,7 @@ class ParhlParser(Parser):
     def cond_prima(self, p):
         pass
     
-    @_('ELSE bloque')
+    @_('ELSE block')
     def cond_else(self, p):
         pass
 
@@ -154,11 +154,11 @@ class ParhlParser(Parser):
     def cond_else_if(self, p):
         pass
     
-    @_('ELSE_IF L_PAREN expr R_PAREN bloque')
+    @_('ELSE_IF L_PAREN expr R_PAREN block')
     def else_if(self, p):
         pass
 
-    @_('LET ID L_PAREN func_params R_PAREN COLON func_type bloque')
+    @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
         pass
 
@@ -166,29 +166,29 @@ class ParhlParser(Parser):
     def func_params(self, p):
         pass
 
-    @_('ID COLON cte_type ', 'ID COLON cte_type COMMA func_params_1')
+    @_('ID COLON const_type ', 'ID COLON const_type COMMA func_params_1')
     def func_params_1(self, p):
         pass
 
-    @_('cte_type', 'VOID')
+    @_('const_type', 'VOID')
     def func_type(self, p):
         pass
 
     @_('RETURN expr eos')
-    def retorno(self, p):
+    def ret(self, p):
         pass
 
-    @_('estatutos eos', 'estatutos_de_bloque NEWLINE', 'NEWLINE')
-    def estatuto(self, p):
+    @_('statements eos', 'block_statements NEWLINE', 'NEWLINE')
+    def statement(self, p):
         pass
 
-    @_('var', 'asignacion', 'read_line', 'print_rule', 'read_file', 
+    @_('var', 'assign', 'read_line', 'print_rule', 'read_file', 
         'write_file', 'func_call')
-    def estatutos(self, p):
+    def statements(self, p):
         pass
     
     @_('while_loop', 'for_loop', 'cond', 'cond_else', 'cond_else_if', 'func')
-    def estatutos_de_bloque(self, p):
+    def block_statements(self, p):
         pass;
 
     @_('SEMICOLON','NEWLINE')
