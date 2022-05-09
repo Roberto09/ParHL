@@ -2,28 +2,20 @@ from sly import Parser
 from lexer import ParhlLexer
 
 class ParhlParser(Parser):
+    debugfile = 'parser.out'
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
-    # Grammar rules and actions
-    # """PROGRAM"""
-    # @_('PROGRAM ID ";" program2 bloque1')
-    # def program1(self, p):
-    #     return "program parsed"
+    @_('ignored_newlines globals_aux')
+    def globals(self, p):
+        pass
 
-    # @_('')
-    # def empty(self, p):
-    #     pass
-    @_('estatuto globales', 'estatuto')
-    def globales(self, p):
+    @_('statement globals_aux', 'statements', 'empty')
+    def globals_aux(self, p):
         pass
-    
-    @_('SEMICOLON','NEWLINE')
-    def eos(self, p):
-        pass
-    
+
     @_('INT_V','FLOAT_V', 'BOOL_V', 'STRING_V')
-    def cte(self, p):
+    def const(self, p):
         pass
 
     @_('L_BRACKET expr tens_1')
@@ -42,16 +34,16 @@ class ParhlParser(Parser):
     def tens_id_1(self, p):
         pass
 
-    @_('L_BRACE bloque_1 R_BRACE')
-    def bloque(self, p):
+    @_('ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines')
+    def block(self, p):
         pass
 
-    @_('bloque_1 bloque_1', 'estatuto', 'retorno')
-    def bloque_1(self, p):
+    @_('statement block_1', 'empty')
+    def block_1(self, p):
         pass
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
-    def cte_type(self, p):
+    def const_type(self, p):
         pass
     
     @_('t_expr', 't_expr OR expr')
@@ -86,7 +78,7 @@ class ParhlParser(Parser):
     def factor(self, p):
         pass
 
-    @_('L_PAREN expr R_PAREN', 'cte', 'ID', 'func_call', 'tens', 'tens_id')
+    @_('L_PAREN expr R_PAREN', 'const', 'ID', 'func_call', 'tens', 'tens_id')
     def factor_1(self, p):
         pass
 
@@ -95,7 +87,7 @@ class ParhlParser(Parser):
         pass
     
     @_('PRINT L_PAREN func_call_1')
-    def print(self, p):
+    def print_rule(self, p):
         pass
 
     @_('READ_FILE L_PAREN R_PAREN')
@@ -113,24 +105,24 @@ class ParhlParser(Parser):
     @_('R_PAREN', 'expr R_PAREN', 'expr COMMA func_call_1')
     def func_call_1(self, p):
         pass
-    
+
     @_('ID ASSIG expr')
-    def asignacion(self, p):
+    def assign(self, p):
         pass
     
     @_('LET var_1')
     def var(self, p):
         pass
-    
-    @_('var_2', 'var_2 var_3')
+
+    @_('var_2', 'var_2 COMMA var_1')
     def var_1(self, p):
         pass
 
-    @_('LET var_id COLON cte_type')
+    @_('var_3', 'var_3 ASSIG expr')
     def var_2(self, p):
         pass
 
-    @_('ASSIG expr', 'ASSIG expr COMMA var_1', 'COMMA var_1')
+    @_('var_id COLON const_type')
     def var_3(self, p):
         pass
 
@@ -138,51 +130,92 @@ class ParhlParser(Parser):
     def var_id(self, p):
         pass
 
-    @_('L_PAREN INT_V R_PAREN', 'L_PAREN INT_V R_PAREN var_id_1')
+    @_('L_BRACKET INT_V R_BRACKET', 'L_BRACKET INT_V R_BRACKET var_id_1')
     def var_id_1(self, p):
         pass
 
-    @_('WHILE L_PAREN expr R_PAREN bloque')
+    @_('WHILE L_PAREN expr R_PAREN block')
     def while_loop(self, p):
         pass
 
-    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON ASSIG R_PAREN bloque')
+    @_('FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block')
     def for_loop(self, p):
-        pass 
+        pass
 
-    @_('IF L_PAREN expr R_PAREN cond_1')
+    @_('cond_if', 'cond_if_else', 'cond_if_else_if')
     def cond(self, p):
         pass
 
-    @_('bloque', 'bloque ELSE bloque', 'bloque cond_2')
-    def cond_1(self, p):
+    @_('IF L_PAREN expr R_PAREN block')
+    def simple_if(self, p):
         pass
 
-    @_('ELSE_IF bloque', 'ELSE_IF bloque cond_2')
-    def cond_2(self, p):
+    @_('ELSE block')
+    def simple_else(self, p):
         pass
 
-    @_('LET ID L_PAREN func_params func_type bloque')
+    @_('ELSE_IF L_PAREN expr R_PAREN block complex_else_if')
+    def simple_else_if(self, p):
+        pass
+
+    @_('simple_else_if', 'empty', 'simple_else')
+    def complex_else_if(self, p):
+        pass
+
+    @_('simple_if')
+    def cond_if(self, p):
+        pass
+
+    @_('simple_if simple_else')
+    def cond_if_else(self, p):
+        pass
+
+    @_('simple_if simple_else_if')
+    def cond_if_else_if(self, p):
+        pass
+
+    @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
         pass
 
-    @_('R_PAREN', 'func_params_1')
+    @_('empty', 'func_params_1')
     def func_params(self, p):
         pass
 
-    @_('ID COLON cte_type R_PAREN', 'ID COLON cte_type COMMA func_params_1')
+    @_('ID COLON const_type ', 'ID COLON const_type COMMA func_params_1')
     def func_params_1(self, p):
         pass
 
-    @_('cte_type', 'VOID')
+    @_('const_type', 'VOID')
     def func_type(self, p):
         pass
 
-    @_('RETURN expr eos')
-    def retorno(self, p):
+    @_('RETURN expr')
+    def ret(self, p):
         pass
 
-    @_('var eos', 'asignacion eos', 'while_loop eos', 'for_loop eos',
-        'cond eos', 'func_call eos', 'func eos', 'read_line eos', 'print eos', 'read_file eos', 'write_file eos','eos')
-    def estatuto(self, p):
+    @_('statements eos', 'block_statements')
+    def statement(self, p):
         pass
+
+    @_('var', 'assign', 'read_line', 'print_rule', 'read_file', 
+        'write_file', 'func_call', 'ret')
+    def statements(self, p):
+        pass
+    
+    @_('while_loop', 'for_loop', 'cond', 'func')
+    def block_statements(self, p):
+        pass
+
+    @_('SEMICOLON ignored_newlines','NEWLINE ignored_newlines')
+    def eos(self, p):
+        pass
+
+    @_('NEWLINE ignored_newlines', 'empty')
+    def ignored_newlines(self, p):
+        pass
+
+    @_('')
+    def empty(self, p):
+        pass
+    
