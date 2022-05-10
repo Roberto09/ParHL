@@ -96,19 +96,19 @@ class ParhlLexer(Lexer):
     ID = r"[a-zA-Z_][a-zA-Z0-9_]*"
     
     def FLOAT_V(self, t):
-        t.value = float(t.value)
+        t.value = (float(t.value), 'FLOAT_V')
         return t
 
     def INT_V(self, t):
-        t.value = int(t.value)
+        t.value = (int(t.value), 'INT_V')
         return t
 
     def STRING_V(self, t):
-        t.value = t.value[1:-1]
+        t.value = (t.value[1:-1], 'STRING_V')
         return t
 
     def BOOL_V(self, t):
-        t.value = t.value == "True"
+        t.value = (t.value == "True", 'BOOL_V')
         return t
     
     def NEWLINE(self, t): 

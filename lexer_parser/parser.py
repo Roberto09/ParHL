@@ -1,5 +1,5 @@
 from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr
-from structs.ast.Statements import Globals, Var
+from structs.ast.Statements import Globals, Var, Seq, If, While, For
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -10,27 +10,18 @@ class ParhlParser(Parser):
     
     @_('ignored_newlines globals_aux')
     def globals(self, p):
-        pass
+        return p[1]
 
-    @_('statement globals_aux', 'statements', 'empty')
+    @_('statement globals_aux',  'statements', 'empty')
     def globals_aux(self, p):
-        pass
-
-    @_('INT_V')
+        if len(p) == 1:
+            return p[0]
+        return Seq(p[0], p[1])
+        
+    @_('INT_V', 'FLOAT_V', 'BOOL_V', 'STRING_V')
     def const(self, p):
-        return Const(p[0], 'Int')
-
-    @_('FLOAT_V')
-    def const(self, p):
-        return Const(p[0], 'Float')
-   
-    @_('BOOL_V')
-    def const(self, p):
-        return Const(p[0], 'Bool')
-    
-    @_('STRING_V')
-    def const(self, p):
-        return Const(p[0], 'String')
+        value, type = p[0]
+        return Const(value, type)
 
     @_('L_BRACKET expr tens_1')
     def tens(self, p):
@@ -178,43 +169,45 @@ class ParhlParser(Parser):
 
     @_('WHILE L_PAREN expr R_PAREN block')
     def while_loop(self, p):
-        pass
+        return While(p[2], p[4])
 
     @_('FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block')
     def for_loop(self, p):
-        pass
+        return For(p[2], p[4], p[6], p[7])
 
     @_('cond_if', 'cond_if_else', 'cond_if_else_if')
     def cond(self, p):
-        pass
+        return p[0]
 
     @_('IF L_PAREN expr R_PAREN block')
     def simple_if(self, p):
-        pass
+        return If.IfAux(p[2], p[4])
 
     @_('ELSE block')
     def simple_else(self, p):
-        pass
+        return If.ElseAux(p[1])
 
     @_('ELSE_IF L_PAREN expr R_PAREN block complex_else_if')
     def simple_else_if(self, p):
-        pass
+        return If.ElseIfSeqAux(p[2], p[4], p[5])
 
-    @_('simple_else_if', 'empty', 'simple_else')
+    @_('simple_else_if', 'empty')
     def complex_else_if(self, p):
-        pass
+        return p[0]
 
     @_('simple_if')
     def cond_if(self, p):
-        pass
+        return If(p[0])
 
     @_('simple_if simple_else')
     def cond_if_else(self, p):
-        pass
+        return If(p[0], else_aux=p[1])
 
-    @_('simple_if simple_else_if')
+    @_('simple_if simple_else_if', 'simple_if simple_else_if simple_else')
     def cond_if_else_if(self, p):
-        pass
+        if len(p) == 2:
+            return If(p[0], else_if_seq_aux=p[1])
+        return If(p[0], else_if_seq_aux=p[1], else_aux=p[2])
 
     @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
@@ -243,11 +236,11 @@ class ParhlParser(Parser):
     @_('var', 'assign', 'read_line', 'print_rule', 'read_file', 
         'write_file', 'func_call', 'ret')
     def statements(self, p):
-        pass
+        return p[0]
     
     @_('while_loop', 'for_loop', 'cond', 'func')
     def block_statements(self, p):
-        pass
+        return p[0]
 
     @_('SEMICOLON ignored_newlines','NEWLINE ignored_newlines')
     def eos(self, p):
@@ -259,5 +252,5 @@ class ParhlParser(Parser):
 
     @_('')
     def empty(self, p):
-        pass
+        return None
     
