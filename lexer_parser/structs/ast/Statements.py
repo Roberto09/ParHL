@@ -74,17 +74,31 @@ class For(Statement):
     def gen(self):
         pass
 
-class Var(Statement):
-    def __init__(self, id, id_type, expr):
+class VarDecl(Statement):
+    def __init__(self, id, id_type):
         self.id = id
         self.id_type = id_type
+        self.assign = None
+
+    def do_assign(self, expr):
+        self.assign = Assign(self.id, expr)
+
+    def gen(self):
+        pass
+
+class FuncDecl(Statement):
+    def __init__(self, id, type, params_seq, seq):
+        self.id = id
+        self.type = type
+        self.params_seq = params_seq
+        self.seq = seq 
+
+    def gen(self):
+        pass
+
+class Ret(Statement):
+    def __init__(self, expr):
         self.expr = expr
 
     def gen(self):
-        #  FuncDir.add_var(id, id_type)
-        if hasattr(self, 'expr'):
-            self.expr.gen()
-            assign = Assign(id, self.expr)
-            assign.gen()
-
-
+        pass

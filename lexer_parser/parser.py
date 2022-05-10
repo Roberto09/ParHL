@@ -1,5 +1,5 @@
-from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr
-from structs.ast.Statements import Globals, Var, Seq, If, While, For
+from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
+from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -31,25 +31,23 @@ class ParhlParser(Parser):
     def tens_1(self, p):
         pass
 
-    @_('ID tens_id_1')
+    @_('ID L_BRACKET expr R_BRACKET', 'tens_id L_BRACKET expr R_BRACKET')
     def tens_id(self,p):
-        pass
-    
-    @_('L_BRACKET expr R_BRACKET', 'L_BRACKET expr R_BRACKET tens_id_1')
-    def tens_id_1(self, p):
-        pass
+        return Access(p[0], p[2])
 
     @_('ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines')
     def block(self, p):
-        pass
+        return p[3]
 
     @_('statement block_1', 'empty')
     def block_1(self, p):
-        pass
+        if len(p) == 2:
+            return Seq(p[0], p[1])
+        return p[0]
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
     def const_type(self, p):
-        pass
+        return p[0]
     
     @_('t_expr', 't_expr OR expr')
     def expr(self, p):
@@ -141,31 +139,33 @@ class ParhlParser(Parser):
 
     @_('ID ASSIG expr')
     def assign(self, p):
-        pass
+        return Assign(Id(p[0]), p[2])
     
     @_('LET var_1')
     def var(self, p):
-        pass
+        return p[0]
 
     @_('var_2', 'var_2 COMMA var_1')
     def var_1(self, p):
-        pass
+        if len(p) == 1:
+            return Seq(p[0])
+        return Seq(p[0], p[2])
 
     @_('var_3', 'var_3 ASSIG expr')
     def var_2(self, p):
-        pass
+        if len(p) == 3:
+            p[0].do_assign(p[2])
+        return p[0]
 
     @_('var_id COLON const_type')
     def var_3(self, p):
-        pass
+        return VarDecl(p[0], p[2])
 
-    @_('ID','ID var_id_1')
+    @_('ID','var_id L_BRACKET INT_V R_BRACKET')
     def var_id(self, p):
-        pass
-
-    @_('L_BRACKET INT_V R_BRACKET', 'L_BRACKET INT_V R_BRACKET var_id_1')
-    def var_id_1(self, p):
-        pass
+        if len(p) == 1:
+            return Id(p[0])
+        return Access(p[0], Const(p[2][0], p[2][1]))
 
     @_('WHILE L_PAREN expr R_PAREN block')
     def while_loop(self, p):
@@ -211,27 +211,29 @@ class ParhlParser(Parser):
 
     @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
-        pass
+        return FuncDecl(Id(p[1]), p[6], p[3], p[7])
 
-    @_('empty', 'func_params_1')
+    @_('func_params_1', 'empty')
     def func_params(self, p):
-        pass
+        return p[0]
 
     @_('ID COLON const_type ', 'ID COLON const_type COMMA func_params_1')
     def func_params_1(self, p):
-        pass
+        if len(p) == 3:
+            return Seq(VarDecl(Id(p[0]), p[2]))
+        return Seq(VarDecl(Id(p[0]), p[2]), p[4])
 
     @_('const_type', 'VOID')
     def func_type(self, p):
-        pass
+        return p[0]
 
     @_('RETURN expr')
     def ret(self, p):
-        pass
+        return Ret(p[1])
 
     @_('statements eos', 'block_statements')
     def statement(self, p):
-        pass
+        return p[0]
 
     @_('var', 'assign', 'read_line', 'print_rule', 'read_file', 
         'write_file', 'func_call', 'ret')

@@ -61,6 +61,14 @@ class Id(Expression):
     def gen(self):
         pass
 
+class Access(Expression):
+    def __init__(self, id_access, expr):
+        self.id = id_access
+        self.expr = expr
+
+    def gen(self):
+        pass
+
 
 class UnExpr(Expression):
     def __init__(self, op, right):
