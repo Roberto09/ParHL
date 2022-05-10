@@ -1,13 +1,14 @@
-from lexer_parser.ast_classes.Node import Node
+from ast_classes.Node import Node
 
 class Globals(Node):
-  def __init__(self, estatuto, global_1):
+  def __init__(self, statement, global_1):
     super().__init__('Global')
-    self.estatuto = estatuto
+    self.statement = statement
     self.global_1 = global_1
   
   def gen(self):
-    # Checar self.estatuto.name != 'Return'
-    self.estatuto.gen()
+    if hasattr(self, 'statement'):
+      # Checar self.statement.name != 'Return'
+      self.statement.gen()
     if hasattr(self, 'global_1'):
       self.global_1.gen()

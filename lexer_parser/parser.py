@@ -1,7 +1,8 @@
 from ast_classes.Const import Const
+from ast_classes.Globals import Globals
 from ast_classes.Id import Id
 from ast_classes.BinExpr import BinExpr
-from lexer_parser.ast_classes.UnExpr import UnExpr
+from ast_classes.UnExpr import UnExpr
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -12,11 +13,19 @@ class ParhlParser(Parser):
     
     @_('ignored_newlines globals_aux')
     def globals(self, p):
-        pass
+        return p.globals_aux
 
-    @_('statement globals_aux', 'statements', 'empty')
+    @_('statement globals_aux')
     def globals_aux(self, p):
-        pass
+        return Globals(p[0], p[1])
+
+    @_('statements')
+    def globals_aux(self, p):
+        return Globals(p[0], None)
+
+    @_('empty')
+    def globals_aux(self, p):
+        return Globals(None, None)
 
     @_('INT_V')
     def const(self, p):
