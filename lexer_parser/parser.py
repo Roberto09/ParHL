@@ -1,7 +1,5 @@
-from ast_classes.Const import Const
-from ast_classes.Id import Id
-from ast_classes.BinExpr import BinExpr
-from lexer_parser.ast_classes.UnExpr import UnExpr
+from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr
+from structs.ast.Statements import Globals, Var
 from sly import Parser
 from lexer import ParhlLexer
 
