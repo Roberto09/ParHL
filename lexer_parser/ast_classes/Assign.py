@@ -6,8 +6,8 @@ class Assign(Node):
     self.id = id
     self.expr = expr
   
-  def gen():
-    expr.gen()
+  def gen(self):
+    self.expr.gen()
     # var = FuncDir.getVar(id)
     # exp = FuncDor.getVar(exp)
     # Check expr can be assigned to var

@@ -5,5 +5,5 @@ class Node(ABC):
     self.name = name
 
   @abstractmethod
-  def gen():
+  def gen(self):
     pass

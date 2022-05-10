@@ -6,7 +6,7 @@ class UnExpr(Node):
     self.op = op
     self.arg = arg
 
-  def gen():
+  def gen(self):
     self.arg.gen()
     # newType = SC.get_type(op, arg)
     # malloc temp : newType
