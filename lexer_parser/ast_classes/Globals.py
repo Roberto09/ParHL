@@ -7,6 +7,7 @@ class Globals(Node):
     self.global_1 = global_1
   
   def gen(self):
+    # Checar self.estatuto.name != 'Return'
     self.estatuto.gen()
     if hasattr(self, 'global_1'):
       self.global_1.gen()

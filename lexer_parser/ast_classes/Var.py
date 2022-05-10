@@ -11,5 +11,6 @@ class Var(Node):
   def gen(self):
     #  FuncDir.add_var(id, id_type)
     if hasattr(self, 'expr'):
-      assign = Assign(id, 'expr')
+      self.expr.gen()
+      assign = Assign(id, self.expr)
       assign.gen()
