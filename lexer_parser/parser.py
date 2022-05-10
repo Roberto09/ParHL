@@ -1,3 +1,7 @@
+from lexer_parser.ast_classes.Bool import Bool
+from lexer_parser.ast_classes.Float import Float
+from lexer_parser.ast_classes.Int import Int
+from lexer_parser.ast_classes.String import String
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -14,9 +18,21 @@ class ParhlParser(Parser):
     def globals_aux(self, p):
         pass
 
-    @_('INT_V','FLOAT_V', 'BOOL_V', 'STRING_V')
+    @_('INT_V')
     def const(self, p):
-        pass
+        return Int(p[0])
+
+    @_('FLOAT_V')
+    def const(self, p):
+        return Float(p[0])
+   
+    @_('BOOL_V')
+    def const(self, p):
+        return Bool(p[0])
+    
+    @_('STRING_V')
+    def const(self, p):
+        return String(p[0])
 
     @_('L_BRACKET expr tens_1')
     def tens(self, p):
