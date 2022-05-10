@@ -5,6 +5,10 @@ from ast_classes.BinExpr import BinExpr
 from ast_classes.UnExpr import UnExpr
 from ast_classes.Var import Var
 from ast_classes.Assign import Assign
+from ast_classes.If import If
+from ast_classes.Else import Else
+from ast_classes.ElseIf import ElseIf
+from ast_classes.IfElse import IfElse
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -202,37 +206,34 @@ class ParhlParser(Parser):
     def for_loop(self, p):
         pass
 
-    @_('cond_if', 'cond_if_else', 'cond_if_else_if')
+    @_('simple_if', 'cond_if_else', 'cond_if_else_if')
     def cond(self, p):
-        pass
+        return p[0]
 
     @_('IF L_PAREN expr R_PAREN block')
     def simple_if(self, p):
-        pass
+        return If(p[2], p[4])
 
     @_('ELSE block')
     def simple_else(self, p):
-        pass
+        return Else(p[1])
 
     @_('ELSE_IF L_PAREN expr R_PAREN block complex_else_if')
     def simple_else_if(self, p):
-        pass
+        return ElseIf(p[2], p[4], p[5])
 
     @_('simple_else_if', 'empty', 'simple_else')
     def complex_else_if(self, p):
-        pass
-
-    @_('simple_if')
-    def cond_if(self, p):
-        pass
+        return p[0]
 
     @_('simple_if simple_else')
     def cond_if_else(self, p):
-        pass
+        return IfElse(p[0], p[1])
 
     @_('simple_if simple_else_if')
     def cond_if_else_if(self, p):
-        pass
+        return IfElse(p[0], p[1])
+        
 
     @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
@@ -277,5 +278,5 @@ class ParhlParser(Parser):
 
     @_('')
     def empty(self, p):
-        pass
+        return None
     

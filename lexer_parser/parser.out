@@ -79,43 +79,42 @@ Rule 75    while_loop -> WHILE L_PAREN expr R_PAREN block
 Rule 76    for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
 Rule 77    cond -> cond_if_else_if
 Rule 78    cond -> cond_if_else
-Rule 79    cond -> cond_if
+Rule 79    cond -> simple_if
 Rule 80    simple_if -> IF L_PAREN expr R_PAREN block
 Rule 81    simple_else -> ELSE block
 Rule 82    simple_else_if -> ELSE_IF L_PAREN expr R_PAREN block complex_else_if
 Rule 83    complex_else_if -> simple_else
 Rule 84    complex_else_if -> empty
 Rule 85    complex_else_if -> simple_else_if
-Rule 86    cond_if -> simple_if
-Rule 87    cond_if_else -> simple_if simple_else
-Rule 88    cond_if_else_if -> simple_if simple_else_if
-Rule 89    func -> LET ID L_PAREN func_params R_PAREN COLON func_type block
-Rule 90    func_params -> func_params_1
-Rule 91    func_params -> empty
-Rule 92    func_params_1 -> ID COLON const_type COMMA func_params_1
-Rule 93    func_params_1 -> ID COLON const_type
-Rule 94    func_type -> VOID
-Rule 95    func_type -> const_type
-Rule 96    ret -> RETURN expr
-Rule 97    statement -> block_statements
-Rule 98    statement -> statements eos
-Rule 99    statements -> ret
-Rule 100   statements -> func_call
-Rule 101   statements -> write_file
-Rule 102   statements -> read_file
-Rule 103   statements -> print_rule
-Rule 104   statements -> read_line
-Rule 105   statements -> assign
-Rule 106   statements -> var
-Rule 107   block_statements -> func
-Rule 108   block_statements -> cond
-Rule 109   block_statements -> for_loop
-Rule 110   block_statements -> while_loop
-Rule 111   eos -> NEWLINE ignored_newlines
-Rule 112   eos -> SEMICOLON ignored_newlines
-Rule 113   ignored_newlines -> empty
-Rule 114   ignored_newlines -> NEWLINE ignored_newlines
-Rule 115   empty -> <empty>
+Rule 86    cond_if_else -> simple_if simple_else
+Rule 87    cond_if_else_if -> simple_if simple_else_if
+Rule 88    func -> LET ID L_PAREN func_params R_PAREN COLON func_type block
+Rule 89    func_params -> func_params_1
+Rule 90    func_params -> empty
+Rule 91    func_params_1 -> ID COLON const_type COMMA func_params_1
+Rule 92    func_params_1 -> ID COLON const_type
+Rule 93    func_type -> VOID
+Rule 94    func_type -> const_type
+Rule 95    ret -> RETURN expr
+Rule 96    statement -> block_statements
+Rule 97    statement -> statements eos
+Rule 98    statements -> ret
+Rule 99    statements -> func_call
+Rule 100   statements -> write_file
+Rule 101   statements -> read_file
+Rule 102   statements -> print_rule
+Rule 103   statements -> read_line
+Rule 104   statements -> assign
+Rule 105   statements -> var
+Rule 106   block_statements -> func
+Rule 107   block_statements -> cond
+Rule 108   block_statements -> for_loop
+Rule 109   block_statements -> while_loop
+Rule 110   eos -> NEWLINE ignored_newlines
+Rule 111   eos -> SEMICOLON ignored_newlines
+Rule 112   ignored_newlines -> empty
+Rule 113   ignored_newlines -> NEWLINE ignored_newlines
+Rule 114   empty -> <empty>
 
 Terminals, with rules where they appear:
 
@@ -123,8 +122,8 @@ AND                  : 27
 ASSIG                : 64 68
 BOOL_T               : 21
 BOOL_V               : 6
-COLON                : 70 89 92 93
-COMMA                : 10 61 66 92
+COLON                : 70 88 91 92
+COMMA                : 10 61 66 91
 DIV                  : 41
 ELSE                 : 81
 ELSE_IF              : 82
@@ -138,20 +137,20 @@ GPU_BOOL_T           : 18
 GPU_FLOAT_T          : 19
 GPU_INT_T            : 20
 GT                   : 34
-ID                   : 12 50 60 64 71 72 89 92 93
+ID                   : 12 50 60 64 71 72 88 91 92
 IF                   : 80
 INT_T                : 24
 INT_V                : 8 73 74
 LEQT                 : 31
-LET                  : 65 89
+LET                  : 65 88
 LT                   : 33
 L_BRACE              : 15
 L_BRACKET            : 9 13 14 73 74
-L_PAREN              : 55 56 57 58 59 60 75 76 80 82 89
+L_PAREN              : 55 56 57 58 59 60 75 76 80 82 88
 MINUS                : 37 46
 MOD                  : 40
 MULT                 : 42
-NEWLINE              : 111 114
+NEWLINE              : 110 113
 NOT                  : 48
 NOT_EQ               : 35
 OR                   : 25
@@ -159,94 +158,93 @@ PLUS                 : 38 47
 PRINT                : 57
 READ_FILE            : 58
 READ_LINE            : 56
-RETURN               : 96
+RETURN               : 95
 R_BRACE              : 15
 R_BRACKET            : 11 13 14 73 74
-R_PAREN              : 55 56 58 62 63 75 76 80 82 89
-SEMICOLON            : 76 76 112
+R_PAREN              : 55 56 58 62 63 75 76 80 82 88
+SEMICOLON            : 76 76 111
 STRING_T             : 22
 STRING_V             : 5
-VOID                 : 94
+VOID                 : 93
 WHILE                : 75
 WRITE_FILE           : 59
 error                : 
 
 Nonterminals, with rules where they appear:
 
-assign               : 76 105
-block                : 75 76 80 81 82 89
+assign               : 76 104
+block                : 75 76 80 81 82 88
 block_1              : 15 17
-block_statements     : 97
+block_statements     : 96
 comparison           : 29
 complex_else_if      : 82
-cond                 : 108
-cond_if              : 79
+cond                 : 107
 cond_if_else         : 78
 cond_if_else_if      : 77
 const                : 54
-const_type           : 70 92 93 95
-empty                : 2 16 84 91 113
-eos                  : 98
+const_type           : 70 91 92 94
+empty                : 2 16 84 90 112
+eos                  : 97
 exp_factor           : 40 41 42 43 44
-expr                 : 9 10 13 14 25 55 61 62 64 68 75 76 80 82 96
+expr                 : 9 10 13 14 25 55 61 62 64 68 75 76 80 82 95
 factor               : 44 45
 factor_1             : 46 47 48 49
-for_loop             : 109
-func                 : 107
-func_call            : 53 100
+for_loop             : 108
+func                 : 106
+func_call            : 53 99
 func_call_1          : 57 59 60 61
-func_params          : 89
-func_params_1        : 90 92
-func_type            : 89
+func_params          : 88
+func_params_1        : 89 91
+func_type            : 88
 g_expr               : 27 28
 globals              : 0
 globals_aux          : 1 4
-ignored_newlines     : 1 15 15 15 111 112 114
+ignored_newlines     : 1 15 15 15 110 111 113
 m_expr               : 29 29 30 37 38
-print_rule           : 103
-read_file            : 102
-read_line            : 104
-ret                  : 99
-simple_else          : 83 87
-simple_else_if       : 85 88
-simple_if            : 86 87 88
+print_rule           : 102
+read_file            : 101
+read_line            : 103
+ret                  : 98
+simple_else          : 83 86
+simple_else_if       : 85 87
+simple_if            : 79 86 87
 statement            : 4 17
-statements           : 3 98
+statements           : 3 97
 t_expr               : 25 26 27
 tens                 : 52
 tens_1               : 9 10
 tens_id              : 51
 tens_id_1            : 12 13
 term                 : 37 38 39 40 41 42
-var                  : 76 106
+var                  : 76 105
 var_1                : 65 66
 var_2                : 66 67
 var_3                : 68 69
 var_id               : 70
 var_id_1             : 71 73
-while_loop           : 110
-write_file           : 101
+while_loop           : 109
+write_file           : 100
 
 
 state 0
 
     (0) S' -> . globals
     (1) globals -> . ignored_newlines globals_aux
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
     NEWLINE         shift and go to state 4
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
 
     globals                        shift and go to state 1
     ignored_newlines               shift and go to state 2
@@ -263,18 +261,18 @@ state 2
     (2) globals_aux -> . empty
     (3) globals_aux -> . statements
     (4) globals_aux -> . statement globals_aux
-    (115) empty -> .
-    (99) statements -> . ret
-    (100) statements -> . func_call
-    (101) statements -> . write_file
-    (102) statements -> . read_file
-    (103) statements -> . print_rule
-    (104) statements -> . read_line
-    (105) statements -> . assign
-    (106) statements -> . var
-    (97) statement -> . block_statements
-    (98) statement -> . statements eos
-    (96) ret -> . RETURN expr
+    (114) empty -> .
+    (98) statements -> . ret
+    (99) statements -> . func_call
+    (100) statements -> . write_file
+    (101) statements -> . read_file
+    (102) statements -> . print_rule
+    (103) statements -> . read_line
+    (104) statements -> . assign
+    (105) statements -> . var
+    (96) statement -> . block_statements
+    (97) statement -> . statements eos
+    (95) ret -> . RETURN expr
     (60) func_call -> . ID L_PAREN func_call_1
     (59) write_file -> . WRITE_FILE L_PAREN func_call_1
     (58) read_file -> . READ_FILE L_PAREN R_PAREN
@@ -282,21 +280,20 @@ state 2
     (56) read_line -> . READ_LINE L_PAREN R_PAREN
     (64) assign -> . ID ASSIG expr
     (65) var -> . LET var_1
-    (107) block_statements -> . func
-    (108) block_statements -> . cond
-    (109) block_statements -> . for_loop
-    (110) block_statements -> . while_loop
-    (89) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (106) block_statements -> . func
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (88) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
     (77) cond -> . cond_if_else_if
     (78) cond -> . cond_if_else
-    (79) cond -> . cond_if
+    (79) cond -> . simple_if
     (76) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
     (75) while_loop -> . WHILE L_PAREN expr R_PAREN block
-    (88) cond_if_else_if -> . simple_if simple_else_if
-    (87) cond_if_else -> . simple_if simple_else
-    (86) cond_if -> . simple_if
+    (87) cond_if_else_if -> . simple_if simple_else_if
+    (86) cond_if_else -> . simple_if simple_else
     (80) simple_if -> . IF L_PAREN expr R_PAREN block
-    $end            reduce using rule 115 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
     RETURN          shift and go to state 18
     ID              shift and go to state 19
     WRITE_FILE      shift and go to state 20
@@ -306,7 +303,7 @@ state 2
     LET             shift and go to state 24
     FOR             shift and go to state 32
     WHILE           shift and go to state 33
-    IF              shift and go to state 35
+    IF              shift and go to state 34
 
     globals_aux                    shift and go to state 5
     empty                          shift and go to state 6
@@ -327,53 +324,52 @@ state 2
     while_loop                     shift and go to state 28
     cond_if_else_if                shift and go to state 29
     cond_if_else                   shift and go to state 30
-    cond_if                        shift and go to state 31
-    simple_if                      shift and go to state 34
+    simple_if                      shift and go to state 31
 
 state 3
 
-    (113) ignored_newlines -> empty .
-    RETURN          reduce using rule 113 (ignored_newlines -> empty .)
-    ID              reduce using rule 113 (ignored_newlines -> empty .)
-    WRITE_FILE      reduce using rule 113 (ignored_newlines -> empty .)
-    READ_FILE       reduce using rule 113 (ignored_newlines -> empty .)
-    PRINT           reduce using rule 113 (ignored_newlines -> empty .)
-    READ_LINE       reduce using rule 113 (ignored_newlines -> empty .)
-    LET             reduce using rule 113 (ignored_newlines -> empty .)
-    FOR             reduce using rule 113 (ignored_newlines -> empty .)
-    WHILE           reduce using rule 113 (ignored_newlines -> empty .)
-    IF              reduce using rule 113 (ignored_newlines -> empty .)
-    $end            reduce using rule 113 (ignored_newlines -> empty .)
-    R_BRACE         reduce using rule 113 (ignored_newlines -> empty .)
-    L_BRACE         reduce using rule 113 (ignored_newlines -> empty .)
-    ELSE_IF         reduce using rule 113 (ignored_newlines -> empty .)
-    ELSE            reduce using rule 113 (ignored_newlines -> empty .)
+    (112) ignored_newlines -> empty .
+    RETURN          reduce using rule 112 (ignored_newlines -> empty .)
+    ID              reduce using rule 112 (ignored_newlines -> empty .)
+    WRITE_FILE      reduce using rule 112 (ignored_newlines -> empty .)
+    READ_FILE       reduce using rule 112 (ignored_newlines -> empty .)
+    PRINT           reduce using rule 112 (ignored_newlines -> empty .)
+    READ_LINE       reduce using rule 112 (ignored_newlines -> empty .)
+    LET             reduce using rule 112 (ignored_newlines -> empty .)
+    FOR             reduce using rule 112 (ignored_newlines -> empty .)
+    WHILE           reduce using rule 112 (ignored_newlines -> empty .)
+    IF              reduce using rule 112 (ignored_newlines -> empty .)
+    $end            reduce using rule 112 (ignored_newlines -> empty .)
+    R_BRACE         reduce using rule 112 (ignored_newlines -> empty .)
+    L_BRACE         reduce using rule 112 (ignored_newlines -> empty .)
+    ELSE_IF         reduce using rule 112 (ignored_newlines -> empty .)
+    ELSE            reduce using rule 112 (ignored_newlines -> empty .)
 
 
 state 4
 
-    (114) ignored_newlines -> NEWLINE . ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
+    (113) ignored_newlines -> NEWLINE . ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
     NEWLINE         shift and go to state 4
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
-    L_BRACE         reduce using rule 115 (empty -> .)
-    ELSE_IF         reduce using rule 115 (empty -> .)
-    ELSE            reduce using rule 115 (empty -> .)
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
+    L_BRACE         reduce using rule 114 (empty -> .)
+    ELSE_IF         reduce using rule 114 (empty -> .)
+    ELSE            reduce using rule 114 (empty -> .)
 
-    ignored_newlines               shift and go to state 36
+    ignored_newlines               shift and go to state 35
     empty                          shift and go to state 3
 
 state 5
@@ -391,14 +387,14 @@ state 6
 state 7
 
     (3) globals_aux -> statements .
-    (98) statement -> statements . eos
-    (111) eos -> . NEWLINE ignored_newlines
-    (112) eos -> . SEMICOLON ignored_newlines
+    (97) statement -> statements . eos
+    (110) eos -> . NEWLINE ignored_newlines
+    (111) eos -> . SEMICOLON ignored_newlines
     $end            reduce using rule 3 (globals_aux -> statements .)
-    NEWLINE         shift and go to state 38
-    SEMICOLON       shift and go to state 39
+    NEWLINE         shift and go to state 37
+    SEMICOLON       shift and go to state 38
 
-    eos                            shift and go to state 37
+    eos                            shift and go to state 36
 
 state 8
 
@@ -406,18 +402,18 @@ state 8
     (2) globals_aux -> . empty
     (3) globals_aux -> . statements
     (4) globals_aux -> . statement globals_aux
-    (115) empty -> .
-    (99) statements -> . ret
-    (100) statements -> . func_call
-    (101) statements -> . write_file
-    (102) statements -> . read_file
-    (103) statements -> . print_rule
-    (104) statements -> . read_line
-    (105) statements -> . assign
-    (106) statements -> . var
-    (97) statement -> . block_statements
-    (98) statement -> . statements eos
-    (96) ret -> . RETURN expr
+    (114) empty -> .
+    (98) statements -> . ret
+    (99) statements -> . func_call
+    (100) statements -> . write_file
+    (101) statements -> . read_file
+    (102) statements -> . print_rule
+    (103) statements -> . read_line
+    (104) statements -> . assign
+    (105) statements -> . var
+    (96) statement -> . block_statements
+    (97) statement -> . statements eos
+    (95) ret -> . RETURN expr
     (60) func_call -> . ID L_PAREN func_call_1
     (59) write_file -> . WRITE_FILE L_PAREN func_call_1
     (58) read_file -> . READ_FILE L_PAREN R_PAREN
@@ -425,21 +421,20 @@ state 8
     (56) read_line -> . READ_LINE L_PAREN R_PAREN
     (64) assign -> . ID ASSIG expr
     (65) var -> . LET var_1
-    (107) block_statements -> . func
-    (108) block_statements -> . cond
-    (109) block_statements -> . for_loop
-    (110) block_statements -> . while_loop
-    (89) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (106) block_statements -> . func
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (88) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
     (77) cond -> . cond_if_else_if
     (78) cond -> . cond_if_else
-    (79) cond -> . cond_if
+    (79) cond -> . simple_if
     (76) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
     (75) while_loop -> . WHILE L_PAREN expr R_PAREN block
-    (88) cond_if_else_if -> . simple_if simple_else_if
-    (87) cond_if_else -> . simple_if simple_else
-    (86) cond_if -> . simple_if
+    (87) cond_if_else_if -> . simple_if simple_else_if
+    (86) cond_if_else -> . simple_if simple_else
     (80) simple_if -> . IF L_PAREN expr R_PAREN block
-    $end            reduce using rule 115 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
     RETURN          shift and go to state 18
     ID              shift and go to state 19
     WRITE_FILE      shift and go to state 20
@@ -449,10 +444,10 @@ state 8
     LET             shift and go to state 24
     FOR             shift and go to state 32
     WHILE           shift and go to state 33
-    IF              shift and go to state 35
+    IF              shift and go to state 34
 
     statement                      shift and go to state 8
-    globals_aux                    shift and go to state 40
+    globals_aux                    shift and go to state 39
     empty                          shift and go to state 6
     statements                     shift and go to state 7
     ret                            shift and go to state 9
@@ -470,93 +465,92 @@ state 8
     while_loop                     shift and go to state 28
     cond_if_else_if                shift and go to state 29
     cond_if_else                   shift and go to state 30
-    cond_if                        shift and go to state 31
-    simple_if                      shift and go to state 34
+    simple_if                      shift and go to state 31
 
 state 9
 
-    (99) statements -> ret .
-    NEWLINE         reduce using rule 99 (statements -> ret .)
-    SEMICOLON       reduce using rule 99 (statements -> ret .)
-    $end            reduce using rule 99 (statements -> ret .)
+    (98) statements -> ret .
+    NEWLINE         reduce using rule 98 (statements -> ret .)
+    SEMICOLON       reduce using rule 98 (statements -> ret .)
+    $end            reduce using rule 98 (statements -> ret .)
 
 
 state 10
 
-    (100) statements -> func_call .
-    NEWLINE         reduce using rule 100 (statements -> func_call .)
-    SEMICOLON       reduce using rule 100 (statements -> func_call .)
-    $end            reduce using rule 100 (statements -> func_call .)
+    (99) statements -> func_call .
+    NEWLINE         reduce using rule 99 (statements -> func_call .)
+    SEMICOLON       reduce using rule 99 (statements -> func_call .)
+    $end            reduce using rule 99 (statements -> func_call .)
 
 
 state 11
 
-    (101) statements -> write_file .
-    NEWLINE         reduce using rule 101 (statements -> write_file .)
-    SEMICOLON       reduce using rule 101 (statements -> write_file .)
-    $end            reduce using rule 101 (statements -> write_file .)
+    (100) statements -> write_file .
+    NEWLINE         reduce using rule 100 (statements -> write_file .)
+    SEMICOLON       reduce using rule 100 (statements -> write_file .)
+    $end            reduce using rule 100 (statements -> write_file .)
 
 
 state 12
 
-    (102) statements -> read_file .
-    NEWLINE         reduce using rule 102 (statements -> read_file .)
-    SEMICOLON       reduce using rule 102 (statements -> read_file .)
-    $end            reduce using rule 102 (statements -> read_file .)
+    (101) statements -> read_file .
+    NEWLINE         reduce using rule 101 (statements -> read_file .)
+    SEMICOLON       reduce using rule 101 (statements -> read_file .)
+    $end            reduce using rule 101 (statements -> read_file .)
 
 
 state 13
 
-    (103) statements -> print_rule .
-    NEWLINE         reduce using rule 103 (statements -> print_rule .)
-    SEMICOLON       reduce using rule 103 (statements -> print_rule .)
-    $end            reduce using rule 103 (statements -> print_rule .)
+    (102) statements -> print_rule .
+    NEWLINE         reduce using rule 102 (statements -> print_rule .)
+    SEMICOLON       reduce using rule 102 (statements -> print_rule .)
+    $end            reduce using rule 102 (statements -> print_rule .)
 
 
 state 14
 
-    (104) statements -> read_line .
-    NEWLINE         reduce using rule 104 (statements -> read_line .)
-    SEMICOLON       reduce using rule 104 (statements -> read_line .)
-    $end            reduce using rule 104 (statements -> read_line .)
+    (103) statements -> read_line .
+    NEWLINE         reduce using rule 103 (statements -> read_line .)
+    SEMICOLON       reduce using rule 103 (statements -> read_line .)
+    $end            reduce using rule 103 (statements -> read_line .)
 
 
 state 15
 
-    (105) statements -> assign .
-    NEWLINE         reduce using rule 105 (statements -> assign .)
-    SEMICOLON       reduce using rule 105 (statements -> assign .)
-    $end            reduce using rule 105 (statements -> assign .)
+    (104) statements -> assign .
+    NEWLINE         reduce using rule 104 (statements -> assign .)
+    SEMICOLON       reduce using rule 104 (statements -> assign .)
+    $end            reduce using rule 104 (statements -> assign .)
 
 
 state 16
 
-    (106) statements -> var .
-    NEWLINE         reduce using rule 106 (statements -> var .)
-    SEMICOLON       reduce using rule 106 (statements -> var .)
-    $end            reduce using rule 106 (statements -> var .)
+    (105) statements -> var .
+    NEWLINE         reduce using rule 105 (statements -> var .)
+    SEMICOLON       reduce using rule 105 (statements -> var .)
+    $end            reduce using rule 105 (statements -> var .)
 
 
 state 17
 
-    (97) statement -> block_statements .
-    RETURN          reduce using rule 97 (statement -> block_statements .)
-    ID              reduce using rule 97 (statement -> block_statements .)
-    WRITE_FILE      reduce using rule 97 (statement -> block_statements .)
-    READ_FILE       reduce using rule 97 (statement -> block_statements .)
-    PRINT           reduce using rule 97 (statement -> block_statements .)
-    READ_LINE       reduce using rule 97 (statement -> block_statements .)
-    LET             reduce using rule 97 (statement -> block_statements .)
-    FOR             reduce using rule 97 (statement -> block_statements .)
-    WHILE           reduce using rule 97 (statement -> block_statements .)
-    IF              reduce using rule 97 (statement -> block_statements .)
-    $end            reduce using rule 97 (statement -> block_statements .)
-    R_BRACE         reduce using rule 97 (statement -> block_statements .)
+    (96) statement -> block_statements .
+    RETURN          reduce using rule 96 (statement -> block_statements .)
+    ID              reduce using rule 96 (statement -> block_statements .)
+    WRITE_FILE      reduce using rule 96 (statement -> block_statements .)
+    READ_FILE       reduce using rule 96 (statement -> block_statements .)
+    PRINT           reduce using rule 96 (statement -> block_statements .)
+    READ_LINE       reduce using rule 96 (statement -> block_statements .)
+    LET             reduce using rule 96 (statement -> block_statements .)
+    FOR             reduce using rule 96 (statement -> block_statements .)
+    WHILE           reduce using rule 96 (statement -> block_statements .)
+    IF              reduce using rule 96 (statement -> block_statements .)
+    $end            reduce using rule 96 (statement -> block_statements .)
+    R_BRACE         reduce using rule 96 (statement -> block_statements .)
 
 
 state 18
 
-    (96) ret -> RETURN . expr
+    (95) ret -> RETURN . expr
     (25) expr -> . t_expr OR expr
     (26) expr -> . t_expr
     (27) t_expr -> . g_expr AND t_expr
@@ -589,66 +583,66 @@ state 18
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 41
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 40
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
 state 19
 
     (60) func_call -> ID . L_PAREN func_call_1
     (64) assign -> ID . ASSIG expr
-    L_PAREN         shift and go to state 63
-    ASSIG           shift and go to state 64
+    L_PAREN         shift and go to state 62
+    ASSIG           shift and go to state 63
 
 
 state 20
 
     (59) write_file -> WRITE_FILE . L_PAREN func_call_1
-    L_PAREN         shift and go to state 65
+    L_PAREN         shift and go to state 64
 
 
 state 21
 
     (58) read_file -> READ_FILE . L_PAREN R_PAREN
-    L_PAREN         shift and go to state 66
+    L_PAREN         shift and go to state 65
 
 
 state 22
 
     (57) print_rule -> PRINT . L_PAREN func_call_1
-    L_PAREN         shift and go to state 67
+    L_PAREN         shift and go to state 66
 
 
 state 23
 
     (56) read_line -> READ_LINE . L_PAREN R_PAREN
-    L_PAREN         shift and go to state 68
+    L_PAREN         shift and go to state 67
 
 
 state 24
 
     (65) var -> LET . var_1
-    (89) func -> LET . ID L_PAREN func_params R_PAREN COLON func_type block
+    (88) func -> LET . ID L_PAREN func_params R_PAREN COLON func_type block
     (66) var_1 -> . var_2 COMMA var_1
     (67) var_1 -> . var_2
     (68) var_2 -> . var_3 ASSIG expr
@@ -656,79 +650,79 @@ state 24
     (70) var_3 -> . var_id COLON const_type
     (71) var_id -> . ID var_id_1
     (72) var_id -> . ID
-    ID              shift and go to state 70
+    ID              shift and go to state 69
 
-    var_1                          shift and go to state 69
-    var_2                          shift and go to state 71
-    var_3                          shift and go to state 72
-    var_id                         shift and go to state 73
+    var_1                          shift and go to state 68
+    var_2                          shift and go to state 70
+    var_3                          shift and go to state 71
+    var_id                         shift and go to state 72
 
 state 25
 
-    (107) block_statements -> func .
-    RETURN          reduce using rule 107 (block_statements -> func .)
-    ID              reduce using rule 107 (block_statements -> func .)
-    WRITE_FILE      reduce using rule 107 (block_statements -> func .)
-    READ_FILE       reduce using rule 107 (block_statements -> func .)
-    PRINT           reduce using rule 107 (block_statements -> func .)
-    READ_LINE       reduce using rule 107 (block_statements -> func .)
-    LET             reduce using rule 107 (block_statements -> func .)
-    FOR             reduce using rule 107 (block_statements -> func .)
-    WHILE           reduce using rule 107 (block_statements -> func .)
-    IF              reduce using rule 107 (block_statements -> func .)
-    $end            reduce using rule 107 (block_statements -> func .)
-    R_BRACE         reduce using rule 107 (block_statements -> func .)
+    (106) block_statements -> func .
+    RETURN          reduce using rule 106 (block_statements -> func .)
+    ID              reduce using rule 106 (block_statements -> func .)
+    WRITE_FILE      reduce using rule 106 (block_statements -> func .)
+    READ_FILE       reduce using rule 106 (block_statements -> func .)
+    PRINT           reduce using rule 106 (block_statements -> func .)
+    READ_LINE       reduce using rule 106 (block_statements -> func .)
+    LET             reduce using rule 106 (block_statements -> func .)
+    FOR             reduce using rule 106 (block_statements -> func .)
+    WHILE           reduce using rule 106 (block_statements -> func .)
+    IF              reduce using rule 106 (block_statements -> func .)
+    $end            reduce using rule 106 (block_statements -> func .)
+    R_BRACE         reduce using rule 106 (block_statements -> func .)
 
 
 state 26
 
-    (108) block_statements -> cond .
-    RETURN          reduce using rule 108 (block_statements -> cond .)
-    ID              reduce using rule 108 (block_statements -> cond .)
-    WRITE_FILE      reduce using rule 108 (block_statements -> cond .)
-    READ_FILE       reduce using rule 108 (block_statements -> cond .)
-    PRINT           reduce using rule 108 (block_statements -> cond .)
-    READ_LINE       reduce using rule 108 (block_statements -> cond .)
-    LET             reduce using rule 108 (block_statements -> cond .)
-    FOR             reduce using rule 108 (block_statements -> cond .)
-    WHILE           reduce using rule 108 (block_statements -> cond .)
-    IF              reduce using rule 108 (block_statements -> cond .)
-    $end            reduce using rule 108 (block_statements -> cond .)
-    R_BRACE         reduce using rule 108 (block_statements -> cond .)
+    (107) block_statements -> cond .
+    RETURN          reduce using rule 107 (block_statements -> cond .)
+    ID              reduce using rule 107 (block_statements -> cond .)
+    WRITE_FILE      reduce using rule 107 (block_statements -> cond .)
+    READ_FILE       reduce using rule 107 (block_statements -> cond .)
+    PRINT           reduce using rule 107 (block_statements -> cond .)
+    READ_LINE       reduce using rule 107 (block_statements -> cond .)
+    LET             reduce using rule 107 (block_statements -> cond .)
+    FOR             reduce using rule 107 (block_statements -> cond .)
+    WHILE           reduce using rule 107 (block_statements -> cond .)
+    IF              reduce using rule 107 (block_statements -> cond .)
+    $end            reduce using rule 107 (block_statements -> cond .)
+    R_BRACE         reduce using rule 107 (block_statements -> cond .)
 
 
 state 27
 
-    (109) block_statements -> for_loop .
-    RETURN          reduce using rule 109 (block_statements -> for_loop .)
-    ID              reduce using rule 109 (block_statements -> for_loop .)
-    WRITE_FILE      reduce using rule 109 (block_statements -> for_loop .)
-    READ_FILE       reduce using rule 109 (block_statements -> for_loop .)
-    PRINT           reduce using rule 109 (block_statements -> for_loop .)
-    READ_LINE       reduce using rule 109 (block_statements -> for_loop .)
-    LET             reduce using rule 109 (block_statements -> for_loop .)
-    FOR             reduce using rule 109 (block_statements -> for_loop .)
-    WHILE           reduce using rule 109 (block_statements -> for_loop .)
-    IF              reduce using rule 109 (block_statements -> for_loop .)
-    $end            reduce using rule 109 (block_statements -> for_loop .)
-    R_BRACE         reduce using rule 109 (block_statements -> for_loop .)
+    (108) block_statements -> for_loop .
+    RETURN          reduce using rule 108 (block_statements -> for_loop .)
+    ID              reduce using rule 108 (block_statements -> for_loop .)
+    WRITE_FILE      reduce using rule 108 (block_statements -> for_loop .)
+    READ_FILE       reduce using rule 108 (block_statements -> for_loop .)
+    PRINT           reduce using rule 108 (block_statements -> for_loop .)
+    READ_LINE       reduce using rule 108 (block_statements -> for_loop .)
+    LET             reduce using rule 108 (block_statements -> for_loop .)
+    FOR             reduce using rule 108 (block_statements -> for_loop .)
+    WHILE           reduce using rule 108 (block_statements -> for_loop .)
+    IF              reduce using rule 108 (block_statements -> for_loop .)
+    $end            reduce using rule 108 (block_statements -> for_loop .)
+    R_BRACE         reduce using rule 108 (block_statements -> for_loop .)
 
 
 state 28
 
-    (110) block_statements -> while_loop .
-    RETURN          reduce using rule 110 (block_statements -> while_loop .)
-    ID              reduce using rule 110 (block_statements -> while_loop .)
-    WRITE_FILE      reduce using rule 110 (block_statements -> while_loop .)
-    READ_FILE       reduce using rule 110 (block_statements -> while_loop .)
-    PRINT           reduce using rule 110 (block_statements -> while_loop .)
-    READ_LINE       reduce using rule 110 (block_statements -> while_loop .)
-    LET             reduce using rule 110 (block_statements -> while_loop .)
-    FOR             reduce using rule 110 (block_statements -> while_loop .)
-    WHILE           reduce using rule 110 (block_statements -> while_loop .)
-    IF              reduce using rule 110 (block_statements -> while_loop .)
-    $end            reduce using rule 110 (block_statements -> while_loop .)
-    R_BRACE         reduce using rule 110 (block_statements -> while_loop .)
+    (109) block_statements -> while_loop .
+    RETURN          reduce using rule 109 (block_statements -> while_loop .)
+    ID              reduce using rule 109 (block_statements -> while_loop .)
+    WRITE_FILE      reduce using rule 109 (block_statements -> while_loop .)
+    READ_FILE       reduce using rule 109 (block_statements -> while_loop .)
+    PRINT           reduce using rule 109 (block_statements -> while_loop .)
+    READ_LINE       reduce using rule 109 (block_statements -> while_loop .)
+    LET             reduce using rule 109 (block_statements -> while_loop .)
+    FOR             reduce using rule 109 (block_statements -> while_loop .)
+    WHILE           reduce using rule 109 (block_statements -> while_loop .)
+    IF              reduce using rule 109 (block_statements -> while_loop .)
+    $end            reduce using rule 109 (block_statements -> while_loop .)
+    R_BRACE         reduce using rule 109 (block_statements -> while_loop .)
 
 
 state 29
@@ -767,166 +761,149 @@ state 30
 
 state 31
 
-    (79) cond -> cond_if .
-    RETURN          reduce using rule 79 (cond -> cond_if .)
-    ID              reduce using rule 79 (cond -> cond_if .)
-    WRITE_FILE      reduce using rule 79 (cond -> cond_if .)
-    READ_FILE       reduce using rule 79 (cond -> cond_if .)
-    PRINT           reduce using rule 79 (cond -> cond_if .)
-    READ_LINE       reduce using rule 79 (cond -> cond_if .)
-    LET             reduce using rule 79 (cond -> cond_if .)
-    FOR             reduce using rule 79 (cond -> cond_if .)
-    WHILE           reduce using rule 79 (cond -> cond_if .)
-    IF              reduce using rule 79 (cond -> cond_if .)
-    $end            reduce using rule 79 (cond -> cond_if .)
-    R_BRACE         reduce using rule 79 (cond -> cond_if .)
+    (79) cond -> simple_if .
+    (87) cond_if_else_if -> simple_if . simple_else_if
+    (86) cond_if_else -> simple_if . simple_else
+    (82) simple_else_if -> . ELSE_IF L_PAREN expr R_PAREN block complex_else_if
+    (81) simple_else -> . ELSE block
+    RETURN          reduce using rule 79 (cond -> simple_if .)
+    ID              reduce using rule 79 (cond -> simple_if .)
+    WRITE_FILE      reduce using rule 79 (cond -> simple_if .)
+    READ_FILE       reduce using rule 79 (cond -> simple_if .)
+    PRINT           reduce using rule 79 (cond -> simple_if .)
+    READ_LINE       reduce using rule 79 (cond -> simple_if .)
+    LET             reduce using rule 79 (cond -> simple_if .)
+    FOR             reduce using rule 79 (cond -> simple_if .)
+    WHILE           reduce using rule 79 (cond -> simple_if .)
+    IF              reduce using rule 79 (cond -> simple_if .)
+    $end            reduce using rule 79 (cond -> simple_if .)
+    R_BRACE         reduce using rule 79 (cond -> simple_if .)
+    ELSE_IF         shift and go to state 75
+    ELSE            shift and go to state 76
 
+    simple_else_if                 shift and go to state 73
+    simple_else                    shift and go to state 74
 
 state 32
 
     (76) for_loop -> FOR . L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
-    L_PAREN         shift and go to state 74
+    L_PAREN         shift and go to state 77
 
 
 state 33
 
     (75) while_loop -> WHILE . L_PAREN expr R_PAREN block
-    L_PAREN         shift and go to state 75
+    L_PAREN         shift and go to state 78
 
 
 state 34
 
-    (88) cond_if_else_if -> simple_if . simple_else_if
-    (87) cond_if_else -> simple_if . simple_else
-    (86) cond_if -> simple_if .
-    (82) simple_else_if -> . ELSE_IF L_PAREN expr R_PAREN block complex_else_if
-    (81) simple_else -> . ELSE block
-    RETURN          reduce using rule 86 (cond_if -> simple_if .)
-    ID              reduce using rule 86 (cond_if -> simple_if .)
-    WRITE_FILE      reduce using rule 86 (cond_if -> simple_if .)
-    READ_FILE       reduce using rule 86 (cond_if -> simple_if .)
-    PRINT           reduce using rule 86 (cond_if -> simple_if .)
-    READ_LINE       reduce using rule 86 (cond_if -> simple_if .)
-    LET             reduce using rule 86 (cond_if -> simple_if .)
-    FOR             reduce using rule 86 (cond_if -> simple_if .)
-    WHILE           reduce using rule 86 (cond_if -> simple_if .)
-    IF              reduce using rule 86 (cond_if -> simple_if .)
-    $end            reduce using rule 86 (cond_if -> simple_if .)
-    R_BRACE         reduce using rule 86 (cond_if -> simple_if .)
-    ELSE_IF         shift and go to state 78
-    ELSE            shift and go to state 79
+    (80) simple_if -> IF . L_PAREN expr R_PAREN block
+    L_PAREN         shift and go to state 79
 
-    simple_else_if                 shift and go to state 76
-    simple_else                    shift and go to state 77
 
 state 35
 
-    (80) simple_if -> IF . L_PAREN expr R_PAREN block
-    L_PAREN         shift and go to state 80
+    (113) ignored_newlines -> NEWLINE ignored_newlines .
+    RETURN          reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    ID              reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    WRITE_FILE      reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    READ_FILE       reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    PRINT           reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    READ_LINE       reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    LET             reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    FOR             reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    WHILE           reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    IF              reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    $end            reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    R_BRACE         reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    L_BRACE         reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    ELSE_IF         reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
+    ELSE            reduce using rule 113 (ignored_newlines -> NEWLINE ignored_newlines .)
 
 
 state 36
 
-    (114) ignored_newlines -> NEWLINE ignored_newlines .
-    RETURN          reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    ID              reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    WRITE_FILE      reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    READ_FILE       reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    PRINT           reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    READ_LINE       reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    LET             reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    FOR             reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    WHILE           reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    IF              reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    $end            reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    R_BRACE         reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    L_BRACE         reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    ELSE_IF         reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
-    ELSE            reduce using rule 114 (ignored_newlines -> NEWLINE ignored_newlines .)
+    (97) statement -> statements eos .
+    RETURN          reduce using rule 97 (statement -> statements eos .)
+    ID              reduce using rule 97 (statement -> statements eos .)
+    WRITE_FILE      reduce using rule 97 (statement -> statements eos .)
+    READ_FILE       reduce using rule 97 (statement -> statements eos .)
+    PRINT           reduce using rule 97 (statement -> statements eos .)
+    READ_LINE       reduce using rule 97 (statement -> statements eos .)
+    LET             reduce using rule 97 (statement -> statements eos .)
+    FOR             reduce using rule 97 (statement -> statements eos .)
+    WHILE           reduce using rule 97 (statement -> statements eos .)
+    IF              reduce using rule 97 (statement -> statements eos .)
+    $end            reduce using rule 97 (statement -> statements eos .)
+    R_BRACE         reduce using rule 97 (statement -> statements eos .)
 
 
 state 37
 
-    (98) statement -> statements eos .
-    RETURN          reduce using rule 98 (statement -> statements eos .)
-    ID              reduce using rule 98 (statement -> statements eos .)
-    WRITE_FILE      reduce using rule 98 (statement -> statements eos .)
-    READ_FILE       reduce using rule 98 (statement -> statements eos .)
-    PRINT           reduce using rule 98 (statement -> statements eos .)
-    READ_LINE       reduce using rule 98 (statement -> statements eos .)
-    LET             reduce using rule 98 (statement -> statements eos .)
-    FOR             reduce using rule 98 (statement -> statements eos .)
-    WHILE           reduce using rule 98 (statement -> statements eos .)
-    IF              reduce using rule 98 (statement -> statements eos .)
-    $end            reduce using rule 98 (statement -> statements eos .)
-    R_BRACE         reduce using rule 98 (statement -> statements eos .)
+    (110) eos -> NEWLINE . ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
 
+    ignored_newlines               shift and go to state 80
+    empty                          shift and go to state 3
 
 state 38
 
-    (111) eos -> NEWLINE . ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
+    (111) eos -> SEMICOLON . ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
     NEWLINE         shift and go to state 4
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
 
     ignored_newlines               shift and go to state 81
     empty                          shift and go to state 3
 
 state 39
 
-    (112) eos -> SEMICOLON . ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
-
-    ignored_newlines               shift and go to state 82
-    empty                          shift and go to state 3
-
-state 40
-
     (4) globals_aux -> statement globals_aux .
     $end            reduce using rule 4 (globals_aux -> statement globals_aux .)
 
 
+state 40
+
+    (95) ret -> RETURN expr .
+    NEWLINE         reduce using rule 95 (ret -> RETURN expr .)
+    SEMICOLON       reduce using rule 95 (ret -> RETURN expr .)
+    $end            reduce using rule 95 (ret -> RETURN expr .)
+
+
 state 41
-
-    (96) ret -> RETURN expr .
-    NEWLINE         reduce using rule 96 (ret -> RETURN expr .)
-    SEMICOLON       reduce using rule 96 (ret -> RETURN expr .)
-    $end            reduce using rule 96 (ret -> RETURN expr .)
-
-
-state 42
 
     (25) expr -> t_expr . OR expr
     (26) expr -> t_expr .
-    OR              shift and go to state 83
+    OR              shift and go to state 82
     NEWLINE         reduce using rule 26 (expr -> t_expr .)
     SEMICOLON       reduce using rule 26 (expr -> t_expr .)
     $end            reduce using rule 26 (expr -> t_expr .)
@@ -935,11 +912,11 @@ state 42
     R_BRACKET       reduce using rule 26 (expr -> t_expr .)
 
 
-state 43
+state 42
 
     (27) t_expr -> g_expr . AND t_expr
     (28) t_expr -> g_expr .
-    AND             shift and go to state 84
+    AND             shift and go to state 83
     OR              reduce using rule 28 (t_expr -> g_expr .)
     NEWLINE         reduce using rule 28 (t_expr -> g_expr .)
     SEMICOLON       reduce using rule 28 (t_expr -> g_expr .)
@@ -949,7 +926,7 @@ state 43
     R_BRACKET       reduce using rule 28 (t_expr -> g_expr .)
 
 
-state 44
+state 43
 
     (29) g_expr -> m_expr . comparison m_expr
     (30) g_expr -> m_expr .
@@ -967,22 +944,22 @@ state 44
     R_PAREN         reduce using rule 30 (g_expr -> m_expr .)
     COMMA           reduce using rule 30 (g_expr -> m_expr .)
     R_BRACKET       reduce using rule 30 (g_expr -> m_expr .)
-    LEQT            shift and go to state 86
-    GEQT            shift and go to state 87
-    LT              shift and go to state 88
-    GT              shift and go to state 89
-    NOT_EQ          shift and go to state 90
-    EQ              shift and go to state 91
+    LEQT            shift and go to state 85
+    GEQT            shift and go to state 86
+    LT              shift and go to state 87
+    GT              shift and go to state 88
+    NOT_EQ          shift and go to state 89
+    EQ              shift and go to state 90
 
-    comparison                     shift and go to state 85
+    comparison                     shift and go to state 84
 
-state 45
+state 44
 
     (37) m_expr -> term . MINUS m_expr
     (38) m_expr -> term . PLUS m_expr
     (39) m_expr -> term .
-    MINUS           shift and go to state 92
-    PLUS            shift and go to state 93
+    MINUS           shift and go to state 91
+    PLUS            shift and go to state 92
     LEQT            reduce using rule 39 (m_expr -> term .)
     GEQT            reduce using rule 39 (m_expr -> term .)
     LT              reduce using rule 39 (m_expr -> term .)
@@ -999,7 +976,7 @@ state 45
     R_BRACKET       reduce using rule 39 (m_expr -> term .)
 
 
-state 46
+state 45
 
     (46) factor -> MINUS . factor_1
     (50) factor_1 -> . ID
@@ -1015,21 +992,21 @@ state 46
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    factor_1                       shift and go to state 94
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    factor_1                       shift and go to state 93
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 47
+state 46
 
     (47) factor -> PLUS . factor_1
     (50) factor_1 -> . ID
@@ -1045,29 +1022,29 @@ state 47
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    factor_1                       shift and go to state 95
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    factor_1                       shift and go to state 94
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 48
+state 47
 
     (40) term -> exp_factor . MOD term
     (41) term -> exp_factor . DIV term
     (42) term -> exp_factor . MULT term
     (43) term -> exp_factor .
-    MOD             shift and go to state 96
-    DIV             shift and go to state 97
-    MULT            shift and go to state 98
+    MOD             shift and go to state 95
+    DIV             shift and go to state 96
+    MULT            shift and go to state 97
     MINUS           reduce using rule 43 (term -> exp_factor .)
     PLUS            reduce using rule 43 (term -> exp_factor .)
     LEQT            reduce using rule 43 (term -> exp_factor .)
@@ -1086,11 +1063,11 @@ state 48
     R_BRACKET       reduce using rule 43 (term -> exp_factor .)
 
 
-state 49
+state 48
 
     (44) exp_factor -> factor . EXP exp_factor
     (45) exp_factor -> factor .
-    EXP             shift and go to state 99
+    EXP             shift and go to state 98
     MOD             reduce using rule 45 (exp_factor -> factor .)
     DIV             reduce using rule 45 (exp_factor -> factor .)
     MULT            reduce using rule 45 (exp_factor -> factor .)
@@ -1112,7 +1089,7 @@ state 49
     R_BRACKET       reduce using rule 45 (exp_factor -> factor .)
 
 
-state 50
+state 49
 
     (49) factor -> factor_1 .
     EXP             reduce using rule 49 (factor -> factor_1 .)
@@ -1137,7 +1114,7 @@ state 50
     R_BRACKET       reduce using rule 49 (factor -> factor_1 .)
 
 
-state 51
+state 50
 
     (48) factor -> NOT . factor_1
     (50) factor_1 -> . ID
@@ -1153,21 +1130,21 @@ state 51
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    factor_1                       shift and go to state 100
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    factor_1                       shift and go to state 99
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 52
+state 51
 
     (50) factor_1 -> ID .
     (12) tens_id -> ID . tens_id_1
@@ -1194,12 +1171,12 @@ state 52
     R_PAREN         reduce using rule 50 (factor_1 -> ID .)
     COMMA           reduce using rule 50 (factor_1 -> ID .)
     R_BRACKET       reduce using rule 50 (factor_1 -> ID .)
-    L_PAREN         shift and go to state 63
-    L_BRACKET       shift and go to state 102
+    L_PAREN         shift and go to state 62
+    L_BRACKET       shift and go to state 101
 
-    tens_id_1                      shift and go to state 101
+    tens_id_1                      shift and go to state 100
 
-state 53
+state 52
 
     (51) factor_1 -> tens_id .
     EXP             reduce using rule 51 (factor_1 -> tens_id .)
@@ -1224,7 +1201,7 @@ state 53
     R_BRACKET       reduce using rule 51 (factor_1 -> tens_id .)
 
 
-state 54
+state 53
 
     (52) factor_1 -> tens .
     EXP             reduce using rule 52 (factor_1 -> tens .)
@@ -1249,7 +1226,7 @@ state 54
     R_BRACKET       reduce using rule 52 (factor_1 -> tens .)
 
 
-state 55
+state 54
 
     (53) factor_1 -> func_call .
     EXP             reduce using rule 53 (factor_1 -> func_call .)
@@ -1274,7 +1251,7 @@ state 55
     R_BRACKET       reduce using rule 53 (factor_1 -> func_call .)
 
 
-state 56
+state 55
 
     (54) factor_1 -> const .
     EXP             reduce using rule 54 (factor_1 -> const .)
@@ -1299,7 +1276,7 @@ state 56
     R_BRACKET       reduce using rule 54 (factor_1 -> const .)
 
 
-state 57
+state 56
 
     (55) factor_1 -> L_PAREN . expr R_PAREN
     (25) expr -> . t_expr OR expr
@@ -1334,31 +1311,31 @@ state 57
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 103
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 102
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 58
+state 57
 
     (9) tens -> L_BRACKET . expr tens_1
     (25) expr -> . t_expr OR expr
@@ -1393,31 +1370,31 @@ state 58
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 104
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 103
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 59
+state 58
 
     (5) const -> STRING_V .
     EXP             reduce using rule 5 (const -> STRING_V .)
@@ -1442,7 +1419,7 @@ state 59
     R_BRACKET       reduce using rule 5 (const -> STRING_V .)
 
 
-state 60
+state 59
 
     (6) const -> BOOL_V .
     EXP             reduce using rule 6 (const -> BOOL_V .)
@@ -1467,7 +1444,7 @@ state 60
     R_BRACKET       reduce using rule 6 (const -> BOOL_V .)
 
 
-state 61
+state 60
 
     (7) const -> FLOAT_V .
     EXP             reduce using rule 7 (const -> FLOAT_V .)
@@ -1492,7 +1469,7 @@ state 61
     R_BRACKET       reduce using rule 7 (const -> FLOAT_V .)
 
 
-state 62
+state 61
 
     (8) const -> INT_V .
     EXP             reduce using rule 8 (const -> INT_V .)
@@ -1517,7 +1494,7 @@ state 62
     R_BRACKET       reduce using rule 8 (const -> INT_V .)
 
 
-state 63
+state 62
 
     (60) func_call -> ID L_PAREN . func_call_1
     (61) func_call_1 -> . expr COMMA func_call_1
@@ -1555,33 +1532,33 @@ state 63
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    R_PAREN         shift and go to state 107
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    R_PAREN         shift and go to state 106
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    func_call_1                    shift and go to state 105
-    expr                           shift and go to state 106
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    func_call_1                    shift and go to state 104
+    expr                           shift and go to state 105
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 64
+state 63
 
     (64) assign -> ID ASSIG . expr
     (25) expr -> . t_expr OR expr
@@ -1616,31 +1593,31 @@ state 64
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 108
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 107
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 65
+state 64
 
     (59) write_file -> WRITE_FILE L_PAREN . func_call_1
     (61) func_call_1 -> . expr COMMA func_call_1
@@ -1678,39 +1655,39 @@ state 65
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    R_PAREN         shift and go to state 107
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    R_PAREN         shift and go to state 106
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    func_call_1                    shift and go to state 109
-    expr                           shift and go to state 106
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    func_call_1                    shift and go to state 108
+    expr                           shift and go to state 105
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 66
+state 65
 
     (58) read_file -> READ_FILE L_PAREN . R_PAREN
-    R_PAREN         shift and go to state 110
+    R_PAREN         shift and go to state 109
 
 
-state 67
+state 66
 
     (57) print_rule -> PRINT L_PAREN . func_call_1
     (61) func_call_1 -> . expr COMMA func_call_1
@@ -1748,39 +1725,39 @@ state 67
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    R_PAREN         shift and go to state 107
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    R_PAREN         shift and go to state 106
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    func_call_1                    shift and go to state 111
-    expr                           shift and go to state 106
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    func_call_1                    shift and go to state 110
+    expr                           shift and go to state 105
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 68
+state 67
 
     (56) read_line -> READ_LINE L_PAREN . R_PAREN
-    R_PAREN         shift and go to state 112
+    R_PAREN         shift and go to state 111
 
 
-state 69
+state 68
 
     (65) var -> LET var_1 .
     NEWLINE         reduce using rule 65 (var -> LET var_1 .)
@@ -1788,55 +1765,109 @@ state 69
     $end            reduce using rule 65 (var -> LET var_1 .)
 
 
-state 70
+state 69
 
-    (89) func -> LET ID . L_PAREN func_params R_PAREN COLON func_type block
+    (88) func -> LET ID . L_PAREN func_params R_PAREN COLON func_type block
     (71) var_id -> ID . var_id_1
     (72) var_id -> ID .
     (73) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
     (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET
-    L_PAREN         shift and go to state 113
+    L_PAREN         shift and go to state 112
     COLON           reduce using rule 72 (var_id -> ID .)
-    L_BRACKET       shift and go to state 115
+    L_BRACKET       shift and go to state 114
 
-    var_id_1                       shift and go to state 114
+    var_id_1                       shift and go to state 113
 
-state 71
+state 70
 
     (66) var_1 -> var_2 . COMMA var_1
     (67) var_1 -> var_2 .
-    COMMA           shift and go to state 116
+    COMMA           shift and go to state 115
     NEWLINE         reduce using rule 67 (var_1 -> var_2 .)
     SEMICOLON       reduce using rule 67 (var_1 -> var_2 .)
     $end            reduce using rule 67 (var_1 -> var_2 .)
 
 
-state 72
+state 71
 
     (68) var_2 -> var_3 . ASSIG expr
     (69) var_2 -> var_3 .
-    ASSIG           shift and go to state 117
+    ASSIG           shift and go to state 116
     COMMA           reduce using rule 69 (var_2 -> var_3 .)
     NEWLINE         reduce using rule 69 (var_2 -> var_3 .)
     SEMICOLON       reduce using rule 69 (var_2 -> var_3 .)
     $end            reduce using rule 69 (var_2 -> var_3 .)
 
 
-state 73
+state 72
 
     (70) var_3 -> var_id . COLON const_type
-    COLON           shift and go to state 118
+    COLON           shift and go to state 117
+
+
+state 73
+
+    (87) cond_if_else_if -> simple_if simple_else_if .
+    RETURN          reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    ID              reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    WRITE_FILE      reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    READ_FILE       reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    PRINT           reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    READ_LINE       reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    LET             reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    FOR             reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    WHILE           reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    IF              reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    $end            reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
+    R_BRACE         reduce using rule 87 (cond_if_else_if -> simple_if simple_else_if .)
 
 
 state 74
 
-    (76) for_loop -> FOR L_PAREN . var SEMICOLON expr SEMICOLON assign R_PAREN block
-    (65) var -> . LET var_1
-    LET             shift and go to state 120
+    (86) cond_if_else -> simple_if simple_else .
+    RETURN          reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    ID              reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    WRITE_FILE      reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    READ_FILE       reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    PRINT           reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    READ_LINE       reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    LET             reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    FOR             reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    WHILE           reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    IF              reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    $end            reduce using rule 86 (cond_if_else -> simple_if simple_else .)
+    R_BRACE         reduce using rule 86 (cond_if_else -> simple_if simple_else .)
 
-    var                            shift and go to state 119
 
 state 75
+
+    (82) simple_else_if -> ELSE_IF . L_PAREN expr R_PAREN block complex_else_if
+    L_PAREN         shift and go to state 118
+
+
+state 76
+
+    (81) simple_else -> ELSE . block
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    L_BRACE         reduce using rule 114 (empty -> .)
+
+    block                          shift and go to state 119
+    ignored_newlines               shift and go to state 120
+    empty                          shift and go to state 3
+
+state 77
+
+    (76) for_loop -> FOR L_PAREN . var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (65) var -> . LET var_1
+    LET             shift and go to state 122
+
+    var                            shift and go to state 121
+
+state 78
 
     (75) while_loop -> WHILE L_PAREN . expr R_PAREN block
     (25) expr -> . t_expr OR expr
@@ -1871,85 +1902,31 @@ state 75
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 121
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
-
-state 76
-
-    (88) cond_if_else_if -> simple_if simple_else_if .
-    RETURN          reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    ID              reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    WRITE_FILE      reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    READ_FILE       reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    PRINT           reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    READ_LINE       reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    LET             reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    FOR             reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    WHILE           reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    IF              reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    $end            reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-    R_BRACE         reduce using rule 88 (cond_if_else_if -> simple_if simple_else_if .)
-
-
-state 77
-
-    (87) cond_if_else -> simple_if simple_else .
-    RETURN          reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    ID              reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    WRITE_FILE      reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    READ_FILE       reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    PRINT           reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    READ_LINE       reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    LET             reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    FOR             reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    WHILE           reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    IF              reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    $end            reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-    R_BRACE         reduce using rule 87 (cond_if_else -> simple_if simple_else .)
-
-
-state 78
-
-    (82) simple_else_if -> ELSE_IF . L_PAREN expr R_PAREN block complex_else_if
-    L_PAREN         shift and go to state 122
-
+    expr                           shift and go to state 123
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
 state 79
-
-    (81) simple_else -> ELSE . block
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
-
-    block                          shift and go to state 123
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
-
-state 80
 
     (80) simple_if -> IF L_PAREN . expr R_PAREN block
     (25) expr -> . t_expr OR expr
@@ -1984,65 +1961,65 @@ state 80
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 125
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 124
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
+
+state 80
+
+    (110) eos -> NEWLINE ignored_newlines .
+    RETURN          reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    ID              reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    WRITE_FILE      reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    READ_FILE       reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    PRINT           reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    READ_LINE       reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    LET             reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    FOR             reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    WHILE           reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    IF              reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    $end            reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+    R_BRACE         reduce using rule 110 (eos -> NEWLINE ignored_newlines .)
+
 
 state 81
 
-    (111) eos -> NEWLINE ignored_newlines .
-    RETURN          reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    ID              reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    WRITE_FILE      reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    READ_FILE       reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    PRINT           reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    READ_LINE       reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    LET             reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    FOR             reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    WHILE           reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    IF              reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    $end            reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
-    R_BRACE         reduce using rule 111 (eos -> NEWLINE ignored_newlines .)
+    (111) eos -> SEMICOLON ignored_newlines .
+    RETURN          reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    ID              reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    WRITE_FILE      reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    READ_FILE       reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    PRINT           reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    READ_LINE       reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    LET             reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    FOR             reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    WHILE           reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    IF              reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    $end            reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
+    R_BRACE         reduce using rule 111 (eos -> SEMICOLON ignored_newlines .)
 
 
 state 82
-
-    (112) eos -> SEMICOLON ignored_newlines .
-    RETURN          reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    ID              reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    WRITE_FILE      reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    READ_FILE       reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    PRINT           reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    READ_LINE       reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    LET             reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    FOR             reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    WHILE           reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    IF              reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    $end            reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-    R_BRACE         reduce using rule 112 (eos -> SEMICOLON ignored_newlines .)
-
-
-state 83
 
     (25) expr -> t_expr OR . expr
     (25) expr -> . t_expr OR expr
@@ -2077,31 +2054,31 @@ state 83
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    t_expr                         shift and go to state 42
-    expr                           shift and go to state 126
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    t_expr                         shift and go to state 41
+    expr                           shift and go to state 125
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 84
+state 83
 
     (27) t_expr -> g_expr AND . t_expr
     (27) t_expr -> . g_expr AND t_expr
@@ -2134,30 +2111,30 @@ state 84
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    g_expr                         shift and go to state 43
-    t_expr                         shift and go to state 127
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    g_expr                         shift and go to state 42
+    t_expr                         shift and go to state 126
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 85
+state 84
 
     (29) g_expr -> m_expr comparison . m_expr
     (37) m_expr -> . term MINUS m_expr
@@ -2186,28 +2163,28 @@ state 85
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    m_expr                         shift and go to state 128
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    m_expr                         shift and go to state 127
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 86
+state 85
 
     (31) comparison -> LEQT .
     MINUS           reduce using rule 31 (comparison -> LEQT .)
@@ -2222,7 +2199,7 @@ state 86
     INT_V           reduce using rule 31 (comparison -> LEQT .)
 
 
-state 87
+state 86
 
     (32) comparison -> GEQT .
     MINUS           reduce using rule 32 (comparison -> GEQT .)
@@ -2237,7 +2214,7 @@ state 87
     INT_V           reduce using rule 32 (comparison -> GEQT .)
 
 
-state 88
+state 87
 
     (33) comparison -> LT .
     MINUS           reduce using rule 33 (comparison -> LT .)
@@ -2252,7 +2229,7 @@ state 88
     INT_V           reduce using rule 33 (comparison -> LT .)
 
 
-state 89
+state 88
 
     (34) comparison -> GT .
     MINUS           reduce using rule 34 (comparison -> GT .)
@@ -2267,7 +2244,7 @@ state 89
     INT_V           reduce using rule 34 (comparison -> GT .)
 
 
-state 90
+state 89
 
     (35) comparison -> NOT_EQ .
     MINUS           reduce using rule 35 (comparison -> NOT_EQ .)
@@ -2282,7 +2259,7 @@ state 90
     INT_V           reduce using rule 35 (comparison -> NOT_EQ .)
 
 
-state 91
+state 90
 
     (36) comparison -> EQ .
     MINUS           reduce using rule 36 (comparison -> EQ .)
@@ -2297,7 +2274,7 @@ state 91
     INT_V           reduce using rule 36 (comparison -> EQ .)
 
 
-state 92
+state 91
 
     (37) m_expr -> term MINUS . m_expr
     (37) m_expr -> . term MINUS m_expr
@@ -2326,28 +2303,28 @@ state 92
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    term                           shift and go to state 45
-    m_expr                         shift and go to state 129
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    term                           shift and go to state 44
+    m_expr                         shift and go to state 128
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 93
+state 92
 
     (38) m_expr -> term PLUS . m_expr
     (37) m_expr -> . term MINUS m_expr
@@ -2376,28 +2353,28 @@ state 93
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    term                           shift and go to state 45
-    m_expr                         shift and go to state 130
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    term                           shift and go to state 44
+    m_expr                         shift and go to state 129
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 94
+state 93
 
     (46) factor -> MINUS factor_1 .
     EXP             reduce using rule 46 (factor -> MINUS factor_1 .)
@@ -2422,7 +2399,7 @@ state 94
     R_BRACKET       reduce using rule 46 (factor -> MINUS factor_1 .)
 
 
-state 95
+state 94
 
     (47) factor -> PLUS factor_1 .
     EXP             reduce using rule 47 (factor -> PLUS factor_1 .)
@@ -2447,7 +2424,7 @@ state 95
     R_BRACKET       reduce using rule 47 (factor -> PLUS factor_1 .)
 
 
-state 96
+state 95
 
     (40) term -> exp_factor MOD . term
     (40) term -> . exp_factor MOD term
@@ -2473,27 +2450,27 @@ state 96
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    exp_factor                     shift and go to state 48
-    term                           shift and go to state 131
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    exp_factor                     shift and go to state 47
+    term                           shift and go to state 130
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 97
+state 96
 
     (41) term -> exp_factor DIV . term
     (40) term -> . exp_factor MOD term
@@ -2519,27 +2496,27 @@ state 97
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    exp_factor                     shift and go to state 48
-    term                           shift and go to state 132
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    exp_factor                     shift and go to state 47
+    term                           shift and go to state 131
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 98
+state 97
 
     (42) term -> exp_factor MULT . term
     (40) term -> . exp_factor MOD term
@@ -2565,27 +2542,27 @@ state 98
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    exp_factor                     shift and go to state 48
-    term                           shift and go to state 133
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    exp_factor                     shift and go to state 47
+    term                           shift and go to state 132
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 99
+state 98
 
     (44) exp_factor -> factor EXP . exp_factor
     (44) exp_factor -> . factor EXP exp_factor
@@ -2607,26 +2584,26 @@ state 99
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    factor                         shift and go to state 49
-    exp_factor                     shift and go to state 134
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    factor                         shift and go to state 48
+    exp_factor                     shift and go to state 133
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 100
+state 99
 
     (48) factor -> NOT factor_1 .
     EXP             reduce using rule 48 (factor -> NOT factor_1 .)
@@ -2651,7 +2628,7 @@ state 100
     R_BRACKET       reduce using rule 48 (factor -> NOT factor_1 .)
 
 
-state 101
+state 100
 
     (12) tens_id -> ID tens_id_1 .
     EXP             reduce using rule 12 (tens_id -> ID tens_id_1 .)
@@ -2676,7 +2653,7 @@ state 101
     R_BRACKET       reduce using rule 12 (tens_id -> ID tens_id_1 .)
 
 
-state 102
+state 101
 
     (13) tens_id_1 -> L_BRACKET . expr R_BRACKET tens_id_1
     (14) tens_id_1 -> L_BRACKET . expr R_BRACKET
@@ -2712,47 +2689,47 @@ state 102
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 135
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 134
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 103
+state 102
 
     (55) factor_1 -> L_PAREN expr . R_PAREN
-    R_PAREN         shift and go to state 136
+    R_PAREN         shift and go to state 135
 
 
-state 104
+state 103
 
     (9) tens -> L_BRACKET expr . tens_1
     (10) tens_1 -> . COMMA expr tens_1
     (11) tens_1 -> . R_BRACKET
-    COMMA           shift and go to state 138
-    R_BRACKET       shift and go to state 139
+    COMMA           shift and go to state 137
+    R_BRACKET       shift and go to state 138
 
-    tens_1                         shift and go to state 137
+    tens_1                         shift and go to state 136
 
-state 105
+state 104
 
     (60) func_call -> ID L_PAREN func_call_1 .
     NEWLINE         reduce using rule 60 (func_call -> ID L_PAREN func_call_1 .)
@@ -2777,15 +2754,15 @@ state 105
     R_BRACKET       reduce using rule 60 (func_call -> ID L_PAREN func_call_1 .)
 
 
-state 106
+state 105
 
     (61) func_call_1 -> expr . COMMA func_call_1
     (62) func_call_1 -> expr . R_PAREN
-    COMMA           shift and go to state 140
-    R_PAREN         shift and go to state 141
+    COMMA           shift and go to state 139
+    R_PAREN         shift and go to state 140
 
 
-state 107
+state 106
 
     (63) func_call_1 -> R_PAREN .
     NEWLINE         reduce using rule 63 (func_call_1 -> R_PAREN .)
@@ -2810,7 +2787,7 @@ state 107
     R_BRACKET       reduce using rule 63 (func_call_1 -> R_PAREN .)
 
 
-state 108
+state 107
 
     (64) assign -> ID ASSIG expr .
     NEWLINE         reduce using rule 64 (assign -> ID ASSIG expr .)
@@ -2819,7 +2796,7 @@ state 108
     R_PAREN         reduce using rule 64 (assign -> ID ASSIG expr .)
 
 
-state 109
+state 108
 
     (59) write_file -> WRITE_FILE L_PAREN func_call_1 .
     NEWLINE         reduce using rule 59 (write_file -> WRITE_FILE L_PAREN func_call_1 .)
@@ -2827,7 +2804,7 @@ state 109
     $end            reduce using rule 59 (write_file -> WRITE_FILE L_PAREN func_call_1 .)
 
 
-state 110
+state 109
 
     (58) read_file -> READ_FILE L_PAREN R_PAREN .
     NEWLINE         reduce using rule 58 (read_file -> READ_FILE L_PAREN R_PAREN .)
@@ -2835,7 +2812,7 @@ state 110
     $end            reduce using rule 58 (read_file -> READ_FILE L_PAREN R_PAREN .)
 
 
-state 111
+state 110
 
     (57) print_rule -> PRINT L_PAREN func_call_1 .
     NEWLINE         reduce using rule 57 (print_rule -> PRINT L_PAREN func_call_1 .)
@@ -2843,7 +2820,7 @@ state 111
     $end            reduce using rule 57 (print_rule -> PRINT L_PAREN func_call_1 .)
 
 
-state 112
+state 111
 
     (56) read_line -> READ_LINE L_PAREN R_PAREN .
     NEWLINE         reduce using rule 56 (read_line -> READ_LINE L_PAREN R_PAREN .)
@@ -2851,35 +2828,35 @@ state 112
     $end            reduce using rule 56 (read_line -> READ_LINE L_PAREN R_PAREN .)
 
 
+state 112
+
+    (88) func -> LET ID L_PAREN . func_params R_PAREN COLON func_type block
+    (89) func_params -> . func_params_1
+    (90) func_params -> . empty
+    (91) func_params_1 -> . ID COLON const_type COMMA func_params_1
+    (92) func_params_1 -> . ID COLON const_type
+    (114) empty -> .
+    ID              shift and go to state 141
+    R_PAREN         reduce using rule 114 (empty -> .)
+
+    func_params                    shift and go to state 142
+    func_params_1                  shift and go to state 143
+    empty                          shift and go to state 144
+
 state 113
-
-    (89) func -> LET ID L_PAREN . func_params R_PAREN COLON func_type block
-    (90) func_params -> . func_params_1
-    (91) func_params -> . empty
-    (92) func_params_1 -> . ID COLON const_type COMMA func_params_1
-    (93) func_params_1 -> . ID COLON const_type
-    (115) empty -> .
-    ID              shift and go to state 142
-    R_PAREN         reduce using rule 115 (empty -> .)
-
-    func_params                    shift and go to state 143
-    func_params_1                  shift and go to state 144
-    empty                          shift and go to state 145
-
-state 114
 
     (71) var_id -> ID var_id_1 .
     COLON           reduce using rule 71 (var_id -> ID var_id_1 .)
 
 
-state 115
+state 114
 
     (73) var_id_1 -> L_BRACKET . INT_V R_BRACKET var_id_1
     (74) var_id_1 -> L_BRACKET . INT_V R_BRACKET
-    INT_V           shift and go to state 146
+    INT_V           shift and go to state 145
 
 
-state 116
+state 115
 
     (66) var_1 -> var_2 COMMA . var_1
     (66) var_1 -> . var_2 COMMA var_1
@@ -2889,14 +2866,14 @@ state 116
     (70) var_3 -> . var_id COLON const_type
     (71) var_id -> . ID var_id_1
     (72) var_id -> . ID
-    ID              shift and go to state 148
+    ID              shift and go to state 147
 
-    var_2                          shift and go to state 71
-    var_1                          shift and go to state 147
-    var_3                          shift and go to state 72
-    var_id                         shift and go to state 73
+    var_2                          shift and go to state 70
+    var_1                          shift and go to state 146
+    var_3                          shift and go to state 71
+    var_id                         shift and go to state 72
 
-state 117
+state 116
 
     (68) var_2 -> var_3 ASSIG . expr
     (25) expr -> . t_expr OR expr
@@ -2931,31 +2908,31 @@ state 117
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 149
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 148
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 118
+state 117
 
     (70) var_3 -> var_id COLON . const_type
     (18) const_type -> . GPU_BOOL_T
@@ -2965,46 +2942,17 @@ state 118
     (22) const_type -> . STRING_T
     (23) const_type -> . FLOAT_T
     (24) const_type -> . INT_T
-    GPU_BOOL_T      shift and go to state 151
-    GPU_FLOAT_T     shift and go to state 152
-    GPU_INT_T       shift and go to state 153
-    BOOL_T          shift and go to state 154
-    STRING_T        shift and go to state 155
-    FLOAT_T         shift and go to state 156
-    INT_T           shift and go to state 157
+    GPU_BOOL_T      shift and go to state 150
+    GPU_FLOAT_T     shift and go to state 151
+    GPU_INT_T       shift and go to state 152
+    BOOL_T          shift and go to state 153
+    STRING_T        shift and go to state 154
+    FLOAT_T         shift and go to state 155
+    INT_T           shift and go to state 156
 
-    const_type                     shift and go to state 150
+    const_type                     shift and go to state 149
 
-state 119
-
-    (76) for_loop -> FOR L_PAREN var . SEMICOLON expr SEMICOLON assign R_PAREN block
-    SEMICOLON       shift and go to state 158
-
-
-state 120
-
-    (65) var -> LET . var_1
-    (66) var_1 -> . var_2 COMMA var_1
-    (67) var_1 -> . var_2
-    (68) var_2 -> . var_3 ASSIG expr
-    (69) var_2 -> . var_3
-    (70) var_3 -> . var_id COLON const_type
-    (71) var_id -> . ID var_id_1
-    (72) var_id -> . ID
-    ID              shift and go to state 148
-
-    var_1                          shift and go to state 69
-    var_2                          shift and go to state 71
-    var_3                          shift and go to state 72
-    var_id                         shift and go to state 73
-
-state 121
-
-    (75) while_loop -> WHILE L_PAREN expr . R_PAREN block
-    R_PAREN         shift and go to state 159
-
-
-state 122
+state 118
 
     (82) simple_else_if -> ELSE_IF L_PAREN . expr R_PAREN block complex_else_if
     (25) expr -> . t_expr OR expr
@@ -3039,31 +2987,31 @@ state 122
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 160
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 157
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 123
+state 119
 
     (81) simple_else -> ELSE block .
     RETURN          reduce using rule 81 (simple_else -> ELSE block .)
@@ -3080,19 +3028,48 @@ state 123
     R_BRACE         reduce using rule 81 (simple_else -> ELSE block .)
 
 
-state 124
+state 120
 
     (15) block -> ignored_newlines . L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    L_BRACE         shift and go to state 161
+    L_BRACE         shift and go to state 158
+
+
+state 121
+
+    (76) for_loop -> FOR L_PAREN var . SEMICOLON expr SEMICOLON assign R_PAREN block
+    SEMICOLON       shift and go to state 159
+
+
+state 122
+
+    (65) var -> LET . var_1
+    (66) var_1 -> . var_2 COMMA var_1
+    (67) var_1 -> . var_2
+    (68) var_2 -> . var_3 ASSIG expr
+    (69) var_2 -> . var_3
+    (70) var_3 -> . var_id COLON const_type
+    (71) var_id -> . ID var_id_1
+    (72) var_id -> . ID
+    ID              shift and go to state 147
+
+    var_1                          shift and go to state 68
+    var_2                          shift and go to state 70
+    var_3                          shift and go to state 71
+    var_id                         shift and go to state 72
+
+state 123
+
+    (75) while_loop -> WHILE L_PAREN expr . R_PAREN block
+    R_PAREN         shift and go to state 160
+
+
+state 124
+
+    (80) simple_if -> IF L_PAREN expr . R_PAREN block
+    R_PAREN         shift and go to state 161
 
 
 state 125
-
-    (80) simple_if -> IF L_PAREN expr . R_PAREN block
-    R_PAREN         shift and go to state 162
-
-
-state 126
 
     (25) expr -> t_expr OR expr .
     NEWLINE         reduce using rule 25 (expr -> t_expr OR expr .)
@@ -3103,7 +3080,7 @@ state 126
     R_BRACKET       reduce using rule 25 (expr -> t_expr OR expr .)
 
 
-state 127
+state 126
 
     (27) t_expr -> g_expr AND t_expr .
     OR              reduce using rule 27 (t_expr -> g_expr AND t_expr .)
@@ -3115,7 +3092,7 @@ state 127
     R_BRACKET       reduce using rule 27 (t_expr -> g_expr AND t_expr .)
 
 
-state 128
+state 127
 
     (29) g_expr -> m_expr comparison m_expr .
     AND             reduce using rule 29 (g_expr -> m_expr comparison m_expr .)
@@ -3128,7 +3105,7 @@ state 128
     R_BRACKET       reduce using rule 29 (g_expr -> m_expr comparison m_expr .)
 
 
-state 129
+state 128
 
     (37) m_expr -> term MINUS m_expr .
     LEQT            reduce using rule 37 (m_expr -> term MINUS m_expr .)
@@ -3147,7 +3124,7 @@ state 129
     R_BRACKET       reduce using rule 37 (m_expr -> term MINUS m_expr .)
 
 
-state 130
+state 129
 
     (38) m_expr -> term PLUS m_expr .
     LEQT            reduce using rule 38 (m_expr -> term PLUS m_expr .)
@@ -3166,7 +3143,7 @@ state 130
     R_BRACKET       reduce using rule 38 (m_expr -> term PLUS m_expr .)
 
 
-state 131
+state 130
 
     (40) term -> exp_factor MOD term .
     MINUS           reduce using rule 40 (term -> exp_factor MOD term .)
@@ -3187,7 +3164,7 @@ state 131
     R_BRACKET       reduce using rule 40 (term -> exp_factor MOD term .)
 
 
-state 132
+state 131
 
     (41) term -> exp_factor DIV term .
     MINUS           reduce using rule 41 (term -> exp_factor DIV term .)
@@ -3208,7 +3185,7 @@ state 132
     R_BRACKET       reduce using rule 41 (term -> exp_factor DIV term .)
 
 
-state 133
+state 132
 
     (42) term -> exp_factor MULT term .
     MINUS           reduce using rule 42 (term -> exp_factor MULT term .)
@@ -3229,7 +3206,7 @@ state 133
     R_BRACKET       reduce using rule 42 (term -> exp_factor MULT term .)
 
 
-state 134
+state 133
 
     (44) exp_factor -> factor EXP exp_factor .
     MOD             reduce using rule 44 (exp_factor -> factor EXP exp_factor .)
@@ -3253,14 +3230,14 @@ state 134
     R_BRACKET       reduce using rule 44 (exp_factor -> factor EXP exp_factor .)
 
 
-state 135
+state 134
 
     (13) tens_id_1 -> L_BRACKET expr . R_BRACKET tens_id_1
     (14) tens_id_1 -> L_BRACKET expr . R_BRACKET
-    R_BRACKET       shift and go to state 163
+    R_BRACKET       shift and go to state 162
 
 
-state 136
+state 135
 
     (55) factor_1 -> L_PAREN expr R_PAREN .
     EXP             reduce using rule 55 (factor_1 -> L_PAREN expr R_PAREN .)
@@ -3285,7 +3262,7 @@ state 136
     R_BRACKET       reduce using rule 55 (factor_1 -> L_PAREN expr R_PAREN .)
 
 
-state 137
+state 136
 
     (9) tens -> L_BRACKET expr tens_1 .
     EXP             reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
@@ -3310,7 +3287,7 @@ state 137
     R_BRACKET       reduce using rule 9 (tens -> L_BRACKET expr tens_1 .)
 
 
-state 138
+state 137
 
     (10) tens_1 -> COMMA . expr tens_1
     (25) expr -> . t_expr OR expr
@@ -3345,31 +3322,31 @@ state 138
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 164
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 163
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 139
+state 138
 
     (11) tens_1 -> R_BRACKET .
     EXP             reduce using rule 11 (tens_1 -> R_BRACKET .)
@@ -3394,7 +3371,7 @@ state 139
     R_BRACKET       reduce using rule 11 (tens_1 -> R_BRACKET .)
 
 
-state 140
+state 139
 
     (61) func_call_1 -> expr COMMA . func_call_1
     (61) func_call_1 -> . expr COMMA func_call_1
@@ -3432,33 +3409,33 @@ state 140
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    R_PAREN         shift and go to state 107
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    R_PAREN         shift and go to state 106
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 106
-    func_call_1                    shift and go to state 165
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
+    expr                           shift and go to state 105
+    func_call_1                    shift and go to state 164
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
-state 141
+state 140
 
     (62) func_call_1 -> expr R_PAREN .
     NEWLINE         reduce using rule 62 (func_call_1 -> expr R_PAREN .)
@@ -3483,39 +3460,39 @@ state 141
     R_BRACKET       reduce using rule 62 (func_call_1 -> expr R_PAREN .)
 
 
+state 141
+
+    (91) func_params_1 -> ID . COLON const_type COMMA func_params_1
+    (92) func_params_1 -> ID . COLON const_type
+    COLON           shift and go to state 165
+
+
 state 142
 
-    (92) func_params_1 -> ID . COLON const_type COMMA func_params_1
-    (93) func_params_1 -> ID . COLON const_type
-    COLON           shift and go to state 166
+    (88) func -> LET ID L_PAREN func_params . R_PAREN COLON func_type block
+    R_PAREN         shift and go to state 166
 
 
 state 143
 
-    (89) func -> LET ID L_PAREN func_params . R_PAREN COLON func_type block
-    R_PAREN         shift and go to state 167
+    (89) func_params -> func_params_1 .
+    R_PAREN         reduce using rule 89 (func_params -> func_params_1 .)
 
 
 state 144
 
-    (90) func_params -> func_params_1 .
-    R_PAREN         reduce using rule 90 (func_params -> func_params_1 .)
+    (90) func_params -> empty .
+    R_PAREN         reduce using rule 90 (func_params -> empty .)
 
 
 state 145
 
-    (91) func_params -> empty .
-    R_PAREN         reduce using rule 91 (func_params -> empty .)
+    (73) var_id_1 -> L_BRACKET INT_V . R_BRACKET var_id_1
+    (74) var_id_1 -> L_BRACKET INT_V . R_BRACKET
+    R_BRACKET       shift and go to state 167
 
 
 state 146
-
-    (73) var_id_1 -> L_BRACKET INT_V . R_BRACKET var_id_1
-    (74) var_id_1 -> L_BRACKET INT_V . R_BRACKET
-    R_BRACKET       shift and go to state 168
-
-
-state 147
 
     (66) var_1 -> var_2 COMMA var_1 .
     NEWLINE         reduce using rule 66 (var_1 -> var_2 COMMA var_1 .)
@@ -3523,18 +3500,18 @@ state 147
     $end            reduce using rule 66 (var_1 -> var_2 COMMA var_1 .)
 
 
-state 148
+state 147
 
     (71) var_id -> ID . var_id_1
     (72) var_id -> ID .
     (73) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
     (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET
     COLON           reduce using rule 72 (var_id -> ID .)
-    L_BRACKET       shift and go to state 115
+    L_BRACKET       shift and go to state 114
 
-    var_id_1                       shift and go to state 114
+    var_id_1                       shift and go to state 113
 
-state 149
+state 148
 
     (68) var_2 -> var_3 ASSIG expr .
     COMMA           reduce using rule 68 (var_2 -> var_3 ASSIG expr .)
@@ -3543,7 +3520,7 @@ state 149
     $end            reduce using rule 68 (var_2 -> var_3 ASSIG expr .)
 
 
-state 150
+state 149
 
     (70) var_3 -> var_id COLON const_type .
     ASSIG           reduce using rule 70 (var_3 -> var_id COLON const_type .)
@@ -3553,7 +3530,7 @@ state 150
     $end            reduce using rule 70 (var_3 -> var_id COLON const_type .)
 
 
-state 151
+state 150
 
     (18) const_type -> GPU_BOOL_T .
     ASSIG           reduce using rule 18 (const_type -> GPU_BOOL_T .)
@@ -3565,7 +3542,7 @@ state 151
     L_BRACE         reduce using rule 18 (const_type -> GPU_BOOL_T .)
 
 
-state 152
+state 151
 
     (19) const_type -> GPU_FLOAT_T .
     ASSIG           reduce using rule 19 (const_type -> GPU_FLOAT_T .)
@@ -3577,7 +3554,7 @@ state 152
     L_BRACE         reduce using rule 19 (const_type -> GPU_FLOAT_T .)
 
 
-state 153
+state 152
 
     (20) const_type -> GPU_INT_T .
     ASSIG           reduce using rule 20 (const_type -> GPU_INT_T .)
@@ -3589,7 +3566,7 @@ state 153
     L_BRACE         reduce using rule 20 (const_type -> GPU_INT_T .)
 
 
-state 154
+state 153
 
     (21) const_type -> BOOL_T .
     ASSIG           reduce using rule 21 (const_type -> BOOL_T .)
@@ -3601,7 +3578,7 @@ state 154
     L_BRACE         reduce using rule 21 (const_type -> BOOL_T .)
 
 
-state 155
+state 154
 
     (22) const_type -> STRING_T .
     ASSIG           reduce using rule 22 (const_type -> STRING_T .)
@@ -3613,7 +3590,7 @@ state 155
     L_BRACE         reduce using rule 22 (const_type -> STRING_T .)
 
 
-state 156
+state 155
 
     (23) const_type -> FLOAT_T .
     ASSIG           reduce using rule 23 (const_type -> FLOAT_T .)
@@ -3625,7 +3602,7 @@ state 156
     L_BRACE         reduce using rule 23 (const_type -> FLOAT_T .)
 
 
-state 157
+state 156
 
     (24) const_type -> INT_T .
     ASSIG           reduce using rule 24 (const_type -> INT_T .)
@@ -3637,7 +3614,35 @@ state 157
     L_BRACE         reduce using rule 24 (const_type -> INT_T .)
 
 
+state 157
+
+    (82) simple_else_if -> ELSE_IF L_PAREN expr . R_PAREN block complex_else_if
+    R_PAREN         shift and go to state 168
+
+
 state 158
+
+    (15) block -> ignored_newlines L_BRACE . ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
+
+    ignored_newlines               shift and go to state 169
+    empty                          shift and go to state 3
+
+state 159
 
     (76) for_loop -> FOR L_PAREN var SEMICOLON . expr SEMICOLON assign R_PAREN block
     (25) expr -> . t_expr OR expr
@@ -3672,87 +3677,59 @@ state 158
     (6) const -> . BOOL_V
     (7) const -> . FLOAT_V
     (8) const -> . INT_V
-    MINUS           shift and go to state 46
-    PLUS            shift and go to state 47
-    NOT             shift and go to state 51
-    ID              shift and go to state 52
-    L_PAREN         shift and go to state 57
-    L_BRACKET       shift and go to state 58
-    STRING_V        shift and go to state 59
-    BOOL_V          shift and go to state 60
-    FLOAT_V         shift and go to state 61
-    INT_V           shift and go to state 62
+    MINUS           shift and go to state 45
+    PLUS            shift and go to state 46
+    NOT             shift and go to state 50
+    ID              shift and go to state 51
+    L_PAREN         shift and go to state 56
+    L_BRACKET       shift and go to state 57
+    STRING_V        shift and go to state 58
+    BOOL_V          shift and go to state 59
+    FLOAT_V         shift and go to state 60
+    INT_V           shift and go to state 61
 
-    expr                           shift and go to state 169
-    t_expr                         shift and go to state 42
-    g_expr                         shift and go to state 43
-    m_expr                         shift and go to state 44
-    term                           shift and go to state 45
-    exp_factor                     shift and go to state 48
-    factor                         shift and go to state 49
-    factor_1                       shift and go to state 50
-    tens_id                        shift and go to state 53
-    tens                           shift and go to state 54
-    func_call                      shift and go to state 55
-    const                          shift and go to state 56
-
-state 159
-
-    (75) while_loop -> WHILE L_PAREN expr R_PAREN . block
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
-
-    block                          shift and go to state 170
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
+    expr                           shift and go to state 170
+    t_expr                         shift and go to state 41
+    g_expr                         shift and go to state 42
+    m_expr                         shift and go to state 43
+    term                           shift and go to state 44
+    exp_factor                     shift and go to state 47
+    factor                         shift and go to state 48
+    factor_1                       shift and go to state 49
+    tens_id                        shift and go to state 52
+    tens                           shift and go to state 53
+    func_call                      shift and go to state 54
+    const                          shift and go to state 55
 
 state 160
 
-    (82) simple_else_if -> ELSE_IF L_PAREN expr . R_PAREN block complex_else_if
-    R_PAREN         shift and go to state 171
+    (75) while_loop -> WHILE L_PAREN expr R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    L_BRACE         reduce using rule 114 (empty -> .)
 
+    block                          shift and go to state 171
+    ignored_newlines               shift and go to state 120
+    empty                          shift and go to state 3
 
 state 161
 
-    (15) block -> ignored_newlines L_BRACE . ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
+    (80) simple_if -> IF L_PAREN expr R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
     NEWLINE         shift and go to state 4
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
+    L_BRACE         reduce using rule 114 (empty -> .)
 
-    ignored_newlines               shift and go to state 172
+    block                          shift and go to state 172
+    ignored_newlines               shift and go to state 120
     empty                          shift and go to state 3
 
 state 162
-
-    (80) simple_if -> IF L_PAREN expr R_PAREN . block
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
-
-    block                          shift and go to state 173
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
-
-state 163
 
     (13) tens_id_1 -> L_BRACKET expr R_BRACKET . tens_id_1
     (14) tens_id_1 -> L_BRACKET expr R_BRACKET .
@@ -3778,21 +3755,21 @@ state 163
     R_PAREN         reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
     COMMA           reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
     R_BRACKET       reduce using rule 14 (tens_id_1 -> L_BRACKET expr R_BRACKET .)
-    L_BRACKET       shift and go to state 102
+    L_BRACKET       shift and go to state 101
 
-    tens_id_1                      shift and go to state 174
+    tens_id_1                      shift and go to state 173
 
-state 164
+state 163
 
     (10) tens_1 -> COMMA expr . tens_1
     (10) tens_1 -> . COMMA expr tens_1
     (11) tens_1 -> . R_BRACKET
-    COMMA           shift and go to state 138
-    R_BRACKET       shift and go to state 139
+    COMMA           shift and go to state 137
+    R_BRACKET       shift and go to state 138
 
-    tens_1                         shift and go to state 175
+    tens_1                         shift and go to state 174
 
-state 165
+state 164
 
     (61) func_call_1 -> expr COMMA func_call_1 .
     NEWLINE         reduce using rule 61 (func_call_1 -> expr COMMA func_call_1 .)
@@ -3817,10 +3794,10 @@ state 165
     R_BRACKET       reduce using rule 61 (func_call_1 -> expr COMMA func_call_1 .)
 
 
-state 166
+state 165
 
-    (92) func_params_1 -> ID COLON . const_type COMMA func_params_1
-    (93) func_params_1 -> ID COLON . const_type
+    (91) func_params_1 -> ID COLON . const_type COMMA func_params_1
+    (92) func_params_1 -> ID COLON . const_type
     (18) const_type -> . GPU_BOOL_T
     (19) const_type -> . GPU_FLOAT_T
     (20) const_type -> . GPU_INT_T
@@ -3828,40 +3805,124 @@ state 166
     (22) const_type -> . STRING_T
     (23) const_type -> . FLOAT_T
     (24) const_type -> . INT_T
-    GPU_BOOL_T      shift and go to state 151
-    GPU_FLOAT_T     shift and go to state 152
-    GPU_INT_T       shift and go to state 153
-    BOOL_T          shift and go to state 154
-    STRING_T        shift and go to state 155
-    FLOAT_T         shift and go to state 156
-    INT_T           shift and go to state 157
+    GPU_BOOL_T      shift and go to state 150
+    GPU_FLOAT_T     shift and go to state 151
+    GPU_INT_T       shift and go to state 152
+    BOOL_T          shift and go to state 153
+    STRING_T        shift and go to state 154
+    FLOAT_T         shift and go to state 155
+    INT_T           shift and go to state 156
 
-    const_type                     shift and go to state 176
+    const_type                     shift and go to state 175
+
+state 166
+
+    (88) func -> LET ID L_PAREN func_params R_PAREN . COLON func_type block
+    COLON           shift and go to state 176
+
 
 state 167
-
-    (89) func -> LET ID L_PAREN func_params R_PAREN . COLON func_type block
-    COLON           shift and go to state 177
-
-
-state 168
 
     (73) var_id_1 -> L_BRACKET INT_V R_BRACKET . var_id_1
     (74) var_id_1 -> L_BRACKET INT_V R_BRACKET .
     (73) var_id_1 -> . L_BRACKET INT_V R_BRACKET var_id_1
     (74) var_id_1 -> . L_BRACKET INT_V R_BRACKET
     COLON           reduce using rule 74 (var_id_1 -> L_BRACKET INT_V R_BRACKET .)
-    L_BRACKET       shift and go to state 115
+    L_BRACKET       shift and go to state 114
 
-    var_id_1                       shift and go to state 178
+    var_id_1                       shift and go to state 177
+
+state 168
+
+    (82) simple_else_if -> ELSE_IF L_PAREN expr R_PAREN . block complex_else_if
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    L_BRACE         reduce using rule 114 (empty -> .)
+
+    block                          shift and go to state 178
+    ignored_newlines               shift and go to state 120
+    empty                          shift and go to state 3
 
 state 169
 
-    (76) for_loop -> FOR L_PAREN var SEMICOLON expr . SEMICOLON assign R_PAREN block
-    SEMICOLON       shift and go to state 179
+    (15) block -> ignored_newlines L_BRACE ignored_newlines . block_1 R_BRACE ignored_newlines
+    (16) block_1 -> . empty
+    (17) block_1 -> . statement block_1
+    (114) empty -> .
+    (96) statement -> . block_statements
+    (97) statement -> . statements eos
+    (106) block_statements -> . func
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (98) statements -> . ret
+    (99) statements -> . func_call
+    (100) statements -> . write_file
+    (101) statements -> . read_file
+    (102) statements -> . print_rule
+    (103) statements -> . read_line
+    (104) statements -> . assign
+    (105) statements -> . var
+    (88) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (77) cond -> . cond_if_else_if
+    (78) cond -> . cond_if_else
+    (79) cond -> . simple_if
+    (76) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
+    (75) while_loop -> . WHILE L_PAREN expr R_PAREN block
+    (95) ret -> . RETURN expr
+    (60) func_call -> . ID L_PAREN func_call_1
+    (59) write_file -> . WRITE_FILE L_PAREN func_call_1
+    (58) read_file -> . READ_FILE L_PAREN R_PAREN
+    (57) print_rule -> . PRINT L_PAREN func_call_1
+    (56) read_line -> . READ_LINE L_PAREN R_PAREN
+    (64) assign -> . ID ASSIG expr
+    (65) var -> . LET var_1
+    (87) cond_if_else_if -> . simple_if simple_else_if
+    (86) cond_if_else -> . simple_if simple_else
+    (80) simple_if -> . IF L_PAREN expr R_PAREN block
+    R_BRACE         reduce using rule 114 (empty -> .)
+    LET             shift and go to state 183
+    FOR             shift and go to state 32
+    WHILE           shift and go to state 33
+    RETURN          shift and go to state 18
+    ID              shift and go to state 19
+    WRITE_FILE      shift and go to state 20
+    READ_FILE       shift and go to state 21
+    PRINT           shift and go to state 22
+    READ_LINE       shift and go to state 23
+    IF              shift and go to state 34
 
+    block_1                        shift and go to state 179
+    empty                          shift and go to state 180
+    statement                      shift and go to state 181
+    block_statements               shift and go to state 17
+    statements                     shift and go to state 182
+    func                           shift and go to state 25
+    cond                           shift and go to state 26
+    for_loop                       shift and go to state 27
+    while_loop                     shift and go to state 28
+    ret                            shift and go to state 9
+    func_call                      shift and go to state 10
+    write_file                     shift and go to state 11
+    read_file                      shift and go to state 12
+    print_rule                     shift and go to state 13
+    read_line                      shift and go to state 14
+    assign                         shift and go to state 15
+    var                            shift and go to state 16
+    cond_if_else_if                shift and go to state 29
+    cond_if_else                   shift and go to state 30
+    simple_if                      shift and go to state 31
 
 state 170
+
+    (76) for_loop -> FOR L_PAREN var SEMICOLON expr . SEMICOLON assign R_PAREN block
+    SEMICOLON       shift and go to state 184
+
+
+state 171
 
     (75) while_loop -> WHILE L_PAREN expr R_PAREN block .
     RETURN          reduce using rule 75 (while_loop -> WHILE L_PAREN expr R_PAREN block .)
@@ -3878,93 +3939,7 @@ state 170
     R_BRACE         reduce using rule 75 (while_loop -> WHILE L_PAREN expr R_PAREN block .)
 
 
-state 171
-
-    (82) simple_else_if -> ELSE_IF L_PAREN expr R_PAREN . block complex_else_if
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
-
-    block                          shift and go to state 180
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
-
 state 172
-
-    (15) block -> ignored_newlines L_BRACE ignored_newlines . block_1 R_BRACE ignored_newlines
-    (16) block_1 -> . empty
-    (17) block_1 -> . statement block_1
-    (115) empty -> .
-    (97) statement -> . block_statements
-    (98) statement -> . statements eos
-    (107) block_statements -> . func
-    (108) block_statements -> . cond
-    (109) block_statements -> . for_loop
-    (110) block_statements -> . while_loop
-    (99) statements -> . ret
-    (100) statements -> . func_call
-    (101) statements -> . write_file
-    (102) statements -> . read_file
-    (103) statements -> . print_rule
-    (104) statements -> . read_line
-    (105) statements -> . assign
-    (106) statements -> . var
-    (89) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
-    (77) cond -> . cond_if_else_if
-    (78) cond -> . cond_if_else
-    (79) cond -> . cond_if
-    (76) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
-    (75) while_loop -> . WHILE L_PAREN expr R_PAREN block
-    (96) ret -> . RETURN expr
-    (60) func_call -> . ID L_PAREN func_call_1
-    (59) write_file -> . WRITE_FILE L_PAREN func_call_1
-    (58) read_file -> . READ_FILE L_PAREN R_PAREN
-    (57) print_rule -> . PRINT L_PAREN func_call_1
-    (56) read_line -> . READ_LINE L_PAREN R_PAREN
-    (64) assign -> . ID ASSIG expr
-    (65) var -> . LET var_1
-    (88) cond_if_else_if -> . simple_if simple_else_if
-    (87) cond_if_else -> . simple_if simple_else
-    (86) cond_if -> . simple_if
-    (80) simple_if -> . IF L_PAREN expr R_PAREN block
-    R_BRACE         reduce using rule 115 (empty -> .)
-    LET             shift and go to state 185
-    FOR             shift and go to state 32
-    WHILE           shift and go to state 33
-    RETURN          shift and go to state 18
-    ID              shift and go to state 19
-    WRITE_FILE      shift and go to state 20
-    READ_FILE       shift and go to state 21
-    PRINT           shift and go to state 22
-    READ_LINE       shift and go to state 23
-    IF              shift and go to state 35
-
-    block_1                        shift and go to state 181
-    empty                          shift and go to state 182
-    statement                      shift and go to state 183
-    block_statements               shift and go to state 17
-    statements                     shift and go to state 184
-    func                           shift and go to state 25
-    cond                           shift and go to state 26
-    for_loop                       shift and go to state 27
-    while_loop                     shift and go to state 28
-    ret                            shift and go to state 9
-    func_call                      shift and go to state 10
-    write_file                     shift and go to state 11
-    read_file                      shift and go to state 12
-    print_rule                     shift and go to state 13
-    read_line                      shift and go to state 14
-    assign                         shift and go to state 15
-    var                            shift and go to state 16
-    cond_if_else_if                shift and go to state 29
-    cond_if_else                   shift and go to state 30
-    cond_if                        shift and go to state 31
-    simple_if                      shift and go to state 34
-
-state 173
 
     (80) simple_if -> IF L_PAREN expr R_PAREN block .
     ELSE_IF         reduce using rule 80 (simple_if -> IF L_PAREN expr R_PAREN block .)
@@ -3983,7 +3958,7 @@ state 173
     R_BRACE         reduce using rule 80 (simple_if -> IF L_PAREN expr R_PAREN block .)
 
 
-state 174
+state 173
 
     (13) tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .
     EXP             reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
@@ -4008,7 +3983,7 @@ state 174
     R_BRACKET       reduce using rule 13 (tens_id_1 -> L_BRACKET expr R_BRACKET tens_id_1 .)
 
 
-state 175
+state 174
 
     (10) tens_1 -> COMMA expr tens_1 .
     EXP             reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
@@ -4033,19 +4008,19 @@ state 175
     R_BRACKET       reduce using rule 10 (tens_1 -> COMMA expr tens_1 .)
 
 
+state 175
+
+    (91) func_params_1 -> ID COLON const_type . COMMA func_params_1
+    (92) func_params_1 -> ID COLON const_type .
+    COMMA           shift and go to state 185
+    R_PAREN         reduce using rule 92 (func_params_1 -> ID COLON const_type .)
+
+
 state 176
 
-    (92) func_params_1 -> ID COLON const_type . COMMA func_params_1
-    (93) func_params_1 -> ID COLON const_type .
-    COMMA           shift and go to state 186
-    R_PAREN         reduce using rule 93 (func_params_1 -> ID COLON const_type .)
-
-
-state 177
-
-    (89) func -> LET ID L_PAREN func_params R_PAREN COLON . func_type block
-    (94) func_type -> . VOID
-    (95) func_type -> . const_type
+    (88) func -> LET ID L_PAREN func_params R_PAREN COLON . func_type block
+    (93) func_type -> . VOID
+    (94) func_type -> . const_type
     (18) const_type -> . GPU_BOOL_T
     (19) const_type -> . GPU_FLOAT_T
     (20) const_type -> . GPU_INT_T
@@ -4053,100 +4028,92 @@ state 177
     (22) const_type -> . STRING_T
     (23) const_type -> . FLOAT_T
     (24) const_type -> . INT_T
-    VOID            shift and go to state 188
-    GPU_BOOL_T      shift and go to state 151
-    GPU_FLOAT_T     shift and go to state 152
-    GPU_INT_T       shift and go to state 153
-    BOOL_T          shift and go to state 154
-    STRING_T        shift and go to state 155
-    FLOAT_T         shift and go to state 156
-    INT_T           shift and go to state 157
+    VOID            shift and go to state 187
+    GPU_BOOL_T      shift and go to state 150
+    GPU_FLOAT_T     shift and go to state 151
+    GPU_INT_T       shift and go to state 152
+    BOOL_T          shift and go to state 153
+    STRING_T        shift and go to state 154
+    FLOAT_T         shift and go to state 155
+    INT_T           shift and go to state 156
 
-    func_type                      shift and go to state 187
-    const_type                     shift and go to state 189
+    func_type                      shift and go to state 186
+    const_type                     shift and go to state 188
 
-state 178
+state 177
 
     (73) var_id_1 -> L_BRACKET INT_V R_BRACKET var_id_1 .
     COLON           reduce using rule 73 (var_id_1 -> L_BRACKET INT_V R_BRACKET var_id_1 .)
 
 
-state 179
-
-    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON . assign R_PAREN block
-    (64) assign -> . ID ASSIG expr
-    ID              shift and go to state 191
-
-    assign                         shift and go to state 190
-
-state 180
+state 178
 
     (82) simple_else_if -> ELSE_IF L_PAREN expr R_PAREN block . complex_else_if
     (83) complex_else_if -> . simple_else
     (84) complex_else_if -> . empty
     (85) complex_else_if -> . simple_else_if
     (81) simple_else -> . ELSE block
-    (115) empty -> .
+    (114) empty -> .
     (82) simple_else_if -> . ELSE_IF L_PAREN expr R_PAREN block complex_else_if
-    ELSE            shift and go to state 79
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
-    ELSE_IF         shift and go to state 78
+    ELSE            shift and go to state 76
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
+    ELSE_IF         shift and go to state 75
 
-    complex_else_if                shift and go to state 192
-    simple_else                    shift and go to state 193
-    empty                          shift and go to state 194
-    simple_else_if                 shift and go to state 195
+    complex_else_if                shift and go to state 189
+    simple_else                    shift and go to state 190
+    empty                          shift and go to state 191
+    simple_else_if                 shift and go to state 192
 
-state 181
+state 179
 
     (15) block -> ignored_newlines L_BRACE ignored_newlines block_1 . R_BRACE ignored_newlines
-    R_BRACE         shift and go to state 196
+    R_BRACE         shift and go to state 193
 
 
-state 182
+state 180
 
     (16) block_1 -> empty .
     R_BRACE         reduce using rule 16 (block_1 -> empty .)
 
 
-state 183
+state 181
 
     (17) block_1 -> statement . block_1
     (16) block_1 -> . empty
     (17) block_1 -> . statement block_1
-    (115) empty -> .
-    (97) statement -> . block_statements
-    (98) statement -> . statements eos
-    (107) block_statements -> . func
-    (108) block_statements -> . cond
-    (109) block_statements -> . for_loop
-    (110) block_statements -> . while_loop
-    (99) statements -> . ret
-    (100) statements -> . func_call
-    (101) statements -> . write_file
-    (102) statements -> . read_file
-    (103) statements -> . print_rule
-    (104) statements -> . read_line
-    (105) statements -> . assign
-    (106) statements -> . var
-    (89) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
+    (114) empty -> .
+    (96) statement -> . block_statements
+    (97) statement -> . statements eos
+    (106) block_statements -> . func
+    (107) block_statements -> . cond
+    (108) block_statements -> . for_loop
+    (109) block_statements -> . while_loop
+    (98) statements -> . ret
+    (99) statements -> . func_call
+    (100) statements -> . write_file
+    (101) statements -> . read_file
+    (102) statements -> . print_rule
+    (103) statements -> . read_line
+    (104) statements -> . assign
+    (105) statements -> . var
+    (88) func -> . LET ID L_PAREN func_params R_PAREN COLON func_type block
     (77) cond -> . cond_if_else_if
     (78) cond -> . cond_if_else
-    (79) cond -> . cond_if
+    (79) cond -> . simple_if
     (76) for_loop -> . FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block
     (75) while_loop -> . WHILE L_PAREN expr R_PAREN block
-    (96) ret -> . RETURN expr
+    (95) ret -> . RETURN expr
     (60) func_call -> . ID L_PAREN func_call_1
     (59) write_file -> . WRITE_FILE L_PAREN func_call_1
     (58) read_file -> . READ_FILE L_PAREN R_PAREN
@@ -4154,12 +4121,11 @@ state 183
     (56) read_line -> . READ_LINE L_PAREN R_PAREN
     (64) assign -> . ID ASSIG expr
     (65) var -> . LET var_1
-    (88) cond_if_else_if -> . simple_if simple_else_if
-    (87) cond_if_else -> . simple_if simple_else
-    (86) cond_if -> . simple_if
+    (87) cond_if_else_if -> . simple_if simple_else_if
+    (86) cond_if_else -> . simple_if simple_else
     (80) simple_if -> . IF L_PAREN expr R_PAREN block
-    R_BRACE         reduce using rule 115 (empty -> .)
-    LET             shift and go to state 185
+    R_BRACE         reduce using rule 114 (empty -> .)
+    LET             shift and go to state 183
     FOR             shift and go to state 32
     WHILE           shift and go to state 33
     RETURN          shift and go to state 18
@@ -4168,13 +4134,13 @@ state 183
     READ_FILE       shift and go to state 21
     PRINT           shift and go to state 22
     READ_LINE       shift and go to state 23
-    IF              shift and go to state 35
+    IF              shift and go to state 34
 
-    statement                      shift and go to state 183
-    block_1                        shift and go to state 197
-    empty                          shift and go to state 182
+    statement                      shift and go to state 181
+    block_1                        shift and go to state 194
+    empty                          shift and go to state 180
     block_statements               shift and go to state 17
-    statements                     shift and go to state 184
+    statements                     shift and go to state 182
     func                           shift and go to state 25
     cond                           shift and go to state 26
     for_loop                       shift and go to state 27
@@ -4189,22 +4155,21 @@ state 183
     var                            shift and go to state 16
     cond_if_else_if                shift and go to state 29
     cond_if_else                   shift and go to state 30
-    cond_if                        shift and go to state 31
-    simple_if                      shift and go to state 34
+    simple_if                      shift and go to state 31
 
-state 184
+state 182
 
-    (98) statement -> statements . eos
-    (111) eos -> . NEWLINE ignored_newlines
-    (112) eos -> . SEMICOLON ignored_newlines
-    NEWLINE         shift and go to state 38
-    SEMICOLON       shift and go to state 39
+    (97) statement -> statements . eos
+    (110) eos -> . NEWLINE ignored_newlines
+    (111) eos -> . SEMICOLON ignored_newlines
+    NEWLINE         shift and go to state 37
+    SEMICOLON       shift and go to state 38
 
-    eos                            shift and go to state 37
+    eos                            shift and go to state 36
 
-state 185
+state 183
 
-    (89) func -> LET . ID L_PAREN func_params R_PAREN COLON func_type block
+    (88) func -> LET . ID L_PAREN func_params R_PAREN COLON func_type block
     (65) var -> LET . var_1
     (66) var_1 -> . var_2 COMMA var_1
     (67) var_1 -> . var_2
@@ -4213,63 +4178,59 @@ state 185
     (70) var_3 -> . var_id COLON const_type
     (71) var_id -> . ID var_id_1
     (72) var_id -> . ID
-    ID              shift and go to state 70
+    ID              shift and go to state 69
 
-    var_1                          shift and go to state 69
-    var_2                          shift and go to state 71
-    var_3                          shift and go to state 72
-    var_id                         shift and go to state 73
+    var_1                          shift and go to state 68
+    var_2                          shift and go to state 70
+    var_3                          shift and go to state 71
+    var_id                         shift and go to state 72
+
+state 184
+
+    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON . assign R_PAREN block
+    (64) assign -> . ID ASSIG expr
+    ID              shift and go to state 196
+
+    assign                         shift and go to state 195
+
+state 185
+
+    (91) func_params_1 -> ID COLON const_type COMMA . func_params_1
+    (91) func_params_1 -> . ID COLON const_type COMMA func_params_1
+    (92) func_params_1 -> . ID COLON const_type
+    ID              shift and go to state 141
+
+    func_params_1                  shift and go to state 197
 
 state 186
 
-    (92) func_params_1 -> ID COLON const_type COMMA . func_params_1
-    (92) func_params_1 -> . ID COLON const_type COMMA func_params_1
-    (93) func_params_1 -> . ID COLON const_type
-    ID              shift and go to state 142
+    (88) func -> LET ID L_PAREN func_params R_PAREN COLON func_type . block
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    L_BRACE         reduce using rule 114 (empty -> .)
 
-    func_params_1                  shift and go to state 198
+    block                          shift and go to state 198
+    ignored_newlines               shift and go to state 120
+    empty                          shift and go to state 3
 
 state 187
 
-    (89) func -> LET ID L_PAREN func_params R_PAREN COLON func_type . block
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
+    (93) func_type -> VOID .
+    NEWLINE         reduce using rule 93 (func_type -> VOID .)
+    L_BRACE         reduce using rule 93 (func_type -> VOID .)
 
-    block                          shift and go to state 199
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
 
 state 188
 
-    (94) func_type -> VOID .
-    NEWLINE         reduce using rule 94 (func_type -> VOID .)
-    L_BRACE         reduce using rule 94 (func_type -> VOID .)
+    (94) func_type -> const_type .
+    NEWLINE         reduce using rule 94 (func_type -> const_type .)
+    L_BRACE         reduce using rule 94 (func_type -> const_type .)
 
 
 state 189
-
-    (95) func_type -> const_type .
-    NEWLINE         reduce using rule 95 (func_type -> const_type .)
-    L_BRACE         reduce using rule 95 (func_type -> const_type .)
-
-
-state 190
-
-    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign . R_PAREN block
-    R_PAREN         shift and go to state 200
-
-
-state 191
-
-    (64) assign -> ID . ASSIG expr
-    ASSIG           shift and go to state 64
-
-
-state 192
 
     (82) simple_else_if -> ELSE_IF L_PAREN expr R_PAREN block complex_else_if .
     RETURN          reduce using rule 82 (simple_else_if -> ELSE_IF L_PAREN expr R_PAREN block complex_else_if .)
@@ -4286,7 +4247,7 @@ state 192
     R_BRACE         reduce using rule 82 (simple_else_if -> ELSE_IF L_PAREN expr R_PAREN block complex_else_if .)
 
 
-state 193
+state 190
 
     (83) complex_else_if -> simple_else .
     RETURN          reduce using rule 83 (complex_else_if -> simple_else .)
@@ -4303,7 +4264,7 @@ state 193
     R_BRACE         reduce using rule 83 (complex_else_if -> simple_else .)
 
 
-state 194
+state 191
 
     (84) complex_else_if -> empty .
     RETURN          reduce using rule 84 (complex_else_if -> empty .)
@@ -4320,7 +4281,7 @@ state 194
     R_BRACE         reduce using rule 84 (complex_else_if -> empty .)
 
 
-state 195
+state 192
 
     (85) complex_else_if -> simple_else_if .
     RETURN          reduce using rule 85 (complex_else_if -> simple_else_if .)
@@ -4337,75 +4298,73 @@ state 195
     R_BRACE         reduce using rule 85 (complex_else_if -> simple_else_if .)
 
 
-state 196
+state 193
 
     (15) block -> ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE . ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
     NEWLINE         shift and go to state 4
-    RETURN          reduce using rule 115 (empty -> .)
-    ID              reduce using rule 115 (empty -> .)
-    WRITE_FILE      reduce using rule 115 (empty -> .)
-    READ_FILE       reduce using rule 115 (empty -> .)
-    PRINT           reduce using rule 115 (empty -> .)
-    READ_LINE       reduce using rule 115 (empty -> .)
-    LET             reduce using rule 115 (empty -> .)
-    FOR             reduce using rule 115 (empty -> .)
-    WHILE           reduce using rule 115 (empty -> .)
-    IF              reduce using rule 115 (empty -> .)
-    $end            reduce using rule 115 (empty -> .)
-    R_BRACE         reduce using rule 115 (empty -> .)
-    ELSE_IF         reduce using rule 115 (empty -> .)
-    ELSE            reduce using rule 115 (empty -> .)
+    RETURN          reduce using rule 114 (empty -> .)
+    ID              reduce using rule 114 (empty -> .)
+    WRITE_FILE      reduce using rule 114 (empty -> .)
+    READ_FILE       reduce using rule 114 (empty -> .)
+    PRINT           reduce using rule 114 (empty -> .)
+    READ_LINE       reduce using rule 114 (empty -> .)
+    LET             reduce using rule 114 (empty -> .)
+    FOR             reduce using rule 114 (empty -> .)
+    WHILE           reduce using rule 114 (empty -> .)
+    IF              reduce using rule 114 (empty -> .)
+    $end            reduce using rule 114 (empty -> .)
+    R_BRACE         reduce using rule 114 (empty -> .)
+    ELSE_IF         reduce using rule 114 (empty -> .)
+    ELSE            reduce using rule 114 (empty -> .)
 
-    ignored_newlines               shift and go to state 201
+    ignored_newlines               shift and go to state 199
     empty                          shift and go to state 3
 
-state 197
+state 194
 
     (17) block_1 -> statement block_1 .
     R_BRACE         reduce using rule 17 (block_1 -> statement block_1 .)
 
 
+state 195
+
+    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign . R_PAREN block
+    R_PAREN         shift and go to state 200
+
+
+state 196
+
+    (64) assign -> ID . ASSIG expr
+    ASSIG           shift and go to state 63
+
+
+state 197
+
+    (91) func_params_1 -> ID COLON const_type COMMA func_params_1 .
+    R_PAREN         reduce using rule 91 (func_params_1 -> ID COLON const_type COMMA func_params_1 .)
+
+
 state 198
 
-    (92) func_params_1 -> ID COLON const_type COMMA func_params_1 .
-    R_PAREN         reduce using rule 92 (func_params_1 -> ID COLON const_type COMMA func_params_1 .)
+    (88) func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .
+    RETURN          reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    ID              reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    WRITE_FILE      reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    READ_FILE       reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    PRINT           reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    READ_LINE       reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    LET             reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    FOR             reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    WHILE           reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    IF              reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    $end            reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
+    R_BRACE         reduce using rule 88 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
 
 
 state 199
-
-    (89) func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .
-    RETURN          reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    ID              reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    WRITE_FILE      reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    READ_FILE       reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    PRINT           reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    READ_LINE       reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    LET             reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    FOR             reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    WHILE           reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    IF              reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    $end            reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-    R_BRACE         reduce using rule 89 (func -> LET ID L_PAREN func_params R_PAREN COLON func_type block .)
-
-
-state 200
-
-    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN . block
-    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
-    (113) ignored_newlines -> . empty
-    (114) ignored_newlines -> . NEWLINE ignored_newlines
-    (115) empty -> .
-    NEWLINE         shift and go to state 4
-    L_BRACE         reduce using rule 115 (empty -> .)
-
-    block                          shift and go to state 202
-    ignored_newlines               shift and go to state 124
-    empty                          shift and go to state 3
-
-state 201
 
     (15) block -> ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines .
     RETURN          reduce using rule 15 (block -> ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines .)
@@ -4424,7 +4383,21 @@ state 201
     ELSE            reduce using rule 15 (block -> ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines .)
 
 
-state 202
+state 200
+
+    (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN . block
+    (15) block -> . ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines
+    (112) ignored_newlines -> . empty
+    (113) ignored_newlines -> . NEWLINE ignored_newlines
+    (114) empty -> .
+    NEWLINE         shift and go to state 4
+    L_BRACE         reduce using rule 114 (empty -> .)
+
+    block                          shift and go to state 201
+    ignored_newlines               shift and go to state 120
+    empty                          shift and go to state 3
+
+state 201
 
     (76) for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block .
     RETURN          reduce using rule 76 (for_loop -> FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block .)
