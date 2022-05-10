@@ -4,6 +4,7 @@ from ast_classes.Id import Id
 from ast_classes.BinExpr import BinExpr
 from ast_classes.UnExpr import UnExpr
 from ast_classes.Var import Var
+from ast_classes.Assign import Assign
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -162,7 +163,7 @@ class ParhlParser(Parser):
 
     @_('ID ASSIG expr')
     def assign(self, p):
-        pass
+        return Assign(p[0], p[2])
     
     @_('LET var_1')
     def var(self, p):
