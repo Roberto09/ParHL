@@ -1,6 +1,7 @@
 from ast_classes.Const import Const
 from ast_classes.Id import Id
 from ast_classes.BinExpr import BinExpr
+from lexer_parser.ast_classes.UnExpr import UnExpr
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -109,7 +110,10 @@ class ParhlParser(Parser):
 
     @_('factor_1', 'NOT factor_1', 'PLUS factor_1', 'MINUS factor_1')
     def factor(self, p):
-        pass
+        if len(p) == 1:
+            return p[0]
+        else:
+            return UnExpr(p[0], p[1])
 
     @_('L_PAREN expr R_PAREN', 'const', 'func_call', 'tens', 'tens_id')
     def factor_1(self, p):
