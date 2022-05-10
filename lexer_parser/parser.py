@@ -1,7 +1,5 @@
-from lexer_parser.ast_classes.Bool import Bool
-from lexer_parser.ast_classes.Float import Float
-from lexer_parser.ast_classes.Int import Int
-from lexer_parser.ast_classes.String import String
+from ast_classes.Const import Const
+from ast_classes.Id import Id
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -20,19 +18,19 @@ class ParhlParser(Parser):
 
     @_('INT_V')
     def const(self, p):
-        return Int(p[0])
+        return Const(p[0], 'Int')
 
     @_('FLOAT_V')
     def const(self, p):
-        return Float(p[0])
+        return Const(p[0], 'Float')
    
     @_('BOOL_V')
     def const(self, p):
-        return Bool(p[0])
+        return Const(p[0], 'Bool')
     
     @_('STRING_V')
     def const(self, p):
-        return String(p[0])
+        return Const(p[0], 'String')
 
     @_('L_BRACKET expr tens_1')
     def tens(self, p):
@@ -94,9 +92,13 @@ class ParhlParser(Parser):
     def factor(self, p):
         pass
 
-    @_('L_PAREN expr R_PAREN', 'const', 'ID', 'func_call', 'tens', 'tens_id')
+    @_('L_PAREN expr R_PAREN', 'const', 'func_call', 'tens', 'tens_id')
     def factor_1(self, p):
         pass
+
+    @_('ID')
+    def factor_1(self, p):
+        return Id(p[0])
 
     @_('READ_LINE L_PAREN R_PAREN')
     def read_line(self, p):
