@@ -1,5 +1,6 @@
 from ast_classes.Const import Const
 from ast_classes.Id import Id
+from ast_classes.BinExpr import BinExpr
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -62,31 +63,49 @@ class ParhlParser(Parser):
     
     @_('t_expr', 't_expr OR expr')
     def expr(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('g_expr', 'g_expr AND t_expr')
     def t_expr(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('m_expr', 'm_expr comparison m_expr')
     def g_expr(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('EQ', 'NOT_EQ', 'GT', 'LT', 'GEQT', 'LEQT')
     def comparison(self, p):
-        pass
+        return p[0]
 
     @_('term', 'term PLUS m_expr', 'term MINUS m_expr')
     def m_expr(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('exp_factor', 'exp_factor MULT term', 'exp_factor DIV term', 'exp_factor MOD term')
     def term(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('factor', 'factor EXP exp_factor')
     def exp_factor(self, p):
-        pass
+        if(len(p) == 1):
+            return p[0]
+        else:
+            return BinExpr(p[0], p[1], p[2])
 
     @_('factor_1', 'NOT factor_1', 'PLUS factor_1', 'MINUS factor_1')
     def factor(self, p):
@@ -94,7 +113,10 @@ class ParhlParser(Parser):
 
     @_('L_PAREN expr R_PAREN', 'const', 'func_call', 'tens', 'tens_id')
     def factor_1(self, p):
-        pass
+        if len(p) == 3:
+            return p[1]
+        else:
+            return p[0]
 
     @_('ID')
     def factor_1(self, p):

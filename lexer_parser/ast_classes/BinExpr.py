@@ -1,4 +1,4 @@
-from lexer_parser.ast_classes.Node import Node
+from ast_classes.Node import Node
 
 class BinExpr(Node):
   def __init__(self, left, op, right):
