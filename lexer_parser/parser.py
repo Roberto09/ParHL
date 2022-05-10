@@ -3,6 +3,7 @@ from ast_classes.Globals import Globals
 from ast_classes.Id import Id
 from ast_classes.BinExpr import BinExpr
 from ast_classes.UnExpr import UnExpr
+from ast_classes.Var import Var
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -165,23 +166,28 @@ class ParhlParser(Parser):
     
     @_('LET var_1')
     def var(self, p):
-        pass
+        return p[1]
 
     @_('var_2', 'var_2 COMMA var_1')
     def var_1(self, p):
-        pass
+        return p[0]
 
     @_('var_3', 'var_3 ASSIG expr')
     def var_2(self, p):
-        pass
+        if len(p) == 1:
+            return Var(p[0][0], p[0][1], None)
+        else:
+            return Var(p[0][0], p[0][1], p[2])
 
     @_('var_id COLON const_type')
     def var_3(self, p):
-        pass
+        return [p[0], p[2]]
 
     @_('ID','ID var_id_1')
     def var_id(self, p):
-        pass
+        if len(p) == 1:
+            return Id(p[0])
+        return
 
     @_('L_BRACKET INT_V R_BRACKET', 'L_BRACKET INT_V R_BRACKET var_id_1')
     def var_id_1(self, p):

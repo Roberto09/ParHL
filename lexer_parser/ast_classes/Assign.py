@@ -1,4 +1,4 @@
-from lexer_parser.ast_classes.Node import Node
+from ast_classes.Node import Node
 
 class Assign(Node):
   def __init__(self, id, expr):

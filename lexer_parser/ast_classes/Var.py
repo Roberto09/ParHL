@@ -1,5 +1,5 @@
-from lexer_parser.ast_classes.Node import Node
-from lexer_parser.ast_classes.Assign import Assign
+from ast_classes.Node import Node
+from ast_classes.Assign import Assign
 
 class Var(Node):
   def __init__(self, id, id_type, expr):
