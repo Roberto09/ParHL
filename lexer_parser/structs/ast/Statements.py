@@ -16,14 +16,18 @@ class Globals(Statement):
 
     
 class Seq(Statement):
-    def __init__(self, stmt, seq=None):
+    def __init__(self, stmt, seq=Empty()):
         self.stmt = stmt
         self.seq = seq
     
     def gen(self):
         pass
 
-
+class Empty(Statement):
+    def __init__(self):
+        pass
+    def gen(self):
+        pass
 class If(Statement):
     
     class IfAux(Statement):
@@ -48,7 +52,7 @@ class If(Statement):
         def gen(self):
             pass
 
-    def __init__(self, if_aux, else_if_seq_aux=None, else_aux=None):
+    def __init__(self, if_aux, else_if_seq_aux=Empty(), else_aux=Empty()):
         self.if_aux = if_aux
         self.else_if_seq_aux = else_if_seq_aux
         self.else_aux = else_aux
@@ -78,7 +82,7 @@ class VarDecl(Statement):
     def __init__(self, id, id_type):
         self.id = id
         self.id_type = id_type
-        self.assign = None
+        self.assign = Empty()
 
     def do_assign(self, expr):
         self.assign = Assign(self.id, expr)
@@ -103,18 +107,17 @@ class Ret(Statement):
     def gen(self):
         pass
 
-class IOFunc(Statement):
-    def __init__(self, op, args_seq=None):
-        self.op = op
+class FuncCall(Statement):
+    def __init__(self, id, args_seq = Empty()):
+        self.id = id
         self.args_seq = args_seq
     
     def gen(self):
         pass
 
-class FuncCall(Statement):
-    def __init__(self, id, args_seq):
-        self.id = id
-        self.args_seq = args_seq
+class IOFunc(FuncCall):
+    def __init__(self, id, args_seq=Empty()):
+        super().__init__(id, args_seq)
     
     def gen(self):
         pass
