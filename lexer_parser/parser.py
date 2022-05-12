@@ -1,5 +1,5 @@
 from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc
+from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -102,7 +102,7 @@ class ParhlParser(Parser):
         else:
             return UnExpr(p[0], p[1])
 
-    @_('L_PAREN expr R_PAREN', 'const', 'func_call', 'tens', 'tens_id')
+    @_('L_PAREN expr R_PAREN', 'const', 'func_call', 'tens', 'tens_id', 'read_line', 'read_file')
     def factor_1(self, p):
         if len(p) == 3:
             return p[1]
@@ -121,9 +121,9 @@ class ParhlParser(Parser):
     def print_rule(self, p):
         return IOFunc(p[0], p[2])
 
-    @_('READ_FILE L_PAREN R_PAREN')
+    @_('READ_FILE L_PAREN expr R_PAREN')
     def read_file(self, p):
-        pass
+        return IOFunc(p[0], Seq(p[2]))
 
     @_('WRITE_FILE L_PAREN func_call_1')
     def write_file(self, p):
@@ -135,7 +135,9 @@ class ParhlParser(Parser):
 
     @_('R_PAREN', 'expr R_PAREN', 'expr COMMA func_call_1')
     def func_call_1(self, p):
-        if len(p) == 2:
+        if len(p) == 1:
+            return Empty()
+        elif len(p) == 2:
             return Seq(p[0])
         elif len(p) == 3:
             return Seq(p[0], p[2])
@@ -238,7 +240,7 @@ class ParhlParser(Parser):
     def statement(self, p):
         return p[0]
 
-    @_('var', 'assign', 'read_line', 'print_rule', 'read_file', 
+    @_('var', 'assign', 'print_rule', 
         'write_file', 'func_call', 'ret')
     def statements(self, p):
         return p[0]
@@ -257,5 +259,5 @@ class ParhlParser(Parser):
 
     @_('')
     def empty(self, p):
-        return None
+        return Empty()
     
