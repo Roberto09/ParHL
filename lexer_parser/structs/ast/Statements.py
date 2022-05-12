@@ -14,6 +14,11 @@ class Globals(Statement):
         if hasattr(self, 'global_1'):
             self.global_1.gen()
 
+class Empty(Statement):
+    def __init__(self):
+        pass
+    def gen(self):
+        pass
     
 class Seq(Statement):
     def __init__(self, stmt, seq=Empty()):
@@ -23,11 +28,6 @@ class Seq(Statement):
     def gen(self):
         pass
 
-class Empty(Statement):
-    def __init__(self):
-        pass
-    def gen(self):
-        pass
 class If(Statement):
     
     class IfAux(Statement):
