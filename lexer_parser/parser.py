@@ -1,5 +1,5 @@
 from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret
+from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc
 from sly import Parser
 from lexer import ParhlLexer
 
@@ -15,7 +15,7 @@ class ParhlParser(Parser):
     @_('statement globals_aux',  'statements', 'empty')
     def globals_aux(self, p):
         if len(p) == 1:
-            return p[0]
+            return Seq(p[0])
         return Seq(p[0], p[1])
         
     @_('INT_V', 'FLOAT_V', 'BOOL_V', 'STRING_V')
@@ -43,7 +43,7 @@ class ParhlParser(Parser):
     def block_1(self, p):
         if len(p) == 2:
             return Seq(p[0], p[1])
-        return p[0]
+        return Seq(p[0])
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
     def const_type(self, p):
@@ -115,11 +115,11 @@ class ParhlParser(Parser):
 
     @_('READ_LINE L_PAREN R_PAREN')
     def read_line(self, p):
-        pass
+        return IOFunc(p[0])
     
     @_('PRINT L_PAREN func_call_1')
     def print_rule(self, p):
-        pass
+        return IOFunc(p[0], p[2])
 
     @_('READ_FILE L_PAREN R_PAREN')
     def read_file(self, p):
@@ -127,15 +127,18 @@ class ParhlParser(Parser):
 
     @_('WRITE_FILE L_PAREN func_call_1')
     def write_file(self, p):
-        pass
+        return IOFunc(p[0], p[2])
 
     @_('ID L_PAREN func_call_1')
     def func_call(self, p):
-        pass
+        return FuncCall(p[0], p[2])
 
     @_('R_PAREN', 'expr R_PAREN', 'expr COMMA func_call_1')
     def func_call_1(self, p):
-        pass
+        if len(p) == 2:
+            return Seq(p[0])
+        elif len(p) == 3:
+            return Seq(p[0], p[2])
 
     @_('ID ASSIG expr')
     def assign(self, p):

@@ -102,3 +102,19 @@ class Ret(Statement):
 
     def gen(self):
         pass
+
+class IOFunc(Statement):
+    def __init__(self, op, args_seq=None):
+        self.op = op
+        self.args_seq = args_seq
+    
+    def gen(self):
+        pass
+
+class FuncCall(Statement):
+    def __init__(self, id, args_seq):
+        self.id = id
+        self.args_seq = args_seq
+    
+    def gen(self):
+        pass
