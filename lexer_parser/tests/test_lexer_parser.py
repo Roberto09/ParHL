@@ -15,6 +15,7 @@ def write_tokens_to_file_testing(toks_file, out_file):
                         ("./lexer_parser/tests/data/lex_2.parhl", "./lexer_parser/tests/data/lex_2.out")])
 def data_out_lexer(request):
     code, toks = request.param
+    # write_tokens_to_file_testing(code, toks)
     with open(code, 'r') as my_code:
         data = my_code.read()
     with open(toks, 'r') as my_toks:
@@ -29,4 +30,3 @@ def test_lexer(data_out_lexer, capfd):
     for token in tokens: print(token)
     out, _ = capfd.readouterr()
     assert out ==  out_lexer
- 
