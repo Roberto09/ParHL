@@ -7,9 +7,9 @@ if(True){
 
 if(False)
 {
-    read_line()
+    a := read_line()
 } else {
-    read_file()
+    b := read_file("test.txt")
 }
 
 if(a=b) {
