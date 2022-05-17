@@ -1,4 +1,6 @@
 from .Node import Node
+from ..parse_context import ParseContext
+from ..quadruples import Quadruple
 
 class Expression(Node):
     def __init__(self):
@@ -17,14 +19,12 @@ class Assign(Expression):
         self.left = left
         self.right = right
   
-    def gen(self, ctx):
-        self.right.gen(ctx)
-        self.left.gen(ctx)
-        # var = FuncDir.getVar(id)
-        # exp = FuncDor.getVar(exp)
-        # Check expr can be assigned to var
-        # SemanticCube.get_type('ASSIG', var.type, exp.type)
-
+    def gen(self, ctx: ParseContext):
+        left_var = self.right.gen(ctx)
+        right_var = self.left.gen(ctx)
+        ctx.semantic_cube.get_type('ASSIG',left_var, right_var)
+        ctx.add_quadruple(Quadruple('ASSIG', right_var, None, left_var
+        ))
         # quadruple('=', exp, None, var)
 
 
@@ -34,13 +34,14 @@ class BinExpr(Expression):
         self.right = right
         self.op = op
 
-    def gen(self, ctx):
-        self.left.gen(ctx)
+    def gen(self, ctx: ParseContext):
+        left_var = self.left.gen(ctx)
         if hasattr(self, 'right'):
-            self.right.gen(ctx)
-            # newType = SemanticCube.get_type(op, left, right)
-            # malloc temp : newType
-            # quadruple(op, left, right, temp)
+            right_var = self.right.gen(ctx)
+            new_type = ctx.semantic_cube.get_type(self.op, self.right)
+            temp_var = ctx.func_dir.new_temp(new_type)
+            ctx.add_quadruple(Quadruple(self.op, left_var, right_var, temp_var))
+            return temp_var
 
 
 # This implementation depends a bit on how we actually want to handle
@@ -50,7 +51,7 @@ class Const(Expression):
         self.value = value
         self.type = type
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         # Guardar en memoria de constantes
         pass
 
@@ -59,8 +60,9 @@ class Id(Expression):
     def __init__(self, id):
         self.id = id
   
-    def gen(self, ctx):
-        pass
+    def gen(self, ctx: ParseContext):
+        return ctx.get_var(self.id)
+
 class Access(Expression):
     def __init__(self, id_access, expr):
         self.id_access = id_access
@@ -70,7 +72,8 @@ class Access(Expression):
     def id(self):
         return self.id_access.id
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
+        # use id's access func to get address
         pass
 
 
@@ -79,8 +82,10 @@ class UnExpr(Expression):
         self.op = op
         self.right = right
 
-    def gen(self, ctx):
-        self.right.gen(ctx)
-        # newType = SC.get_type(op, arg)
-        # malloc temp : newType
+    def gen(self, ctx: ParseContext):
+        right_var = self.right.gen(ctx)
+        new_type = ctx.semantic_cube.get_type(self.op, self.right)
+        new_var = ctx.func_dir.new_temp(new_type)
+        ctx.add_quadruple(Quadruple(self.op, right_var, new_var))
+        return new_var
         # quadruple(op, arg, None, temp)
