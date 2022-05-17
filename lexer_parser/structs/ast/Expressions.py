@@ -2,6 +2,23 @@ from .Node import Node
 from ..parse_context import ParseContext
 from ..quadruples import Quadruple
 
+symbol_to_token = {
+    "*": 'MULT',
+    "+": 'PLUS',
+    "-": 'MINUS',
+    "/": 'DIV',
+    "^": 'EXP',
+    "%": 'MOD',
+    "=": 'EQ',
+    "<>": 'NOT_EQ',
+    ">=": 'GEQT',
+    "<=": 'LEQT',
+    ">": 'GT',
+    "<": 'LT',
+    "and": 'AND',
+    "or": 'OR',
+    "not": 'NOT',
+}
 class Expression(Node):
     def __init__(self):
         self._id_type = None
@@ -20,12 +37,10 @@ class Assign(Expression):
         self.right = right
   
     def gen(self, ctx: ParseContext):
-        left_var = self.right.gen(ctx)
-        right_var = self.left.gen(ctx)
-        ctx.semantic_cube.get_type('ASSIG',left_var, right_var)
-        ctx.add_quadruple(Quadruple('ASSIG', right_var, None, left_var
-        ))
-        # quadruple('=', exp, None, var)
+        right_var = self.right.gen(ctx)
+        left_var = self.left.gen(ctx)
+        ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
+        ctx.add_quadruple(Quadruple('ASSIG', right_var.name, None, left_var.name))
 
 
 class BinExpr(Expression):
@@ -38,9 +53,11 @@ class BinExpr(Expression):
         left_var = self.left.gen(ctx)
         if hasattr(self, 'right'):
             right_var = self.right.gen(ctx)
-            new_type = ctx.semantic_cube.get_type(self.op, self.right)
+            op_name = symbol_to_token[self.op]
+            new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
             temp_var = ctx.func_dir.new_temp(new_type)
-            ctx.add_quadruple(Quadruple(self.op, left_var, right_var, temp_var))
+            # Need to change names to mem_dirs when they are functioning
+            ctx.add_quadruple(Quadruple(op_name, left_var.name, right_var.name, temp_var.name))
             return temp_var
 
 
@@ -49,19 +66,19 @@ class BinExpr(Expression):
 class Const(Expression):
     def __init__(self, value, type):
         self.value = value
-        self.type = type
-
+        self.token_type = type
+        self.type = type.replace('V', 'T')
+        
     def gen(self, ctx: ParseContext):
         # Guardar en memoria de constantes
-        pass
-
+        return ctx.func_dir.new_temp(self.type, self.value)
 
 class Id(Expression):
     def __init__(self, id):
         self.id = id
   
     def gen(self, ctx: ParseContext):
-        return ctx.get_var(self.id)
+        return ctx.func_dir.get_var(self.id)
 
 class Access(Expression):
     def __init__(self, id_access, expr):
@@ -76,7 +93,6 @@ class Access(Expression):
         # use id's access func to get address
         pass
 
-
 class UnExpr(Expression):
     def __init__(self, op, right):
         self.op = op
@@ -84,8 +100,8 @@ class UnExpr(Expression):
 
     def gen(self, ctx: ParseContext):
         right_var = self.right.gen(ctx)
-        new_type = ctx.semantic_cube.get_type(self.op, self.right)
+        op_name = symbol_to_token[self.op]
+        new_type = ctx.semantic_cube.get_type(op_name, right_var.type)
         new_var = ctx.func_dir.new_temp(new_type)
-        ctx.add_quadruple(Quadruple(self.op, right_var, new_var))
+        ctx.add_quadruple(Quadruple(op_name, right_var.name, None, new_var.name))
         return new_var
-        # quadruple(op, arg, None, temp)
