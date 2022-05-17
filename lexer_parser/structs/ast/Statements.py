@@ -1,3 +1,4 @@
+from ..parse_context import ParseContext
 from .Node import Node
 from .Expressions import Assign, Expression
 
@@ -6,7 +7,7 @@ Statement = Node
 class Empty(Statement):
     def __init__(self):
         pass
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         pass
     
 class Seq(Statement):
@@ -14,7 +15,7 @@ class Seq(Statement):
         self.stmt = stmt
         self.seq = seq
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         try:
             self.stmt.gen(ctx)
         except:
@@ -29,7 +30,7 @@ class If(Statement):
             self.expr = expr
             self.seq = seq
 
-        def gen(self, ctx):
+        def gen(self, ctx: ParseContext):
             self.expr.gen(ctx)
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
@@ -39,7 +40,7 @@ class If(Statement):
             super().__init__(expr, seq)
             self.else_if_seq = else_if_seq
 
-        def gen(self, ctx):
+        def gen(self, ctx: ParseContext):
             super().gen(ctx)
             self.else_if_seq.gen(ctx)
     
@@ -47,7 +48,7 @@ class If(Statement):
         def __init__(self, seq):
             self.seq = seq
         
-        def gen(self, ctx):
+        def gen(self, ctx: ParseContext):
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
@@ -57,7 +58,7 @@ class If(Statement):
         self.else_if_seq_aux = else_if_seq_aux
         self.else_aux = else_aux
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.if_aux.gen(ctx)
         self.else_if_seq_aux.gen(ctx)
         self.else_aux.gen(ctx)
@@ -67,7 +68,7 @@ class While(Statement):
         self.expr = expr
         self.seq = seq
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.expr.gen(ctx)
         ctx.func_dir.start_block_stack()
         self.seq.gen(ctx)
@@ -80,7 +81,7 @@ class For(Statement):
         self.assign = assign
         self.seq = seq
 
-    def gen(self, ctx): 
+    def gen(self, ctx: ParseContext): 
         ctx.func_dir.start_block_stack()
         self.var.gen(ctx)
         self.expr.gen(ctx)
@@ -98,7 +99,7 @@ class VarDecl(Statement):
     def do_assign(self, expr):
         self.assign = Assign(self.id, expr)
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.id.set_id_type(self.id.id, self.id_type)
         ctx.func_dir.add_var(self.id.id, self.id_type)
         # do stuff
@@ -111,7 +112,7 @@ class FuncDecl(Statement):
         self.params_seq = params_seq
         self.seq = seq 
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.id.set_id_type(self.id.id, self.id_type)
         ctx.func_dir.start_func_stack(self.id.id, self.id_type)
         self.params_seq.gen(ctx)
@@ -122,7 +123,7 @@ class Ret(Statement):
     def __init__(self, expr):
         self.expr = expr
 
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.expr.gen(ctx)
 
 class FuncCall(Statement):
@@ -130,12 +131,12 @@ class FuncCall(Statement):
         self.id = id
         self.args_seq = args_seq
     
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.args_seq.gen(ctx)
 
 class IOFunc(FuncCall):
     def __init__(self, id, args_seq=Empty()):
         super().__init__(id, args_seq)
     
-    def gen(self, ctx):
+    def gen(self, ctx: ParseContext):
         self.args_seq.gen(ctx)
