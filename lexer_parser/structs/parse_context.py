@@ -13,3 +13,7 @@ class ParseContext():
     
     def add_quadruple(self, quadruple: Quadruple):
         self._quadruples.append(quadruple)
+        return len(self._quadruples)-1
+    
+    def set_goto_position(self, index):
+        self._quadruples[index].result = len(self._quadruples)
