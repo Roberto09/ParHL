@@ -19,16 +19,6 @@ class Var(Typed):
 class Block():
     def __init__(self):
         # its unclear if we would need a name here ... TBD
-        self.vars = {}
-        self.funcs = {}
-        self.blocks = []
-    
-    def __repr__(self):
-        return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
-
-class Func(Typed):
-    def __init__(self, name, type):
-        super().__init__(name, type)
         self.vars = {} # name : Var
         self.funcs = {} # name : Func
         self.temps = {} # name : var
@@ -42,6 +32,14 @@ class Func(Typed):
             'GPU_BOOL_T': 0,
         }
         self.blocks = []
+    
+    def __repr__(self):
+        return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
+
+class Func(Typed, Block):
+    def __init__(self, name, type):
+        super().__init__(name, type)
+        super(Typed, self).__init__()
 
     def __repr__(self):
         return f"({super().__repr__()}, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks})"
