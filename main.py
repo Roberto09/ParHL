@@ -12,6 +12,8 @@ def lex_pars(filename):
     ast = parser.parse(tokens)
     ctx = ParseContext()
     ast.gen(ctx)
+    qs = ctx.get_quadruples()
+    print(qs)
     return tokens, ast
 
 if __name__ == '__main__': 
