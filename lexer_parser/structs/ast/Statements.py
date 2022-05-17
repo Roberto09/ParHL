@@ -1,3 +1,4 @@
+from ..quadruples import Quadruple
 from ..parse_context import ParseContext
 from .Node import Node
 from .Expressions import Assign, Expression
@@ -27,11 +28,19 @@ class Seq(Statement):
 
     def gen(self, ctx: ParseContext):
         try:
-            self.stmt.gen(ctx)
+            first = self.stmt.gen(ctx)
         except:
             print(self.stmt)
             raise
-        self.seq.gen(ctx)
+        second = self.seq.gen(ctx)
+        if first == None and second == None:
+            return []
+        elif second == None:
+            return [first]
+        elif first == None:
+            return second
+        else:
+            return [first] + second
 
 class If(Statement):
     
@@ -150,4 +159,17 @@ class IOFunc(FuncCall):
         super().__init__(id, args_seq)
     
     def gen(self, ctx: ParseContext):
-        self.args_seq.gen(ctx)
+        seq = self.args_seq.gen(ctx)
+        if self.id in 'read_line':
+            new_var = ctx.func_dir.new_temp('STRING_T')
+            ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.name))
+            return new_var
+        if self.id == 'read_file' and seq is not None:
+            new_var = ctx.func_dir.new_temp('STRING_T')
+            ctx.add_quadruple(Quadruple('READ_FILE', seq[0].name, None, new_var.name))
+            return new_var
+        if seq == None:
+            seq = []
+        for arg in seq:
+            ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.name))
+            
