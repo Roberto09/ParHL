@@ -8,12 +8,13 @@ class Typed():
     def __repr__(self):
         return f"name: {self.name}, type: {self.type}"
 class Var(Typed):
-    def __init__(self, name, type, mem_dir, ):
+    def __init__(self, name, type, mem_dir, value=None):
         super().__init__(name, type)
         self.mem_dir = mem_dir # "location" in instance memory
+        self.value = value
 
     def __repr__(self):
-        return f"({super().__repr__()})"
+        return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
 class Block():
     def __init__(self):
@@ -32,13 +33,13 @@ class Func(Typed):
         self.funcs = {} # name : Func
         self.temps = {} # name : var
         self.temp_counters = { # type : next_temp/total_temps
-            'int': 0,
-            'float': 0,
-            'bool': 0,
-            'string': 0,
-            'gpu_int': 0,
-            'gpu_float': 0,
-            'gpu_bool': 0,
+            'INT_T': 0,
+            'FLOAT_T': 0,
+            'BOOL_T': 0,
+            'STRING_T': 0,
+            'GPU_INT_T': 0,
+            'GPU_FLOAT_T': 0,
+            'GPU_BOOL_T': 0,
         }
         self.blocks = []
 
@@ -80,9 +81,9 @@ class FuncDir:
         var = Var(name, type, -1)
         self.func_stack[-1].vars[name] = var
 
-    def new_temp(self, type):
+    def new_temp(self, type, value=None):
         temp_var_name = type + str(self.func_stack[-1].temp_counters[type])
-        temp_var = Var(temp_var_name, type, -1, 'temp')
+        temp_var = Var(temp_var_name, type, -1, value)
         self.func_stack[-1].temps[temp_var_name] = temp_var
         self.func_stack[-1].temp_counters[type] += 1
         return temp_var
@@ -99,8 +100,10 @@ class FuncDir:
 
     def get_var(self, name):
         return self._find_in_ordered_scopes(name, "vars")
+
     def get_temp(self, name):
         return self.func_stack[-1].temps[name]
+
     def get_func(self, name):
         return self._find_in_ordered_scopes(name, "funcs")
 
