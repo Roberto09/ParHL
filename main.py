@@ -13,8 +13,8 @@ def lex_pars(filename):
     ctx = ParseContext()
     ast.gen(ctx)
     qs = ctx.get_quadruples()
-    for q in qs:
-        print(q)
+    for (i, q) in enumerate(qs):
+        print(i, " - ", q)
     return tokens, ast
 
 if __name__ == '__main__': 
