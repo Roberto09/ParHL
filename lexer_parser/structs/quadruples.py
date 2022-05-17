@@ -1,6 +1,6 @@
 
 class Quadruple():
-    def __init__(self, op, arg_1, arg_2, result):
+    def __init__(self, op, arg_1=None, arg_2=None, result=None):
         self.op = op
         self.arg_1 = arg_1
         self.arg_2 = arg_2
