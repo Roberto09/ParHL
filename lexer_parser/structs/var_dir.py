@@ -1,3 +1,5 @@
+from xml.etree.ElementTree import tostring
+
 class Typed():
     def __init__(self, name, type):
         self.name = name
@@ -6,8 +8,10 @@ class Typed():
     def __repr__(self):
         return f"name: {self.name}, type: {self.type}"
 class Var(Typed):
-    def __init__(self, name, type):
+    def __init__(self, name, type, mem_dir, ):
         super().__init__(name, type)
+        self.mem_dir = mem_dir # "location" in instance memory
+
     def __repr__(self):
         return f"({super().__repr__()})"
 
@@ -26,6 +30,16 @@ class Func(Typed):
         super().__init__(name, type)
         self.vars = {} # name : Var
         self.funcs = {} # name : Func
+        self.temps = {} # name : var
+        self.temp_counters = { # type : next_temp/total_temps
+            'int': 0,
+            'float': 0,
+            'bool': 0,
+            'string': 0,
+            'gpu_int': 0,
+            'gpu_float': 0,
+            'gpu_bool': 0,
+        }
         self.blocks = []
 
     def __repr__(self):
@@ -62,8 +76,16 @@ class FuncDir:
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
         assert name not in self.func_stack[-1].vars and name not in self.func_stack[-1].funcs
-        var = Var(name, type)
+        # Obtain location of next memory of specified type
+        var = Var(name, type, -1)
         self.func_stack[-1].vars[name] = var
+
+    def new_temp(self, type):
+        temp_var_name = type + str(self.func_stack[-1].temp_counters[type])
+        temp_var = Var(temp_var_name, type, -1, 'temp')
+        self.func_stack[-1].temps[temp_var_name] = temp_var
+        self.func_stack[-1].temp_counters[type] += 1
+        return temp_var
 
     def _find_in_ordered_scopes(self, name, attr):
         """
@@ -77,7 +99,8 @@ class FuncDir:
 
     def get_var(self, name):
         return self._find_in_ordered_scopes(name, "vars")
-    
+    def get_temp(self, name):
+        return self.func_stack[-1].temps[name]
     def get_func(self, name):
         return self._find_in_ordered_scopes(name, "funcs")
 
