@@ -1,10 +1,10 @@
-from structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from structs.ast.Statements import FuncDecl, Globals, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
+from .structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
+from .structs.ast.Statements import FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
 from sly import Parser
-from lexer import ParhlLexer
+from .lexer import ParhlLexer
 
 class ParhlParser(Parser):
-    debugfile = 'parser.out'
+    # debugfile = 'parser.out'
     # Get the token list from the lexer (required)
     tokens = ParhlLexer.tokens
     
@@ -148,7 +148,7 @@ class ParhlParser(Parser):
     
     @_('LET var_1')
     def var(self, p):
-        return p[0]
+        return p[1]
 
     @_('var_2', 'var_2 COMMA var_1')
     def var_1(self, p):

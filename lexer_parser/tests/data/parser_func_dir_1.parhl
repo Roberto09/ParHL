@@ -1,0 +1,16 @@
+let x : int := 10, y[10] : float, z : string := "abc" 
+
+let my_func (x : int, k : float) : int {
+    print(x + y[1][2][3])
+    let my_super_func(x : float, z: string) : string{
+        print(123);
+    }
+    while(true){
+        let a : int := 10
+        if (x > 10){
+            print(124)
+        }
+    }
+}
+
+

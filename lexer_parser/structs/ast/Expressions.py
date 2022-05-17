@@ -17,8 +17,9 @@ class Assign(Expression):
         self.left = left
         self.right = right
   
-    def gen(self):
-        self.expr.gen()
+    def gen(self, ctx):
+        self.right.gen(ctx)
+        self.left.gen(ctx)
         # var = FuncDir.getVar(id)
         # exp = FuncDor.getVar(exp)
         # Check expr can be assigned to var
@@ -33,10 +34,10 @@ class BinExpr(Expression):
         self.right = right
         self.op = op
 
-    def gen(self):
-        self.left.gen()
+    def gen(self, ctx):
+        self.left.gen(ctx)
         if hasattr(self, 'right'):
-            self.right.gen()
+            self.right.gen(ctx)
             # newType = SemanticCube.get_type(op, left, right)
             # malloc temp : newType
             # quadruple(op, left, right, temp)
@@ -49,7 +50,7 @@ class Const(Expression):
         self.value = value
         self.type = type
 
-    def gen(self):
+    def gen(self, ctx):
         # Guardar en memoria de constantes
         pass
 
@@ -58,15 +59,18 @@ class Id(Expression):
     def __init__(self, id):
         self.id = id
   
-    def gen(self):
+    def gen(self, ctx):
         pass
-
 class Access(Expression):
     def __init__(self, id_access, expr):
-        self.id = id_access
+        self.id_access = id_access
         self.expr = expr
+    
+    @property
+    def id(self):
+        return self.id_access.id
 
-    def gen(self):
+    def gen(self, ctx):
         pass
 
 
@@ -75,8 +79,8 @@ class UnExpr(Expression):
         self.op = op
         self.right = right
 
-    def gen(self):
-        self.right.gen()
+    def gen(self, ctx):
+        self.right.gen(ctx)
         # newType = SC.get_type(op, arg)
         # malloc temp : newType
         # quadruple(op, arg, None, temp)

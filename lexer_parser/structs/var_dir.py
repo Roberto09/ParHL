@@ -2,17 +2,34 @@ class Typed():
     def __init__(self, name, type):
         self.name = name
         self.type = type
-
+    
+    def __repr__(self):
+        return f"name: {self.name}, type: {self.type}"
 class Var(Typed):
     def __init__(self, name, type):
         super().__init__(name, type)
+    def __repr__(self):
+        return f"({super().__repr__()})"
+
+class Block():
+    def __init__(self):
+        # its unclear if we would need a name here ... TBD
+        self.vars = {}
+        self.funcs = {}
+        self.blocks = []
+    
+    def __repr__(self):
+        return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
 
 class Func(Typed):
     def __init__(self, name, type):
         super().__init__(name, type)
         self.vars = {} # name : Var
         self.funcs = {} # name : Func
+        self.blocks = []
 
+    def __repr__(self):
+        return f"({super().__repr__()}, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks})"
 
 """ Function Directory abstraction
 FuncDir generates a tree of Vars and Funcs which will remain available in the glob_func property.
@@ -32,6 +49,14 @@ class FuncDir:
     def end_func_stack(self, name=None): 
         if name is not None:
             assert self.func_stack[-1].name == name
+        self.func_stack.pop()
+
+    def start_block_stack(self):
+        nxt_block = Block()
+        self.func_stack[-1].blocks.append(nxt_block)
+        self.func_stack.append(nxt_block)
+
+    def end_block_stack(self):
         self.func_stack.pop()
 
     def add_var(self, name, type):
@@ -55,5 +80,9 @@ class FuncDir:
     
     def get_func(self, name):
         return self._find_in_ordered_scopes(name, "funcs")
+
+    def __repr__(self):
+        return f"FuncDir - func_stack: {self.func_stack}"
+
 
     
