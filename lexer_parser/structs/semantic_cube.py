@@ -53,7 +53,7 @@ class SemanticCube():
             'INT_T':_produce_all_same('BOOL_T'),
             'BOOL_T':_produce_all_same('BOOL_T'),
             'FLOAT_T':_produce_all_same('BOOL_T'),
-            'STRING_':_produce_all_same('STRING_T'),
+            'STRING_T':_produce_all_same('BOOL_T'),
             'GPU_INT_T':_produce_all_same('GPU_BOOL_T'),
             'GPU_FLOAT_T':_produce_all_same('GPU_BOOL_T'),
             'GPU_BOOL_T':_produce_all_same('GPU_BOOL_T'),

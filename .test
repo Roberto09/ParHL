@@ -1,0 +1,6 @@
+let x : float := 1 + 3.2 * 8 % 10 ^ 5, y : string := "hola";
+print(x)
+print(y)
+let b : bool := False
+
+b := y <> "hola"
