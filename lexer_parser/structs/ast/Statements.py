@@ -4,6 +4,16 @@ from .Expressions import Assign, Expression
 
 Statement = Node
 
+type_to_token = {
+    'int': 'INT_T',
+    'float': 'FLOAT_T',
+    'string': 'STRING_T', 
+    'bool': 'BOOL_T',
+    'gpu_int': 'GPU_INT_T',
+    'gpu_float': 'GPU_FLOAT_T',
+    'gpu_bool': 'GPU_BOOL_T'
+}
+
 class Empty(Statement):
     def __init__(self):
         pass
@@ -93,7 +103,7 @@ class VarDecl(Statement):
     def __init__(self, id, id_type):
         self.id = id
         assert Expression in type(id).__mro__
-        self.id_type = id_type
+        self.id_type = type_to_token[id_type]
         self.assign = Empty()
 
     def do_assign(self, expr):
@@ -102,6 +112,7 @@ class VarDecl(Statement):
     def gen(self, ctx: ParseContext):
         self.id.set_id_type(self.id.id, self.id_type)
         ctx.func_dir.add_var(self.id.id, self.id_type)
+        self.assign.gen(ctx)
         # do stuff
 
 class FuncDecl(Statement):
