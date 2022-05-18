@@ -122,7 +122,7 @@ class While(Statement):
         ctx.set_goto_position(gotof_index)
 
 class For(Statement):
-    def __init__(self, var, expr, assign, seq):
+    def __init__(self, var, expr, assign, seq=Empty()):
         self.var = var
         self.expr = expr
         self.assign = assign
@@ -131,9 +131,13 @@ class For(Statement):
     def gen(self, ctx: ParseContext): 
         ctx.func_dir.start_block_stack()
         self.var.gen(ctx)
-        self.expr.gen(ctx)
-        self.assign.gen(ctx)
+        jump_index = ctx.get_next_quadruple_index()
+        var = self.expr.gen(ctx)
+        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
         self.seq.gen(ctx)
+        self.assign.gen(ctx)
+        ctx.add_quadruple(Quadruple('GOTO', result=jump_index))
+        ctx.set_goto_position(gotof_index)
         ctx.func_dir.end_block_stack()
 
 class VarDecl(Statement):
