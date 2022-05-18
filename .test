@@ -1,0 +1,12 @@
+let x:int:= 2
+x:= 2+2
+let a(arg: string) : void {
+  let b: int := 0
+  while (b < 10) {
+    let temp : float := 10.3 
+    print(arg)
+    b:= b+x
+  }
+}
+
+a("hola")

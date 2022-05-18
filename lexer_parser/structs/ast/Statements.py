@@ -151,9 +151,11 @@ class VarDecl(Statement):
         self.assign = Assign(self.id, expr)
 
     def gen(self, ctx: ParseContext):
+        print('gen decl')
         self.id.set_id_type(self.id.id, self.id_type)
-        ctx.func_dir.add_var(self.id.id, self.id_type)
+        var = ctx.func_dir.add_var(self.id.id, self.id_type)
         self.assign.gen(ctx)
+        return var
         # do stuff
 
 class FuncDecl(Statement):
@@ -165,11 +167,20 @@ class FuncDecl(Statement):
         self.seq = seq 
 
     def gen(self, ctx: ParseContext):
+        goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
+        
         self.id.set_id_type(self.id.id, self.id_type)
-        ctx.func_dir.start_func_stack(self.id.id, self.id_type)
-        self.params_seq.gen(ctx)
+        
+        q_index = goto_index+1 # index for starting at func
+        ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
+        vars = self.params_seq.gen(ctx)
+        print('decl vars ', vars)
+        ctx.func_dir.set_func_params([] if vars == None else vars)
+        ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
+        ctx.add_quadruple(Quadruple('ENDFUNC'))
+        ctx.set_goto_position(goto_index) # fill goto
 
 class Ret(Statement):
     def __init__(self, expr):
@@ -179,12 +190,24 @@ class Ret(Statement):
         self.expr.gen(ctx)
 
 class FuncCall(Statement):
-    def __init__(self, id, args_seq = Empty()):
+    def __init__(self, id, args_seq):
         self.id = id
         self.args_seq = args_seq
     
     def gen(self, ctx: ParseContext):
-        self.args_seq.gen(ctx)
+        func = ctx.func_dir.get_func(self.id)
+        vars = self.args_seq.gen(ctx)
+        vars = [] if vars == None else vars 
+        print('vars ', vars)
+        print('func.params ', func.params)
+        next_q = ctx.get_next_quadruple_index() + 1
+        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.name))
+        assert len(vars) == len(func.params)
+        for (i, var) in enumerate([] if vars == None else vars):
+            param = func.params[i]
+            ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
+            ctx.add_quadruple(Quadruple('PARAM', var.name, result=param.name))
+
 
 class IOFunc(FuncCall):
     def __init__(self, id, args_seq=Empty()):
