@@ -178,7 +178,7 @@ class ParhlParser(Parser):
 
     @_('FOR L_PAREN var SEMICOLON expr SEMICOLON assign R_PAREN block')
     def for_loop(self, p):
-        return For(p[2], p[4], p[6], p[7])
+        return For(p[2], p[4], p[6], p[8])
 
     @_('cond_if', 'cond_if_else', 'cond_if_else_if')
     def cond(self, p):
