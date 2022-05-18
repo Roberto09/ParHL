@@ -112,10 +112,14 @@ class While(Statement):
         self.seq = seq
 
     def gen(self, ctx: ParseContext):
-        self.expr.gen(ctx)
+        jump_index = ctx.get_next_quadruple_index()
+        var = self.expr.gen(ctx)
+        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
         ctx.func_dir.start_block_stack()
         self.seq.gen(ctx)
         ctx.func_dir.end_block_stack()
+        ctx.add_quadruple(Quadruple('GOTO',result=jump_index))
+        ctx.set_goto_position(gotof_index)
 
 class For(Statement):
     def __init__(self, var, expr, assign, seq):
