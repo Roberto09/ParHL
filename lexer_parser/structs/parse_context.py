@@ -17,3 +17,6 @@ class ParseContext():
     
     def set_goto_position(self, index):
         self._quadruples[index].result = len(self._quadruples)
+
+    def get_next_quadruple_index(self):
+        return len(self._quadruples)
