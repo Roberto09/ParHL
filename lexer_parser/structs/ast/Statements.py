@@ -27,20 +27,12 @@ class Seq(Statement):
         self.seq = seq
 
     def gen(self, ctx: ParseContext):
-        try:
-            first = self.stmt.gen(ctx)
-        except:
-            print(self.stmt)
-            raise
-        second = self.seq.gen(ctx)
-        if first == None and second == None:
-            return []
-        elif second == None:
-            return [first]
-        elif first == None:
-            return second
-        else:
-            return [first] + second
+        self.stmt.gen(ctx)
+        self.seq.gen(ctx)
+
+    def gen_ret_list(self, ctx : ParseContext):
+        # TODO : improve complexity, this is O(n^2)
+        return [self.stmt.gen(ctx)] + ([] if type(self.seq) is Empty else self.seq.gen_ret_list(ctx))
 
 class If(Statement):
     
@@ -168,12 +160,12 @@ class FuncDecl(Statement):
 
     def gen(self, ctx: ParseContext):
         goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
-        
+
         self.id.set_id_type(self.id.id, self.id_type)
         
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
-        vars = self.params_seq.gen(ctx)
+        vars = self.params_seq.gen_ret_list(ctx)
         print('decl vars ', vars)
         ctx.func_dir.set_func_params([] if vars == None else vars)
         ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
@@ -196,8 +188,7 @@ class FuncCall(Statement):
     
     def gen(self, ctx: ParseContext):
         func = ctx.func_dir.get_func(self.id)
-        vars = self.args_seq.gen(ctx)
-        vars = [] if vars == None else vars 
+        vars = self.args_seq.gen_ret_list(ctx)
         print('vars ', vars)
         print('func.params ', func.params)
         next_q = ctx.get_next_quadruple_index() + 1
@@ -214,7 +205,7 @@ class IOFunc(FuncCall):
         super().__init__(id, args_seq)
     
     def gen(self, ctx: ParseContext):
-        seq = self.args_seq.gen(ctx)
+        seq = self.args_seq.gen_ret_list(ctx)
         if self.id in 'read_line':
             new_var = ctx.func_dir.new_temp('STRING_T')
             ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.name))
