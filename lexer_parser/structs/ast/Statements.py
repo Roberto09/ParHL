@@ -20,6 +20,8 @@ class Empty(Statement):
         pass
     def gen(self, ctx: ParseContext):
         pass
+    def __bool__(self):
+        return False
     
 class Seq(Statement):
     def __init__(self, stmt, seq=Empty()):
@@ -35,68 +37,46 @@ class Seq(Statement):
         return [self.stmt.gen(ctx)] + ([] if type(self.seq) is Empty else self.seq.gen_ret_list(ctx))
 
 class If(Statement):
-    
-    class IfAux(Statement):
-        def __init__(self, expr, seq):
+
+    class IfSeqAux(Statement):
+        def __init__(self, expr, seq, nxt_seq = Empty()):
             self.expr = expr
             self.seq = seq
+            self.nxt_seq = nxt_seq
 
         def gen(self, ctx: ParseContext):
             var = self.expr.gen(ctx)
-            gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
+            gotof_idx = ctx.add_quadruple(Quadruple('GOTOF', var.name))
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
-            return gotof_index
+            goto_idx = ctx.add_quadruple(Quadruple('GOTO'))
+            ctx.set_goto_position(gotof_idx)
+            self.nxt_seq.gen(ctx)
+            # At this point the quad_idx is the instruction after the if-elseif-else sequence
+            ctx.set_goto_position(goto_idx)
 
-    class ElseIfSeqAux(IfAux):
-        def __init__(self, expr, seq, else_if_seq):
-            super().__init__(expr, seq)
-            self.else_if_seq = else_if_seq
+        def with_last(self, last):
+            if not self.nxt_seq:
+                self.nxt_seq = last
+            else:
+                self.nxt_seq.with_last(last)
+            return self
 
-        def gen(self, ctx: ParseContext, if_goto_index):
-            # gen goto to jump this when prev block is executed
-            end_goto_index = ctx.add_quadruple(Quadruple('GOTO'))
-            # fill gotof of previous if expr
-            ctx.set_goto_position(if_goto_index)
-            # gens expr qs, gotof q, block qs, and returns location of gotof
-            gotof_index = super().gen(ctx)
-    
-            if isinstance(self.else_if_seq, Empty):
-                return [gotof_index, end_goto_index]
-  
-            # Gen qs for all remaining else ifs, which return their end goto_index
-            goto_array = self.else_if_seq.gen(ctx, gotof_index)
-            return [end_goto_index] + goto_array
-    
     class ElseAux(Statement):
         def __init__(self, seq):
             self.seq = seq
         
         def gen(self, ctx: ParseContext):
-            end_goto_index = ctx.add_quadruple(Quadruple('GOTO'))
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
-            ctx.set_goto_position(end_goto_index)
 
-    def __init__(self, if_aux, else_if_seq_aux=Empty(), else_aux=Empty()):
-        self.if_aux = if_aux
-        self.else_if_seq_aux = else_if_seq_aux
-        self.else_aux = else_aux
+    def __init__(self, if_aux_seq):
+        self.if_aux_seq = if_aux_seq
 
     def gen(self, ctx: ParseContext):
-        goto_array = []
-        if_gotof_index = self.if_aux.gen(ctx)
-        if not isinstance(self.else_if_seq_aux, Empty):
-            goto_array = self.else_if_seq_aux.gen(ctx, if_gotof_index)
-        
-        self.else_aux.gen(ctx)
-        
-        if isinstance(self.else_if_seq_aux, Empty): 
-            ctx.set_goto_position(if_gotof_index)
-        for goto_index in goto_array:
-            ctx.set_goto_position(goto_index)
+        self.if_aux_seq.gen(ctx)
 
 class While(Statement):
     def __init__(self, expr, seq):

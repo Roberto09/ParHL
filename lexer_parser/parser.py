@@ -186,7 +186,7 @@ class ParhlParser(Parser):
 
     @_('IF L_PAREN expr R_PAREN block')
     def simple_if(self, p):
-        return If.IfAux(p[2], p[4])
+        return If.IfSeqAux(p[2], p[4])
 
     @_('ELSE block')
     def simple_else(self, p):
@@ -194,7 +194,7 @@ class ParhlParser(Parser):
 
     @_('ELSE_IF L_PAREN expr R_PAREN block complex_else_if')
     def simple_else_if(self, p):
-        return If.ElseIfSeqAux(p[2], p[4], p[5])
+        return If.IfSeqAux(p[2], p[4], p[5])
 
     @_('simple_else_if', 'empty')
     def complex_else_if(self, p):
@@ -206,13 +206,13 @@ class ParhlParser(Parser):
 
     @_('simple_if simple_else')
     def cond_if_else(self, p):
-        return If(p[0], else_aux=p[1])
+        return If(p[0].with_last(p[1]))
 
     @_('simple_if simple_else_if', 'simple_if simple_else_if simple_else')
     def cond_if_else_if(self, p):
         if len(p) == 2:
-            return If(p[0], else_if_seq_aux=p[1])
-        return If(p[0], else_if_seq_aux=p[1], else_aux=p[2])
+            return If(p[0].with_last(p[1]))
+        return If(p[0].with_last(p[1].with_last(p[2])))
 
     @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):
