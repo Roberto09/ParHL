@@ -1,35 +1,15 @@
-let x : float := 1 + 3.2 * 8 % 10 ^ 5, y : string := "hola";
-print(x)
-print(y)
-if(True){
-    x := 10
+
+let x : int := 10, y[10] : float, z : string := "abc" 
+
+let my_func (x : int, k : float) : int {
+    print(x + 5)
+    let my_super_func(x : float, z: string) : string{
+        print(123);
+    }
+    while(True){
+        let a : int := 10
+        if (x > 10){
+            print(124)
+        }
+    }
 }
-
-if(False)
-{
-    a := read_line()
-} else {
-    b := read_file("test.txt")
-}
-
-if(a=b) {
-
-} else if(a > b) {
-    write_file()
-}
-
-
-while(a > 0) {
-    b:= a or d;
-}
-
-for(let a : int := 0; a < 10; a:= a+1) {
-    y:= y * a;
-}
-
-let foo(a : string ) : int {
-    print("hello")
-    return 2
-} 
-
-foo("name")

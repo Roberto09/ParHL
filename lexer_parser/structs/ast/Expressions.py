@@ -28,10 +28,6 @@ class BinExpr(Expression):
         left_var = self.left.gen(ctx)
         right_var = self.right.gen(ctx)
         op_name = symbol_to_token[self.op]
-        if not right_var:
-            print(left_var)
-            print(op_name)
-            print(right_var)
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
         temp_var = ctx.func_dir.new_temp(new_type)
         # Need to change names to mem_dirs when they are functioning

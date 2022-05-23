@@ -14,7 +14,7 @@ def write_tokens_to_file_testing(toks_file, out_file):
             my_file.write(f"{i}\n")
 
 def data_out(code_f, out_f):
-    # write_tokens_to_file_testing(code, toks)
+    # write_tokens_to_file_testing(code_f, out_f)
     with open(code_f, 'r') as my_code:
         data = my_code.read()
     with open(out_f, 'r') as my_out:

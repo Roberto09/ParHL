@@ -25,7 +25,7 @@ class Seq(Statement):
 
     def gen_ret_list(self, ctx : ParseContext):
         # TODO : improve complexity, this is O(n^2)
-        return [self.stmt.gen(ctx)] + ([] if type(self.seq) is Empty else self.seq.gen_ret_list(ctx))
+        return [self.stmt.gen(ctx)] + (self.seq.gen_ret_list(ctx) if self.seq else [])
 
 class If(Statement):
 
@@ -132,7 +132,7 @@ class FuncDecl(Statement):
         goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
-        vars = self.params_seq.gen_ret_list(ctx)
+        vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else None
         print('decl vars ', vars)
         ctx.func_dir.set_func_params([] if vars == None else vars)
         ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
@@ -155,7 +155,7 @@ class FuncCall(Statement):
     
     def gen(self, ctx: ParseContext):
         func = ctx.func_dir.get_func(self.id)
-        vars = self.args_seq.gen_ret_list(ctx)
+        vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         print('vars ', vars)
         print('func.params ', func.params)
         next_q = ctx.get_next_quadruple_index() + 1
@@ -172,7 +172,7 @@ class IOFunc(FuncCall):
         super().__init__(id, args_seq)
     
     def gen(self, ctx: ParseContext):
-        seq = self.args_seq.gen_ret_list(ctx)
+        seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         if self.id in 'read_line':
             new_var = ctx.func_dir.new_temp('STRING_T')
             ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.name))
