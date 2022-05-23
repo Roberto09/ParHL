@@ -2,18 +2,9 @@ from ..quadruples import Quadruple
 from ..parse_context import ParseContext
 from .Node import Node
 from .Expressions import Assign, Expression
+from ...lexer import type_to_token
 
 Statement = Node
-
-type_to_token = {
-    'int': 'INT_T',
-    'float': 'FLOAT_T',
-    'string': 'STRING_T', 
-    'bool': 'BOOL_T',
-    'gpu_int': 'GPU_INT_T',
-    'gpu_float': 'GPU_FLOAT_T',
-    'gpu_bool': 'GPU_BOOL_T'
-}
 
 class Empty(Statement):
     def __init__(self):
@@ -124,7 +115,6 @@ class VarDecl(Statement):
 
     def gen(self, ctx: ParseContext):
         print('gen decl')
-        self.id.set_id_type(self.id.id, self.id_type)
         var = ctx.func_dir.add_var(self.id.id, self.id_type)
         self.assign.gen(ctx)
         return var
@@ -140,9 +130,6 @@ class FuncDecl(Statement):
 
     def gen(self, ctx: ParseContext):
         goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
-
-        self.id.set_id_type(self.id.id, self.id_type)
-        
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
         vars = self.params_seq.gen_ret_list(ctx)

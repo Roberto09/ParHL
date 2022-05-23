@@ -1,35 +1,10 @@
+from ast import Expression
 from .Node import Node
 from ..parse_context import ParseContext
 from ..quadruples import Quadruple
+from ...lexer import symbol_to_token
 
-symbol_to_token = {
-    "*": 'MULT',
-    "+": 'PLUS',
-    "-": 'MINUS',
-    "/": 'DIV',
-    "^": 'EXP',
-    "%": 'MOD',
-    "=": 'EQ',
-    "<>": 'NOT_EQ',
-    ">=": 'GEQT',
-    "<=": 'LEQT',
-    ">": 'GT',
-    "<": 'LT',
-    "and": 'AND',
-    "or": 'OR',
-    "not": 'NOT',
-}
-class Expression(Node):
-    def __init__(self):
-        self._id_type = None
-
-    def id_type(self):
-        assert self._id_type is not None
-        return self._id_type
-
-    def set_id_type(self, id, type):
-        self._id_type = id, type
-
+Expression = Node
 
 class Assign(Expression):
     def __init__(self, left, right):
@@ -53,6 +28,10 @@ class BinExpr(Expression):
         left_var = self.left.gen(ctx)
         right_var = self.right.gen(ctx)
         op_name = symbol_to_token[self.op]
+        if not right_var:
+            print(left_var)
+            print(op_name)
+            print(right_var)
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
         temp_var = ctx.func_dir.new_temp(new_type)
         # Need to change names to mem_dirs when they are functioning
