@@ -22,9 +22,9 @@ def test_funcs():
     func_dir = FuncDir()
     name1, type1 = "new_func", "int"
     name2, type2 = "other_func", "string"
-    func_dir.start_func_stack(name1, type1)
+    func_dir.start_func_stack(name1, type1, 1)
     func_dir.end_func_stack(name1)
-    func_dir.start_func_stack(name2, type2)
+    func_dir.start_func_stack(name2, type2, 2)
     func_dir.end_func_stack(name2)
     assert_typed_equal(func_dir.get_func(name1), name1, type1)
     assert_typed_equal(func_dir.get_func(name2), name2, type2)
@@ -41,7 +41,7 @@ def add_n_vars(func_dir, n):
 
 def add_func_with_n_vars(func_dir, n):
     func_name, func_type = gen_id(), gen_id()
-    func_dir.start_func_stack(func_name, func_type)
+    func_dir.start_func_stack(func_name, func_type, 1)
     names_types = add_n_vars(func_dir, n)
     return func_name, func_type, names_types
 

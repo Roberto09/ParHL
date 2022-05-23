@@ -17,9 +17,9 @@ class Var(Typed):
 
 class Block():
     def __init__(self):
-        # its unclear if we would need a name here ... TBD
         self.vars: dict[str, Var] = {} # name : Var
         self.funcs: dict[str, Func] = {} # name : Func
+        self.blocks: list[Block] = [] # Block
         self.temps: dict[str, Var] = {} # name : var
         self.temp_counters: dict[str, int] = { # type : next_temp/total_temps
             'INT_T': 0,
@@ -30,7 +30,6 @@ class Block():
             'GPU_FLOAT_T': 0,
             'GPU_BOOL_T': 0,
         }
-        self.blocks = []
     
     def __repr__(self):
         return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
@@ -46,12 +45,6 @@ class Func(Typed, Block):
     
     def set_params(self, params: list[Var]= []):
         self.params = params
-
-    def set_mem_reg(self, vars, funcs, temps, blocks):
-        self.vars = vars
-        self.funcs = funcs
-        self.temp_counters = temps
-        self.blocks = blocks
 
 """ Function Directory abstraction
 FuncDir generates a tree of Vars and Funcs which will remain available in the glob_func property.

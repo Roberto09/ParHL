@@ -6,7 +6,16 @@ from .lexer import ParhlLexer
 class ParhlParser(Parser):
     # debugfile = 'parser.out'
     # Get the token list from the lexer (required)
+    
     tokens = ParhlLexer.tokens
+    precedence = (
+        ('left', OR),
+        ('left', AND),
+        ('left', EQ, NOT_EQ, GT, LT, GEQT, LEQT),
+        ('left', PLUS, MINUS),
+        ('left', MULT, DIV, MOD),
+        ('left', EXP)
+    )
     
     @_('ignored_newlines globals_aux')
     def globals(self, p):
@@ -49,14 +58,14 @@ class ParhlParser(Parser):
     def const_type(self, p):
         return p[0]
     
-    @_('t_expr', 't_expr OR expr')
+    @_('t_expr', 'expr OR t_expr')
     def expr(self, p):
         if(len(p) == 1):
             return p[0]
         else:
             return BinExpr(p[0], p[1], p[2])
 
-    @_('g_expr', 'g_expr AND t_expr')
+    @_('g_expr', 't_expr AND g_expr')
     def t_expr(self, p):
         if(len(p) == 1):
             return p[0]
@@ -74,21 +83,21 @@ class ParhlParser(Parser):
     def comparison(self, p):
         return p[0]
 
-    @_('term', 'term PLUS m_expr', 'term MINUS m_expr')
+    @_('term', 'm_expr PLUS term', 'm_expr MINUS term')
     def m_expr(self, p):
         if(len(p) == 1):
             return p[0]
         else:
             return BinExpr(p[0], p[1], p[2])
 
-    @_('exp_factor', 'exp_factor MULT term', 'exp_factor DIV term', 'exp_factor MOD term')
+    @_('exp_factor', 'term MULT exp_factor', 'term DIV exp_factor', 'term MOD exp_factor')
     def term(self, p):
         if(len(p) == 1):
             return p[0]
         else:
             return BinExpr(p[0], p[1], p[2])
 
-    @_('factor', 'factor EXP exp_factor')
+    @_('factor', 'exp_factor EXP factor')
     def exp_factor(self, p):
         if(len(p) == 1):
             return p[0]
@@ -186,7 +195,7 @@ class ParhlParser(Parser):
 
     @_('IF L_PAREN expr R_PAREN block')
     def simple_if(self, p):
-        return If.IfAux(p[2], p[4])
+        return If.IfSeqAux(p[2], p[4])
 
     @_('ELSE block')
     def simple_else(self, p):
@@ -194,7 +203,7 @@ class ParhlParser(Parser):
 
     @_('ELSE_IF L_PAREN expr R_PAREN block complex_else_if')
     def simple_else_if(self, p):
-        return If.ElseIfSeqAux(p[2], p[4], p[5])
+        return If.IfSeqAux(p[2], p[4], p[5])
 
     @_('simple_else_if', 'empty')
     def complex_else_if(self, p):
@@ -206,13 +215,13 @@ class ParhlParser(Parser):
 
     @_('simple_if simple_else')
     def cond_if_else(self, p):
-        return If(p[0], else_aux=p[1])
+        return If(p[0].with_last(p[1]))
 
     @_('simple_if simple_else_if', 'simple_if simple_else_if simple_else')
     def cond_if_else_if(self, p):
         if len(p) == 2:
-            return If(p[0], else_if_seq_aux=p[1])
-        return If(p[0], else_if_seq_aux=p[1], else_aux=p[2])
+            return If(p[0].with_last(p[1]))
+        return If(p[0].with_last(p[1].with_last(p[2])))
 
     @_('LET ID L_PAREN func_params R_PAREN COLON func_type block')
     def func(self, p):

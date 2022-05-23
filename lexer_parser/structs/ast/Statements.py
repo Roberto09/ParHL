@@ -2,24 +2,17 @@ from ..quadruples import Quadruple
 from ..parse_context import ParseContext
 from .Node import Node
 from .Expressions import Assign, Expression
+from ...lexer import type_to_token
 
 Statement = Node
-
-type_to_token = {
-    'int': 'INT_T',
-    'float': 'FLOAT_T',
-    'string': 'STRING_T', 
-    'bool': 'BOOL_T',
-    'gpu_int': 'GPU_INT_T',
-    'gpu_float': 'GPU_FLOAT_T',
-    'gpu_bool': 'GPU_BOOL_T'
-}
 
 class Empty(Statement):
     def __init__(self):
         pass
     def gen(self, ctx: ParseContext):
         pass
+    def __bool__(self):
+        return False
     
 class Seq(Statement):
     def __init__(self, stmt, seq=Empty()):
@@ -27,84 +20,54 @@ class Seq(Statement):
         self.seq = seq
 
     def gen(self, ctx: ParseContext):
-        try:
-            first = self.stmt.gen(ctx)
-        except:
-            print(self.stmt)
-            raise
-        second = self.seq.gen(ctx)
-        if first == None and second == None:
-            return []
-        elif second == None:
-            return [first]
-        elif first == None:
-            return second
-        else:
-            return [first] + second
+        self.stmt.gen(ctx)
+        self.seq.gen(ctx)
+
+    def gen_ret_list(self, ctx : ParseContext):
+        # TODO : improve complexity, this is O(n^2)
+        return [self.stmt.gen(ctx)] + (self.seq.gen_ret_list(ctx) if self.seq else [])
 
 class If(Statement):
-    
-    class IfAux(Statement):
-        def __init__(self, expr, seq):
+
+    class IfSeqAux(Statement):
+        def __init__(self, expr, seq, nxt_seq = Empty()):
             self.expr = expr
             self.seq = seq
+            self.nxt_seq = nxt_seq
 
         def gen(self, ctx: ParseContext):
             var = self.expr.gen(ctx)
-            gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
+            gotof_idx = ctx.add_quadruple(Quadruple('GOTOF', var.name))
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
-            return gotof_index
+            goto_idx = ctx.add_quadruple(Quadruple('GOTO'))
+            ctx.set_goto_position(gotof_idx)
+            self.nxt_seq.gen(ctx)
+            # At this point the quad_idx is the instruction after the if-elseif-else sequence
+            ctx.set_goto_position(goto_idx)
 
-    class ElseIfSeqAux(IfAux):
-        def __init__(self, expr, seq, else_if_seq):
-            super().__init__(expr, seq)
-            self.else_if_seq = else_if_seq
+        def with_last(self, last):
+            if not self.nxt_seq:
+                self.nxt_seq = last
+            else:
+                self.nxt_seq.with_last(last)
+            return self
 
-        def gen(self, ctx: ParseContext, if_goto_index):
-            # gen goto to jump this when prev block is executed
-            end_goto_index = ctx.add_quadruple(Quadruple('GOTO'))
-            # fill gotof of previous if expr
-            ctx.set_goto_position(if_goto_index)
-            # gens expr qs, gotof q, block qs, and returns location of gotof
-            gotof_index = super().gen(ctx)
-    
-            if isinstance(self.else_if_seq, Empty):
-                return [gotof_index, end_goto_index]
-  
-            # Gen qs for all remaining else ifs, which return their end goto_index
-            goto_array = self.else_if_seq.gen(ctx, gotof_index)
-            return [end_goto_index] + goto_array
-    
     class ElseAux(Statement):
         def __init__(self, seq):
             self.seq = seq
         
         def gen(self, ctx: ParseContext):
-            end_goto_index = ctx.add_quadruple(Quadruple('GOTO'))
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
-            ctx.set_goto_position(end_goto_index)
 
-    def __init__(self, if_aux, else_if_seq_aux=Empty(), else_aux=Empty()):
-        self.if_aux = if_aux
-        self.else_if_seq_aux = else_if_seq_aux
-        self.else_aux = else_aux
+    def __init__(self, if_aux_seq):
+        self.if_aux_seq = if_aux_seq
 
     def gen(self, ctx: ParseContext):
-        goto_array = []
-        if_gotof_index = self.if_aux.gen(ctx)
-        if not isinstance(self.else_if_seq_aux, Empty):
-            goto_array = self.else_if_seq_aux.gen(ctx, if_gotof_index)
-        
-        self.else_aux.gen(ctx)
-        
-        if isinstance(self.else_if_seq_aux, Empty): 
-            ctx.set_goto_position(if_gotof_index)
-        for goto_index in goto_array:
-            ctx.set_goto_position(goto_index)
+        self.if_aux_seq.gen(ctx)
 
 class While(Statement):
     def __init__(self, expr, seq):
@@ -152,7 +115,6 @@ class VarDecl(Statement):
 
     def gen(self, ctx: ParseContext):
         print('gen decl')
-        self.id.set_id_type(self.id.id, self.id_type)
         var = ctx.func_dir.add_var(self.id.id, self.id_type)
         self.assign.gen(ctx)
         return var
@@ -168,12 +130,9 @@ class FuncDecl(Statement):
 
     def gen(self, ctx: ParseContext):
         goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
-        
-        self.id.set_id_type(self.id.id, self.id_type)
-        
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
-        vars = self.params_seq.gen(ctx)
+        vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else None
         print('decl vars ', vars)
         ctx.func_dir.set_func_params([] if vars == None else vars)
         ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
@@ -196,8 +155,7 @@ class FuncCall(Statement):
     
     def gen(self, ctx: ParseContext):
         func = ctx.func_dir.get_func(self.id)
-        vars = self.args_seq.gen(ctx)
-        vars = [] if vars == None else vars 
+        vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         print('vars ', vars)
         print('func.params ', func.params)
         next_q = ctx.get_next_quadruple_index() + 1
@@ -214,7 +172,7 @@ class IOFunc(FuncCall):
         super().__init__(id, args_seq)
     
     def gen(self, ctx: ParseContext):
-        seq = self.args_seq.gen(ctx)
+        seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         if self.id in 'read_line':
             new_var = ctx.func_dir.new_temp('STRING_T')
             ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.name))

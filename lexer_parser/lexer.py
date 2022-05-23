@@ -118,3 +118,32 @@ class ParhlLexer(Lexer):
     def error(self, t):
         print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
         self.index += 1
+
+type_to_token = {
+    'int': 'INT_T',
+    'float': 'FLOAT_T',
+    'string': 'STRING_T', 
+    'bool': 'BOOL_T',
+    'gpu_int': 'GPU_INT_T',
+    'gpu_float': 'GPU_FLOAT_T',
+    'gpu_bool': 'GPU_BOOL_T'
+}
+
+
+symbol_to_token = {
+    "*": 'MULT',
+    "+": 'PLUS',
+    "-": 'MINUS',
+    "/": 'DIV',
+    "^": 'EXP',
+    "%": 'MOD',
+    "=": 'EQ',
+    "<>": 'NOT_EQ',
+    ">=": 'GEQT',
+    "<=": 'LEQT',
+    ">": 'GT',
+    "<": 'LT',
+    "and": 'AND',
+    "or": 'OR',
+    "not": 'NOT',
+}
