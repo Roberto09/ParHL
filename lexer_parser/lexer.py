@@ -1,4 +1,5 @@
 from sly import Lexer
+from .structs.parhl_exceptions import ParhlException
 
 class ParhlLexer(Lexer):
     # Set of token names. This is always required
@@ -116,8 +117,7 @@ class ParhlLexer(Lexer):
         return t
 
     def error(self, t):
-        print('Line %d: Bad character %r' % (self.lineno, t.value[0]))
-        self.index += 1
+        raise ParhlException(f'Bad character {t.value[0]}', self.lineno)
 
 type_to_token = {
     'int': 'INT_T',

@@ -1,3 +1,4 @@
+from .parhl_exceptions import ParhlException
 class Typed():
     def __init__(self, name, type):
         self.name = name
@@ -107,11 +108,11 @@ class FuncDir:
         """
         This allows us to find an id (name) in an attr of the func_stack.
         This follows the idea of finding the variable prioritizing the most inner scopes.
-        """
+        """ 
         for attrs in map(lambda f: getattr(f, attr), reversed(self.func_stack)):
             if name in attrs:
                 return attrs[name]
-        raise Exception(f"{attr} with id {name} not found")
+        raise ParhlException(f"{attr} with id {name} not found")
 
     def get_var(self, name):
         return self._find_in_ordered_scopes(name, "vars")

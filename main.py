@@ -1,6 +1,7 @@
 from lexer_parser.lexer import ParhlLexer
 from lexer_parser.parser import ParhlParser
 from lexer_parser.structs.parse_context import ParseContext
+from lexer_parser.structs.parhl_exceptions import ParhlException
 from sys import argv
 
 def lex_pars(filename):
@@ -19,5 +20,10 @@ def lex_pars(filename):
 
 if __name__ == '__main__': 
     filename = argv[1]
-    lex_pars(filename)
-    pass
+    try:
+        lex_pars(filename)
+    except ParhlException as pe:
+        print(pe)
+    except Exception as e:
+        # TODO, same as in Node : we must change this handling in prod
+        raise e
