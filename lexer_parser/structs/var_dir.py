@@ -34,7 +34,7 @@ class Block():
         self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
     
     def __repr__(self):
-        return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
+        return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
 
     def get_new_memdir(self):
         new_mem_dir = f"{self.id}.{self.var_counter}"
@@ -48,7 +48,7 @@ class Func(Typed, Block):
         self.q_index = q_index
 
     def __repr__(self):
-        return f"({super().__repr__()}, q_index: {self.q_index}, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks})"
+        return f"({super().__repr__()}, {super(Typed, self).__repr__()}, q_index: {self.q_index}, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks})"
     
     def set_params(self, params: list[Var]= []):
         self.params = params
