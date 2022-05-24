@@ -1,4 +1,3 @@
-
 class Typed():
     def __init__(self, name, type):
         self.name = name
@@ -16,6 +15,7 @@ class Var(Typed):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
 class Block():
+    _ID_COUNTER = 0
     def __init__(self):
         self.vars: dict[str, Var] = {} # name : Var
         self.funcs: dict[str, Func] = {} # name : Func
@@ -30,9 +30,16 @@ class Block():
             'GPU_FLOAT_T': 0,
             'GPU_BOOL_T': 0,
         }
+        self.var_counter = 0
+        self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
     
     def __repr__(self):
         return f"(block, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
+
+    def get_new_memdir(self):
+        new_mem_dir = f"{self.id}.{self.var_counter}"
+        self.var_counter += 1
+        return new_mem_dir
 
 class Func(Typed, Block):
     def __init__(self, name, type, q_index):
@@ -54,9 +61,13 @@ class FuncDir:
         self.glob_func = Func('glob', 'void', 0)
         self.func_stack = [self.glob_func]
 
+    @property
+    def curr_func(self):
+        return self.func_stack[-1]
+
     def start_func_stack(self, name, type, q_index):
         # We only care about the most inner scope when it comes to re-definitions. 
-        assert (name not in self.func_stack[-1].vars) and (name not in self.func_stack[-1].funcs)
+        assert (name not in self.curr_func.vars) and (name not in self.curr_func.funcs)
         nxt_func = Func(name, type, q_index)
         self.func_stack[-1].funcs[name] = nxt_func
         self.func_stack.append(nxt_func)
@@ -79,17 +90,17 @@ class FuncDir:
 
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
-        assert name not in self.func_stack[-1].vars and name not in self.func_stack[-1].funcs
+        assert name not in self.curr_func.vars and name not in self.curr_func.funcs
         # Obtain location of next memory of specified type
-        var = Var(name, type, -1)
-        self.func_stack[-1].vars[name] = var
+        var = Var(name, type, self.curr_func.get_new_memdir())
+        self.curr_func.vars[name] = var
         return var
 
     def new_temp(self, type, value=None):
-        temp_var_name = type + str(self.func_stack[-1].temp_counters[type])
-        temp_var = Var(temp_var_name, type, -1, value)
-        self.func_stack[-1].temps[temp_var_name] = temp_var
-        self.func_stack[-1].temp_counters[type] += 1
+        temp_var_name = type + str(self.curr_func.temp_counters[type])
+        temp_var = Var(temp_var_name, type, self.curr_func.get_new_memdir(), value)
+        self.curr_func.temps[temp_var_name] = temp_var
+        self.curr_func.temp_counters[type] += 1
         return temp_var
 
     def _find_in_ordered_scopes(self, name, attr):
@@ -113,6 +124,3 @@ class FuncDir:
 
     def __repr__(self):
         return f"FuncDir - func_stack: {self.func_stack}"
-
-
-    

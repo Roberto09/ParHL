@@ -37,7 +37,7 @@ class If(Statement):
 
         def gen(self, ctx: ParseContext):
             var = self.expr.gen(ctx)
-            gotof_idx = ctx.add_quadruple(Quadruple('GOTOF', var.name))
+            gotof_idx = ctx.add_quadruple(Quadruple('GOTOF', var.mem_dir))
             ctx.func_dir.start_block_stack()
             self.seq.gen(ctx)
             ctx.func_dir.end_block_stack()
@@ -77,7 +77,7 @@ class While(Statement):
     def gen(self, ctx: ParseContext):
         jump_index = ctx.get_next_quadruple_index()
         var = self.expr.gen(ctx)
-        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
+        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.mem_dir))
         ctx.func_dir.start_block_stack()
         self.seq.gen(ctx)
         ctx.func_dir.end_block_stack()
@@ -96,7 +96,7 @@ class For(Statement):
         self.var.gen(ctx)
         jump_index = ctx.get_next_quadruple_index()
         var = self.expr.gen(ctx)
-        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.name))
+        gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.mem_dir))
         self.seq.gen(ctx)
         self.assign.gen(ctx)
         ctx.add_quadruple(Quadruple('GOTO', result=jump_index))
@@ -164,7 +164,7 @@ class FuncCall(Statement):
         for (i, var) in enumerate([] if vars == None else vars):
             param = func.params[i]
             ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
-            ctx.add_quadruple(Quadruple('PARAM', var.name, result=param.name))
+            ctx.add_quadruple(Quadruple('PARAM', var.mem_dir, result=param.mem_dir))
 
 
 class IOFunc(FuncCall):
@@ -175,14 +175,14 @@ class IOFunc(FuncCall):
         seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         if self.id in 'read_line':
             new_var = ctx.func_dir.new_temp('STRING_T')
-            ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.name))
+            ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.mem_dir))
             return new_var
         if self.id == 'read_file' and seq is not None:
             new_var = ctx.func_dir.new_temp('STRING_T')
-            ctx.add_quadruple(Quadruple('READ_FILE', seq[0].name, None, new_var.name))
+            ctx.add_quadruple(Quadruple('READ_FILE', seq[0].mem_dir, None, new_var.mem_dir))
             return new_var
         if seq == None:
             seq = []
         for arg in seq:
-            ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.name))
+            ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
             
