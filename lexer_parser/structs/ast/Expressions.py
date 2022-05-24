@@ -15,7 +15,7 @@ class Assign(Expression):
         right_var = self.right.gen(ctx)
         left_var = self.left.gen(ctx)
         ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
-        ctx.add_quadruple(Quadruple('ASSIG', right_var.name, None, left_var.name))
+        ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, None, left_var.mem_dir))
 
 
 class BinExpr(Expression):
@@ -31,7 +31,7 @@ class BinExpr(Expression):
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
         temp_var = ctx.func_dir.new_temp(new_type)
         # Need to change names to mem_dirs when they are functioning
-        ctx.add_quadruple(Quadruple(op_name, left_var.name, right_var.name, temp_var.name))
+        ctx.add_quadruple(Quadruple(op_name, left_var.mem_dir, right_var.mem_dir, temp_var.mem_dir))
         return temp_var
 
 
@@ -77,5 +77,5 @@ class UnExpr(Expression):
         op_name = symbol_to_token[self.op]
         new_type = ctx.semantic_cube.get_type(op_name, right_var.type)
         new_var = ctx.func_dir.new_temp(new_type)
-        ctx.add_quadruple(Quadruple(op_name, right_var.name, None, new_var.name))
+        ctx.add_quadruple(Quadruple(op_name, right_var.mem_dir, None, new_var.name))
         return new_var
