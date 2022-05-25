@@ -141,7 +141,7 @@ class FuncDecl(Statement):
         goto_index = ctx.add_quadruple(Quadruple('GOTO')) # add gotos to skip function on initial execution, only executed once called
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
-        vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else None
+        vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else []
         ctx.func_dir.set_func_params([] if vars == None else vars)
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
@@ -162,10 +162,12 @@ class Ret(Statement):
         
         if curr_func.type == 'void':
             raise ParhlException(f"function {curr_func.name} is of type void, cannot return value")
-        var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
+        var_type = ctx.semantic_cube.get_type('ASSIG', type_to_token[curr_func.type], expr_var.type)
 
-        prev_func = ctx.func_dir.func_stack[-1]
-        func_var = prev_func.vars[curr_func.id]
+        # func_var will always be in the scope that the func was declared, so the one before last 
+        prev_func = ctx.func_dir.func_stack[-2] 
+        print(prev_func.vars)
+        func_var = prev_func.vars[curr_func.name]
         ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=func_var.mem_dir))
 
 
@@ -178,9 +180,11 @@ class FuncCall(Statement):
     
     def gen_impl(self, ctx: ParseContext):
         func = ctx.func_dir.get_func(self.id)
-        vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
+        vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else []
         ctx.add_quadruple(Quadruple('ERA',result=func.id)) # on vm lookup func by id
-        assert len(vars) == len(func.params)
+        if len(vars) != len(func.params):
+            raise ParhlException(f"function {func.name} expected {len(func.params)} but received {len(vars)}")
+
         for (i, var) in enumerate([] if vars == None else vars):
             param = func.params[i]
             ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
@@ -191,7 +195,7 @@ class FuncCall(Statement):
         
         if func.type != 'void':
             func_var = ctx.func_dir.get_var(self.id)
-            temp_var = ctx.func_dir.new_temp(func.type)
+            temp_var = ctx.func_dir.new_temp(type_to_token[func.type])
             ctx.add_quadruple(Quadruple('ASSIG', func_var.mem_dir, result=temp_var.mem_dir))
             return temp_var
 
@@ -201,7 +205,7 @@ class IOFunc(FuncCall):
         super().__init__(line, id, args_seq)
     
     def gen_impl(self, ctx: ParseContext):
-        seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
+        seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else []
         if self.id in 'read_line':
             new_var = ctx.func_dir.new_temp('STRING_T')
             ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.mem_dir))
