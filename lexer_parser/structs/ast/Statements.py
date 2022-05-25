@@ -123,7 +123,6 @@ class VarDecl(Statement):
         self.assign = Assign(self.lineno, self.id, expr)
 
     def gen_impl(self, ctx: ParseContext):
-        print('gen decl')
         var = ctx.func_dir.add_var(self.id.id, self.id_type)
         self.assign.gen(ctx)
         return var
@@ -143,7 +142,6 @@ class FuncDecl(Statement):
         q_index = goto_index+1 # index for starting at func
         ctx.func_dir.start_func_stack(self.id.id, self.id_type, q_index)
         vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else None
-        print('decl vars ', vars)
         ctx.func_dir.set_func_params([] if vars == None else vars)
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
@@ -163,7 +161,7 @@ class Ret(Statement):
         curr_func = ctx.func_dir.curr_func
         
         if curr_func.type == 'void':
-            raise ParhlException(f"function {curr_func.id} void, cannot return value")
+            raise ParhlException(f"function {curr_func.name} is of type void, cannot return value")
         var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
 
         prev_func = ctx.func_dir.func_stack[-1]
@@ -181,9 +179,7 @@ class FuncCall(Statement):
     def gen_impl(self, ctx: ParseContext):
         func = ctx.func_dir.get_func(self.id)
         vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
-        print('vars ', vars)
-        print('func.params ', func.params)
-        ctx.add_quadruple(Quadruple('ERA',result=self.id)) # on vm lookup func by id
+        ctx.add_quadruple(Quadruple('ERA',result=func.id)) # on vm lookup func by id
         assert len(vars) == len(func.params)
         for (i, var) in enumerate([] if vars == None else vars):
             param = func.params[i]
@@ -191,7 +187,7 @@ class FuncCall(Statement):
             ctx.add_quadruple(Quadruple('PARAM', var.mem_dir, result=param.mem_dir))
 
         next_q = ctx.get_next_quadruple_index() + 1
-        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.name))
+        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.id))
         
         if func.type != 'void':
             func_var = ctx.func_dir.get_var(self.id)
