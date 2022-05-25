@@ -135,7 +135,6 @@ class FuncDecl(Statement):
         vars = self.params_seq.gen_ret_list(ctx) if self.params_seq else None
         print('decl vars ', vars)
         ctx.func_dir.set_func_params([] if vars == None else vars)
-        ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
         ctx.add_quadruple(Quadruple('ENDFUNC'))
@@ -158,14 +157,14 @@ class FuncCall(Statement):
         vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else None
         print('vars ', vars)
         print('func.params ', func.params)
-        next_q = ctx.get_next_quadruple_index() + 1
-        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.name))
+        ctx.add_quadruple(Quadruple('ERA',result=self.id)) # on vm lookup func by id
         assert len(vars) == len(func.params)
         for (i, var) in enumerate([] if vars == None else vars):
             param = func.params[i]
             ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
             ctx.add_quadruple(Quadruple('PARAM', var.mem_dir, result=param.mem_dir))
-
+        next_q = ctx.get_next_quadruple_index() + 1
+        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.name))
 
 class IOFunc(FuncCall):
     def __init__(self, id, args_seq=Empty()):
