@@ -71,6 +71,12 @@ class FuncDir:
         assert (name not in self.curr_func.vars) and (name not in self.curr_func.funcs)
         nxt_func = Func(name, type, q_index)
         self.func_stack[-1].funcs[name] = nxt_func
+        
+        if type != 'void': 
+            # Create var at scope with same name to store return values
+            func_var = Var(name, type, self.curr_func.get_new_memdir())
+            self.func_stack[-1].vars[name] = func_var
+
         self.func_stack.append(nxt_func)
 
     def end_func_stack(self, name=None): 
