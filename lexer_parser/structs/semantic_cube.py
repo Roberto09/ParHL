@@ -1,3 +1,5 @@
+from .parhl_exceptions import ParhlException
+
 def _produce_all_same(prod_type, but={}):
     return {t: prod_type for t in ['INT_T', 'FLOAT_T', 'BOOL_T', 'STRING_T', 'GPU_INT_T', 'FLOAT_T', 'GPU_BOOL_T']
             if t not in but}
@@ -134,5 +136,5 @@ class SemanticCube():
             return self.semantic_cube[f"{operator}_UN"][t_arg1]
         except:
             if t_arg2 is not None:
-                raise Exception(f"Unsupported binary operation {t_arg1} {operator} {t_arg2}")
-            raise Exception(f"Unsupported unary operation {operator} {t_arg1}")
+                raise ParhlException(f"Unsupported binary operation {t_arg1} {operator} {t_arg2}")
+            raise ParhlException(f"Unsupported unary operation {operator} {t_arg1}")
