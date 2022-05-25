@@ -1,3 +1,4 @@
+from ..parhl_exceptions import ParhlException
 from ..quadruples import Quadruple
 from ..parse_context import ParseContext
 from .Node import Node
@@ -147,6 +148,9 @@ class FuncDecl(Statement):
         ctx.add_quadruple(Quadruple('ERA',result=self.id.id)) # on vm lookup func by id
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
+        last_q = ctx.get_quadruples()[-1]
+        if self.id_type != 'void' and last_q.op != 'RETURN':
+            raise ParhlException(f"function {self.id.id} missing return value.")
         ctx.add_quadruple(Quadruple('ENDFUNC'))
         ctx.set_goto_position(goto_index) # fill goto
 
@@ -156,7 +160,18 @@ class Ret(Statement):
         self.expr = expr
 
     def gen_impl(self, ctx: ParseContext):
-        self.expr.gen(ctx)
+        expr_var = self.expr.gen(ctx)
+        curr_func = ctx.func_dir.curr_func
+        
+        if curr_func.type == 'void':
+            raise ParhlException(f"function {curr_func.id} void, cannot return value")
+        var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
+
+        prev_func = ctx.func_dir.func_stack[-1]
+        func_var = prev_func.vars[curr_func.id]
+        ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=func_var.mem_dir))
+
+
 
 class FuncCall(Statement):
     def __init__(self, line, id, args_seq):
@@ -176,6 +191,12 @@ class FuncCall(Statement):
             param = func.params[i]
             ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
             ctx.add_quadruple(Quadruple('PARAM', var.mem_dir, result=param.mem_dir))
+
+        if func.type != 'void':
+            func_var = ctx.func_dir.get_var(self.id)
+            temp_var = ctx.func_dir.new_temp(func.type)
+            ctx.add_quadruple(Quadruple('ASSIG', func_var.mem_dir, result=temp_var.mem_dir))
+            return temp_var
 
 
 class IOFunc(FuncCall):
