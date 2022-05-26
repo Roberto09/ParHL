@@ -1,6 +1,6 @@
 from lexer_parser.structs.parhl_exceptions import ParhlException
 from .structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from .structs.ast.Statements import FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
+from .structs.ast.Statements import TensorDecl, TensorDim, FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
 from sly import Parser
 from .lexer import ParhlLexer
 
@@ -167,21 +167,25 @@ class ParhlParser(Parser):
             return Seq(p[0].lineno, p[0])
         return Seq(p.lineno, p[0], p[2])
 
-    @_('var_3', 'var_3 ASSIG expr')
+    @_('var_3', 'var_3 ASSIG expr', 'tens_decl')
     def var_2(self, p):
         if len(p) == 3:
             p[0].do_assign(p[2])
         return p[0]
 
-    @_('var_id COLON const_type')
+    @_('ID COLON const_type')
     def var_3(self, p):
-        return VarDecl(p.lineno, p[0], p[2])
+        return VarDecl(p.lineno, Id(p.lineno, p[0]), p[2])
 
-    @_('ID','var_id L_BRACKET INT_V R_BRACKET')
-    def var_id(self, p):
-        if len(p) == 1:
-            return Id(p.lineno, p[0])
-        return Access(p.lineno, p[0], Const(p.lineno, p[2][0], p[2][1]))
+    @_('ID var_dims COLON const_type')
+    def tens_decl(self, p):
+        return TensorDecl(p.lineno, Id(p.lineno, p[0]), p[3], p[1])
+
+    @_('L_BRACKET INT_V R_BRACKET','L_BRACKET INT_V R_BRACKET var_dims')
+    def var_dims(self, p):
+        if len(p) == 3:
+            return Seq(p.lineno, TensorDim(p.lineno, p[1][0]))
+        return Seq(p.lineno, TensorDim(p.lineno, p[1][0]), p[3])
 
     @_('WHILE L_PAREN expr R_PAREN block')
     def while_loop(self, p):
