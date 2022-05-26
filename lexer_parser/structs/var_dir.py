@@ -43,10 +43,11 @@ class Block():
         return new_mem_dir
 
 class Func(Typed, Block):
-    def __init__(self, name, type, q_index):
+    def __init__(self, name, type, q_index, func_var=None):
         super().__init__(name, type)
         super(Typed, self).__init__()
         self.q_index = q_index
+        self.func_var=func_var
 
     def __repr__(self):
         return f"({super().__repr__()}, {super(Typed, self).__repr__()}, q_index: {self.q_index}, vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks})"
@@ -63,19 +64,26 @@ class FuncDir:
         self.func_stack = [self.glob_func]
 
     @property
-    def curr_func(self):
+    def curr_scope(self):
         return self.func_stack[-1]
+    
+    @property
+    def curr_func(self):
+        i = -1
+        while(not isinstance(self.func_stack[i], Func)):
+            i -= 1
+        return self.func_stack[i]
 
     def start_func_stack(self, name, type, q_index):
         # We only care about the most inner scope when it comes to re-definitions. 
-        assert (name not in self.curr_func.vars) and (name not in self.curr_func.funcs)
-        nxt_func = Func(name, type, q_index)
+        assert (name not in self.curr_scope.vars) and (name not in self.curr_scope.funcs)
+        if type == 'VOID': 
+            nxt_func = Func(name, type, q_index)
+        else: 
+            # Create "temp" (so its unaccessable by programmer) var at scope with to store return values
+            func_var = self.new_temp(type)
+            nxt_func = Func(name, type, q_index, func_var)
         self.func_stack[-1].funcs[name] = nxt_func
-        
-        if type != 'void': 
-            # Create var at scope with same name to store return values
-            func_var = Var(name, type, self.curr_func.get_new_memdir())
-            self.func_stack[-1].vars[name] = func_var
 
         self.func_stack.append(nxt_func)
 
@@ -97,17 +105,17 @@ class FuncDir:
 
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
-        assert name not in self.curr_func.vars and name not in self.curr_func.funcs
+        assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
         # Obtain location of next memory of specified type
-        var = Var(name, type, self.curr_func.get_new_memdir())
-        self.curr_func.vars[name] = var
+        var = Var(name, type, self.curr_scope.get_new_memdir())
+        self.curr_scope.vars[name] = var
         return var
 
     def new_temp(self, type, value=None):
-        temp_var_name = type + str(self.curr_func.temp_counters[type])
-        temp_var = Var(temp_var_name, type, self.curr_func.get_new_memdir(), value)
-        self.curr_func.temps[temp_var_name] = temp_var
-        self.curr_func.temp_counters[type] += 1
+        temp_var_name = type + str(self.curr_scope.temp_counters[type])
+        temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir(), value)
+        self.curr_scope.temps[temp_var_name] = temp_var
+        self.curr_scope.temp_counters[type] += 1
         return temp_var
 
     def _find_in_ordered_scopes(self, name, attr):
