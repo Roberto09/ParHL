@@ -133,7 +133,7 @@ class FuncDecl(Statement):
         super().__init__(line)
         self.id = id
         assert Expression in type(id).__mro__
-        self.id_type = id_type
+        self.id_type = type_to_token[id_type]
         self.params_seq = params_seq
         self.seq = seq 
 
@@ -161,17 +161,12 @@ class Ret(Statement):
         expr_var = self.expr.gen(ctx)
         curr_func = ctx.func_dir.curr_func
         
-        if curr_func.type == 'void':
+        if curr_func.type == 'VOID':
             raise ParhlException(f"function {curr_func.name} is of type void, cannot return value")
-        var_type = ctx.semantic_cube.get_type('ASSIG', type_to_token[curr_func.type], expr_var.type)
+        var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
 
-        # func_var will always be in the scope that the func was declared, so the one before last 
-        prev_func = ctx.func_dir.func_stack[-2] 
-        print(prev_func.vars)
-        func_var = prev_func.vars[curr_func.name]
-        ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=func_var.mem_dir))
-
-
+        # If not void, curr_func.func_var must exist
+        ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=curr_func.func_var.mem_dir))
 
 class FuncCall(Statement):
     def __init__(self, line, id, args_seq):
@@ -195,9 +190,8 @@ class FuncCall(Statement):
         ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.id))
         
         if func.type != 'void':
-            func_var = ctx.func_dir.get_var(self.id)
-            temp_var = ctx.func_dir.new_temp(type_to_token[func.type])
-            ctx.add_quadruple(Quadruple('ASSIG', func_var.mem_dir, result=temp_var.mem_dir))
+            temp_var = ctx.func_dir.new_temp(func.type)
+            ctx.add_quadruple(Quadruple('ASSIG', func.func_var.mem_dir, result=temp_var.mem_dir))
             return temp_var
 
 
