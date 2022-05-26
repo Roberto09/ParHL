@@ -126,7 +126,8 @@ type_to_token = {
     'bool': 'BOOL_T',
     'gpu_int': 'GPU_INT_T',
     'gpu_float': 'GPU_FLOAT_T',
-    'gpu_bool': 'GPU_BOOL_T'
+    'gpu_bool': 'GPU_BOOL_T',
+    'void': 'VOID',
 }
 
 
