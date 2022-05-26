@@ -15,6 +15,15 @@ class Var(Typed):
     def __repr__(self):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
+class Tensor(Var):
+    def __init__(self, name, type, mem_dir, value=None, isTensor=False, dims=[]):
+        super().__init__(name, type, mem_dir, value)
+        self.isTensor = isTensor
+        self.dims = dims
+
+    def __repr__(self):
+        return f"({super().__repr__()}, isTensor: {self.isTensor}, Dims: {self.dims})"
+
 class Block():
     _ID_COUNTER = 0
     def __init__(self):
@@ -40,6 +49,11 @@ class Block():
     def get_new_memdir(self):
         new_mem_dir = f"{self.id}.{self.var_counter}"
         self.var_counter += 1
+        return new_mem_dir
+    
+    def get_new_tensor_memdir(self, m0):
+        new_mem_dir = f"{self.id}.{self.var_counter}"
+        self.var_counter += m0
         return new_mem_dir
 
 class Func(Typed, Block):
@@ -102,6 +116,14 @@ class FuncDir:
 
     def end_block_stack(self):
         self.func_stack.pop()
+
+    def add_tensor(self, name, type, dims, m0):
+        # We only care about the most inner scope when it comes to re-definitions.
+        assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
+        # Obtain location of next memory of specified type
+        var = Tensor(name, type, self.curr_scope.get_new_tensor_memdir(m0), isTensor=True, dims=dims)
+        self.curr_scope.vars[name] = var
+        return var
 
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
