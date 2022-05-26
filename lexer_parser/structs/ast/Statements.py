@@ -150,7 +150,6 @@ class TensorDecl(Statement):
         dims =[{}] * size
         m = m0
         for i, r in enumerate(rs):
-            print('i - ', i)
             m = floor(m/r)
             dims[i] = {
                 'limit': r-1,
@@ -158,7 +157,7 @@ class TensorDecl(Statement):
             }
         
         var = ctx.func_dir.add_tensor(self.id.id, self.id_type, dims, m0)
-        print('var ', var)
+        return var
 
 
 class FuncDecl(Statement):

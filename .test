@@ -1,4 +1,7 @@
 let x : int := 10
+let b : int := 2
+let a[5][3][6]:int
+let c:float :=4.4
 
 let factorial (n : int) : int {
     if(n <= 1) {
