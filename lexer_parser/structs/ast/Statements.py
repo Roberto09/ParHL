@@ -146,6 +146,7 @@ class FuncDecl(Statement):
         self.seq.gen(ctx)
         ctx.func_dir.end_func_stack(self.id.id)
         last_q = ctx.get_quadruples()[-1]
+        # func must have a return value if not void
         if self.id_type != 'void' and last_q.op != 'RETURN':
             raise ParhlException(f"function {self.id.id} missing return value.")
         ctx.add_quadruple(Quadruple('ENDFUNC'))
