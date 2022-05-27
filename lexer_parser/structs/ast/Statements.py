@@ -186,8 +186,7 @@ class FuncCall(Statement):
             ctx.semantic_cube.get_type('ASSIG', param.type, var.type)
             ctx.add_quadruple(Quadruple('PARAM', var.mem_dir, result=param.mem_dir))
 
-        next_q = ctx.get_next_quadruple_index() + 1
-        ctx.add_quadruple(Quadruple('GOSUB', next_q, result=func.id))
+        ctx.add_quadruple(Quadruple('GOSUB', func.q_index, result=func.id))
         
         if func.type != 'void':
             temp_var = ctx.func_dir.new_temp(func.type)
