@@ -23,7 +23,7 @@ class Tensor(Var):
         self.addr_var = addr_var
 
     def __repr__(self):
-        return f"({super().__repr__()}, isTensor: {self.isTensor}, Dims: {self.dims})"
+        return f"({super().__repr__()}, isTensor: {self.isTensor}, BaseAddress: {self.addr_var}, Dims: {self.dims})"
 
 class Block():
     _ID_COUNTER = 0
