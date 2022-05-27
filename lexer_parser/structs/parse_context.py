@@ -1,7 +1,8 @@
 from .semantic_cube import SemanticCube
 from .var_dir import FuncDir
 from .quadruples import Quadruple
-    
+import json
+
 class ParseContext():
     def __init__(self):
         self.func_dir = FuncDir()
@@ -9,9 +10,10 @@ class ParseContext():
         self._quadruples: list[Quadruple] = []
 
     def output(self, file):
+        output = json.dumps(self.func_dir.to_obj_dict()
+        | {"quads": [str(q) for q in self._quadruples]})
         with open(file, "w") as out_file:
-            for q in self._quadruples:
-                out_file.write(f"{q}\n")
+            out_file.write(output)
 
     def get_quadruples(self):
         return self._quadruples
