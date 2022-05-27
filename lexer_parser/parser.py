@@ -41,9 +41,15 @@ class ParhlParser(Parser):
     def tens_1(self, p):
         pass
 
-    @_('ID L_BRACKET expr R_BRACKET', 'tens_id L_BRACKET expr R_BRACKET')
+    @_('ID tens_id_1')
     def tens_id(self,p):
-        return Access(p.lineno, p[0], p[2])
+        return Access(p.lineno, Id(p.lineno, p[0]), p[1])
+
+    @_('L_BRACKET expr R_BRACKET tens_id_1', 'L_BRACKET expr R_BRACKET')
+    def tens_id_1(self, p):
+        if len(p) == 3:
+            return Seq(p.lineno, p[1])
+        return Seq(p.lineno, p[1], p[3])
 
     @_('ignored_newlines L_BRACE ignored_newlines block_1 R_BRACE ignored_newlines')
     def block(self, p):
@@ -156,6 +162,10 @@ class ParhlParser(Parser):
     @_('ID ASSIG expr')
     def assign(self, p):
         return Assign(p.lineno, Id(p.lineno, p[0]), p[2])
+    
+    @_('tens_id ASSIG expr')
+    def assign(self, p):
+        return Assign(p.lineno, p[0], p[2])
     
     @_('LET var_1')
     def var(self, p):
