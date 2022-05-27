@@ -47,7 +47,7 @@ class MemoryManager():
 def bin_op(q, mem, op):
     mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
 
-def run_func(mem : MemoryManager, func_id, quads, q_idx):
+def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_hanlder = {
         "ASSIG" : lambda q : mem.set_mem_w_mem(q[1], q[3]),
         "PARAM" : lambda q : mem.set_mem_w_mem(q[1], q[3]),
@@ -70,15 +70,34 @@ def run_func(mem : MemoryManager, func_id, quads, q_idx):
         "CONST" : lambda q : mem.set_mem_w_val(q[3], q[1]),
     }
 
-    while(q_idx < len(quads)):   
+    while(q_idx < len(quads)):
         q = quads[q_idx]
-        basic_op_hanlder[q[0]](q)
-        q_idx += 1
+        q_op = q[0]
+        nxt_q_idx = q_idx + 1
+        if q_op == "GOTO":
+           nxt_q_idx = q[3] 
+        elif q_op == "GOTOF":
+            if(mem.get_mem(q[1])):
+                nxt_q_idx = q[3] 
+        elif q_op == "ERA":
+           func_id = q[3]
+           mem.start_func_stack(func_id)
+        elif q_op == "GOSUB":
+            func_id = q[3]
+            run_func(mem, quads, q[1])
+            mem.end_func_stack(func_id)
+        elif q_op == "RETURN":
+            basic_op_hanlder["ASSIG"](q)
+        elif q_op == "ENDFUNC":
+            break
+        else:
+            basic_op_hanlder[q_op](q)
+        q_idx = nxt_q_idx
 
 def run_global(func_dir, quads):
     memory_manager = MemoryManager(func_dir)
     memory_manager.start_func_stack(0)
-    run_func(memory_manager, 0, quads, 0)
+    run_func(memory_manager, quads, 0)
     memory_manager.end_func_stack(0)
 
 def main():
