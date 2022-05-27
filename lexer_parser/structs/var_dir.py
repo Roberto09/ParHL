@@ -16,10 +16,11 @@ class Var(Typed):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, value=None, isTensor=False, dims=[]):
+    def __init__(self, name, type, mem_dir, addr_var, value=None, isTensor=False, dims=[]):
         super().__init__(name, type, mem_dir, value)
         self.isTensor = isTensor
         self.dims = dims
+        self.addr_var = addr_var
 
     def __repr__(self):
         return f"({super().__repr__()}, isTensor: {self.isTensor}, Dims: {self.dims})"
@@ -39,6 +40,7 @@ class Block():
             'GPU_INT_T': 0,
             'GPU_FLOAT_T': 0,
             'GPU_BOOL_T': 0,
+            'ADDR': 0,
         }
         self.var_counter = 0
         self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
@@ -121,7 +123,9 @@ class FuncDir:
         # We only care about the most inner scope when it comes to re-definitions.
         assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
         # Obtain location of next memory of specified type
-        var = Tensor(name, type, self.curr_scope.get_new_tensor_memdir(m0), isTensor=True, dims=dims)
+        base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
+        addr_var = self.new_temp('ADDR', value=base_mem_dir)
+        var = Tensor(name, type, base_mem_dir, addr_var, isTensor=True, dims=dims)
         self.curr_scope.vars[name] = var
         return var
 
@@ -139,6 +143,12 @@ class FuncDir:
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
+
+    def new_address_temp(self, type):
+        new_temp = self.new_temp(type)
+        base_mem_dir = new_temp.mem_dir
+        new_temp.mem_dir = "(" + new_temp.mem_dir + ")"
+        return (base_mem_dir, new_temp)
 
     def _find_in_ordered_scopes(self, name, attr):
         """
