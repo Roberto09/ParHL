@@ -152,11 +152,11 @@ class TensorDecl(Statement):
         for i, r in enumerate(rs):
             m = floor(m/r)
             dims[i] = {
-                'limit': r-1,
-                'm': m
+                'limit': ctx.func_dir.new_temp('INT_T', r),
+                'm':  ctx.func_dir.new_temp('INT_T', m),
             }
         
-        var = ctx.func_dir.add_tensor(self.id.id, self.id_type, dims, m0)
+        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0)
         return var
 
 
