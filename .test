@@ -1,7 +1,7 @@
 let a[5]:int
 let matrix[10][10]: int;
-
-a[matrix[1][2+2]] := 2
+let cube[3][3][3]: int
+matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
 
 let factorial (n : int) : int {
     if(n <= 1) {
