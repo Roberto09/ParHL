@@ -4,53 +4,49 @@ from sys import argv
 class MemoryManager():
     def __init__(self, func_dir):
         # track memory relevant information
-        self.mem_stack = []
-        self.func_mem_idx_stack = [[] for _ in range(len(func_dir))]
+        self.mem_stack = [[] for _ in range(len(func_dir))]
+        # dormant_mem_stack holds memory for functions which are inactive
+        # i.e. which exist between an ERA and GOSUB state
+        self.dormant_mem_stack = [[] for _ in range(len(func_dir))]
         self.func_dir = func_dir
-
-        # track current function
-        self.func_id_stack = [None]
-        self.curr_func_id = None
 
     def get_mem(self, mem_dir):
         func_id, mem_dir = mem_dir
-        if func_id == self.curr_func_id:
-            return self.func_mem_idx_stack[-1][mem_dir]
-        return self.mem_stack[self.func_mem_idx_stack[func_id][-1]][mem_dir]
+        return self.mem_stack[func_id][-1][mem_dir]
 
     def set_mem_w_val(self, mem_dir_dst, val):
         func_id, mem_dir_dst = mem_dir_dst
-        if func_id == self.curr_func_id:
-            self.func_mem_idx_stack[-1][mem_dir_dst] = val
-        self.mem_stack[self.func_mem_idx_stack[func_id][-1]][mem_dir_dst] = val
+        self.mem_stack[func_id][-1][mem_dir_dst] = val
 
     def set_mem_w_mem(self, mem_dir_src, mem_dir_dst):
         val = self.get_mem(mem_dir_src)
         self.set_mem_w_val(mem_dir_dst, val)
-    
-    def start_func_stack(self, func_id):
-        self.func_id_stack.append(func_id)
-        self.curr_func = func_id
-        
+
+    def set_dorm_mem_w_mem(self, mem_dir_src, dorm_mem_dir_dst):
+        val = self.get_mem(mem_dir_src)
+        func_id, dorm_mem_dir_dst = dorm_mem_dir_dst
+        self.dormant_mem_stack[func_id][-1][dorm_mem_dir_dst] = val
+
+    def era_func_stack(self, func_id):
         func_ttl_vars = self.func_dir[func_id][0]
-        self.func_mem_idx_stack[func_id].append(len(self.mem_stack))
-        self.mem_stack.append([None] * func_ttl_vars)
+        self.dormant_mem_stack[func_id].append([None] * func_ttl_vars)
+
+    def start_func_stack(self, func_id):
+        self.mem_stack[func_id].append(self.dormant_mem_stack[func_id].pop())        
 
     def end_func_stack(self, func_id):
-        assert self.curr_func == func_id
-        self.func_id_stack.pop()
-        self.curr_func = self.func_id_stack[-1]
-
-        self.mem_stack.pop()
-        self.func_mem_idx_stack[func_id].pop()
+        self.mem_stack[func_id].pop()
 
 def bin_op(q, mem, op):
     mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
 
+def assig_op(q, mem):
+    mem.set_mem_w_mem(q[1], q[3])
+
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_hanlder = {
-        "ASSIG" : lambda q : mem.set_mem_w_mem(q[1], q[3]),
-        "PARAM" : lambda q : mem.set_mem_w_mem(q[1], q[3]),
+        "ASSIG" : lambda q : assig_op(q, mem),
+        "PARAM" : lambda q : mem.set_dorm_mem_w_mem(q[1], q[3]),
         "PLUS" : lambda q : bin_op(q, mem, lambda x,y:x+y),
         "MINUS" : lambda q : bin_op(q, mem, lambda x,y:x-y),
         "DIV" : lambda q : bin_op(q, mem, lambda x,y:x/y),
@@ -74,20 +70,27 @@ def run_func(mem : MemoryManager, quads, q_idx):
         q = quads[q_idx]
         q_op = q[0]
         nxt_q_idx = q_idx + 1
+        # block special quads
         if q_op == "GOTO":
            nxt_q_idx = q[3] 
         elif q_op == "GOTOF":
-            if(mem.get_mem(q[1])):
+            if(not mem.get_mem(q[1])):
                 nxt_q_idx = q[3] 
+        elif q_op == "STRTBLK":
+            mem.era_func_stack(q[3])
+            mem.start_func_stack(q[3])
+        elif q_op == "ENDBLK":
+            mem.end_func_stack(q[3])
+        # function special quads
         elif q_op == "ERA":
-           func_id = q[3]
-           mem.start_func_stack(func_id)
+            mem.era_func_stack(q[3])
         elif q_op == "GOSUB":
-            func_id = q[3]
+            mem.start_func_stack(q[3])
             run_func(mem, quads, q[1])
-            mem.end_func_stack(func_id)
+            mem.end_func_stack(q[3])
         elif q_op == "RETURN":
-            basic_op_hanlder["ASSIG"](q)
+            assig_op(q, mem)
+            break
         elif q_op == "ENDFUNC":
             break
         else:
@@ -96,6 +99,7 @@ def run_func(mem : MemoryManager, quads, q_idx):
 
 def run_global(func_dir, quads):
     memory_manager = MemoryManager(func_dir)
+    memory_manager.era_func_stack(0)
     memory_manager.start_func_stack(0)
     run_func(memory_manager, quads, 0)
     memory_manager.end_func_stack(0)
