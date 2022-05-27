@@ -8,6 +8,11 @@ class ParseContext():
         self.semantic_cube = SemanticCube()
         self._quadruples: list[Quadruple] = []
 
+    def output(self, file):
+        with open(file, "w") as out_file:
+            for q in self._quadruples:
+                out_file.write(f"{q}\n")
+
     def get_quadruples(self):
         return self._quadruples
     
