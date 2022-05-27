@@ -43,7 +43,9 @@ class If(Statement):
             var = self.expr.gen(ctx)
             gotof_idx = ctx.add_quadruple(Quadruple('GOTOF', var.mem_dir))
             ctx.func_dir.start_block_stack()
+            ctx.add_quadruple(Quadruple('STRTBLK', result=ctx.func_dir.curr_scope.id))
             self.seq.gen(ctx)
+            ctx.add_quadruple(Quadruple('ENDBLK', result=ctx.func_dir.curr_scope.id))
             ctx.func_dir.end_block_stack()
             goto_idx = ctx.add_quadruple(Quadruple('GOTO'))
             ctx.set_goto_position(gotof_idx)
@@ -65,7 +67,9 @@ class If(Statement):
         
         def gen_impl(self, ctx: ParseContext):
             ctx.func_dir.start_block_stack()
+            ctx.add_quadruple(Quadruple('STRTBLK', result=ctx.func_dir.curr_scope.id))
             self.seq.gen(ctx)
+            ctx.add_quadruple(Quadruple('ENDBLK', result=ctx.func_dir.curr_scope.id))
             ctx.func_dir.end_block_stack()
 
     def __init__(self, line, if_aux_seq):
