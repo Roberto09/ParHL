@@ -40,16 +40,16 @@ class Block():
         return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
 
     def get_new_memdir(self):
-        new_mem_dir = f"{self.id}.{self.var_counter}"
+        new_mem_dir = (self.id, self.var_counter)
         self.var_counter += 1
         return new_mem_dir
     
-    def self_to_obj_repr(self):
+    def self_to_ir_repr(self):
         return [self.var_counter,] # (vars)
     
-    def to_obj_dict(self):
-        curr_func = {self.id: self.self_to_obj_repr()}
-        all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_obj_dict() for b in list(self.funcs.values()) + self.blocks])
+    def to_ir_repr(self):
+        curr_func = {self.id: self.self_to_ir_repr()}
+        all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_ir_repr() for b in list(self.funcs.values()) + self.blocks])
         return all_funcs
 
 class Func(Typed, Block):
@@ -65,8 +65,8 @@ class Func(Typed, Block):
     def set_params(self, params: list[Var]= []):
         self.params = params
 
-    def self_to_obj_repr(self):
-        return super().self_to_obj_repr() + ([self.func_var.mem_dir] if self.func_var else [])
+    def self_to_ir_repr(self):
+        return super().self_to_ir_repr() + ([self.func_var.mem_dir if self.func_var else None])
 
 """ Function Directory abstraction
 FuncDir generates a tree of Vars and Funcs which will remain available in the glob_func property.
@@ -153,6 +153,6 @@ class FuncDir:
     def __repr__(self):
         return f"FuncDir - func_stack: {self.func_stack}"
 
-    def to_obj_dict(self):
-        funcs_dict = self.glob_func.to_obj_dict()
+    def to_ir_repr(self):
+        funcs_dict = self.glob_func.to_ir_repr()
         return {"func_dir": [funcs_dict[i] for i in range(len(funcs_dict))]}

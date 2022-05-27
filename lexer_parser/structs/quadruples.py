@@ -8,3 +8,6 @@ class Quadruple():
     
     def __repr__(self) -> str:
         return f"Q({self.op}, {self.arg_1}, {self.arg_2}, {self.result})"
+
+    def to_ir_repr(self):
+        return (self.op, self.arg_1, self.arg_2, self.result)

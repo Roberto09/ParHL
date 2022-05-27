@@ -20,8 +20,8 @@ def lex_pars(input_file):
     ctx = ParseContext()
     ast.gen(ctx)
     ctx.output(output_file)
-   
-if __name__ == '__main__': 
+
+def main():
     filename = argv[1]
     try:
         lex_pars(filename)
@@ -30,3 +30,6 @@ if __name__ == '__main__':
     except Exception as e:
         # TODO, same as in Node : we must change this handling in prod
         raise e
+
+if __name__ == '__main__': 
+    main()

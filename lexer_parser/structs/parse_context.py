@@ -10,8 +10,8 @@ class ParseContext():
         self._quadruples: list[Quadruple] = []
 
     def output(self, file):
-        output = json.dumps(self.func_dir.to_obj_dict()
-        | {"quads": [str(q) for q in self._quadruples]})
+        output = json.dumps(self.func_dir.to_ir_repr()
+        | {"quads": [q.to_ir_repr() for q in self._quadruples]})
         with open(file, "w") as out_file:
             out_file.write(output)
 
