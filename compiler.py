@@ -4,21 +4,24 @@ from lexer_parser.structs.parse_context import ParseContext
 from lexer_parser.structs.parhl_exceptions import ParhlException
 from sys import argv
 
-def lex_pars(filename):
+def get_output_file(input_file):
+    if input_file[-6:] != '.parhl':
+        raise ParhlException(f"The provided filename: {input_file} does not have the .parhl extension.")
+    return input_file[:-6] + ".out"
+
+def lex_pars(input_file):
+    output_file = get_output_file(input_file)
     lexer = ParhlLexer()
     parser = ParhlParser()
-    with open(filename, 'r') as my_code:
+    with open(input_file, 'r') as my_code:
         data = my_code.read()
     tokens = lexer.tokenize(data)
     ast = parser.parse(tokens)
     ctx = ParseContext()
     ast.gen(ctx)
-    qs = ctx.get_quadruples()
-    for (i, q) in enumerate(qs):
-        print(i, " - ", q)
-    return tokens, ast
+    ctx.output(output_file)
 
-if __name__ == '__main__': 
+def main():
     filename = argv[1]
     try:
         lex_pars(filename)
@@ -27,3 +30,6 @@ if __name__ == '__main__':
     except Exception as e:
         # TODO, same as in Node : we must change this handling in prod
         raise e
+
+if __name__ == '__main__': 
+    main()

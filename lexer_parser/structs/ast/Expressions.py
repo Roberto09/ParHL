@@ -48,7 +48,9 @@ class Const(Expression):
         
     def gen_impl(self, ctx: ParseContext):
         # Guardar en memoria de constantes
-        return ctx.func_dir.new_temp(self.type, self.value)
+        const_var = ctx.func_dir.new_temp(self.type, self.value)
+        ctx.add_quadruple(Quadruple("CONST", self.value, result=const_var.mem_dir))
+        return const_var
 
 class Id(Expression):
     def __init__(self, line, id):
