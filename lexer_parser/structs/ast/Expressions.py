@@ -1,4 +1,5 @@
 from ast import Expression
+from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
 from ..quadruples import Quadruple
@@ -71,9 +72,14 @@ class Access(Expression):
     def gen_impl(self, ctx: ParseContext):
         tens = ctx.func_dir.get_var(self.id)
         exprs = self.expr_seq.gen_ret_list(ctx)
+        if len(tens.dims) != len(exprs):
+            raise ParhlException('Not enough indices provided to array accessor')
+        
         last = len(exprs) - 1
         total_var = ctx.func_dir.new_temp('INT_T',0)
         for i, var in enumerate(exprs):
+            if var.type != 'INT_T':
+                raise ParhlException(f"Expected integer at dimension {i} but got {var.type}")
             ctx.add_quadruple(Quadruple('VERIFY', tens.dims[i]['limit'].mem_dir, result=var.mem_dir))
             if i != last:
                 new_temp = ctx.func_dir.new_temp('INT_T')
