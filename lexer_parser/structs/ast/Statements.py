@@ -106,16 +106,26 @@ class For(Statement):
         self.seq = seq
 
     def gen_impl(self, ctx: ParseContext): 
+        # We create a "virtual" surrounding block s.t. "var" only lives in such scope
         ctx.func_dir.start_block_stack()
+        ctx.add_quadruple(Quadruple('STRTBLK', result=ctx.func_dir.curr_scope.id))
+        
         self.var.gen(ctx)
         jump_index = ctx.get_next_quadruple_index()
+        
         var = self.expr.gen(ctx)
         gotof_index = ctx.add_quadruple(Quadruple('GOTOF', var.mem_dir))
+        ctx.func_dir.start_block_stack()
+        ctx.add_quadruple(Quadruple('STRTBLK', result=ctx.func_dir.curr_scope.id))
         self.seq.gen(ctx)
         self.assign.gen(ctx)
+        ctx.add_quadruple(Quadruple('ENDBLK', result=ctx.func_dir.curr_scope.id))
+        ctx.func_dir.end_block_stack()
         ctx.add_quadruple(Quadruple('GOTO', result=jump_index))
         ctx.set_goto_position(gotof_index)
-        ctx.func_dir.end_block_stack()
+
+        ctx.add_quadruple(Quadruple('ENDBLK', result=ctx.func_dir.curr_scope.id))
+        ctx.func_dir.end_block_stack() 
 
 class VarDecl(Statement):
     def __init__(self, line, id, id_type):
