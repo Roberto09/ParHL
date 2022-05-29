@@ -1,4 +1,5 @@
 from ast import Expression
+from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
 from ..quadruples import Quadruple
@@ -61,18 +62,35 @@ class Id(Expression):
         return ctx.func_dir.get_var(self.id)
 
 class Access(Expression):
-    def __init__(self, line, id_access, expr):
+    def __init__(self, line, id_access, expr_seq):
         super().__init__(line)
         self.id_access = id_access
-        self.expr = expr
+        self.expr_seq = expr_seq
     
     @property
     def id(self):
         return self.id_access.id
 
     def gen_impl(self, ctx: ParseContext):
-        # use id's access func to get address
-        pass
+        tens = ctx.func_dir.get_var(self.id)
+        exprs = self.expr_seq.gen_ret_list(ctx)
+        if len(tens.dims) != len(exprs):
+            raise ParhlException('Not enough indices provided to array accessor')
+        
+        last = len(exprs) - 1
+        total_var = ctx.func_dir.new_temp('INT_T',0)
+        for i, var in enumerate(exprs):
+            if var.type != 'INT_T':
+                raise ParhlException(f"Expected integer at dimension {i} but got {var.type}")
+            ctx.add_quadruple(Quadruple('VERIFY', tens.dims[i]['limit'].mem_dir, result=var.mem_dir))
+            if i != last:
+                new_temp = ctx.func_dir.new_temp('INT_T')
+                ctx.add_quadruple(Quadruple('MULT', var.mem_dir, tens.dims[i]['m'].mem_dir, new_temp.mem_dir))
+                ctx.add_quadruple(Quadruple('PLUS', new_temp.mem_dir, total_var.mem_dir, total_var.mem_dir))
+            if i == last:
+                base_mem_dir, new_temp = ctx.func_dir.new_address_temp(tens.type)
+                ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_var.mem_dir, base_mem_dir))
+                return new_temp
 
 class UnExpr(Expression):
     def __init__(self, line, op, right):

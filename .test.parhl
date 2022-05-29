@@ -1,4 +1,7 @@
-let x : int := 10
+let a[5]:int
+let matrix[10][10]: int;
+let cube[3][3][3]: int
+matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
 
 let factorial (n : int) : int {
     if(n <= 1) {
@@ -21,7 +24,7 @@ let main(): int {
         }
         return fibo(n-1) + fibo(n-2) + fibo
     }
-    print(fibo(x))
+    print(fibo(2))
     return 0
 }
 

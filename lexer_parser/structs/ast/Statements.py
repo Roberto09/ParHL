@@ -4,6 +4,8 @@ from ..parse_context import ParseContext
 from .Node import Node
 from .Expressions import Assign, Expression
 from ...lexer import type_to_token
+from functools import reduce
+from math import floor
 
 Statement = Node
 
@@ -142,7 +144,37 @@ class VarDecl(Statement):
         var = ctx.func_dir.add_var(self.id.id, self.id_type)
         self.assign.gen(ctx)
         return var
-        # do stuff
+
+class TensorDim(Statement):
+    def __init__(self, lineno, dim):
+        super().__init__(lineno)
+        self.dim = dim
+    
+    def gen_impl(self, context):
+        return self.dim
+class TensorDecl(Statement):
+    def __init__(self, lineno, id, id_type, dim_seq=Seq(-1, Empty())):
+        super().__init__(lineno)
+        self.id = id
+        self.id_type = id_type
+        self.dim_seq = dim_seq
+
+    def gen_impl(self, ctx: ParseContext):
+        rs = self.dim_seq.gen_ret_list(ctx)
+        m0 = reduce((lambda x, y: x*y), rs)
+        size = len(rs)
+        dims =[{}] * size
+        m = m0
+        for i, r in enumerate(rs):
+            m = floor(m/r)
+            dims[i] = {
+                'limit': ctx.func_dir.new_temp('INT_T', r),
+                'm':  ctx.func_dir.new_temp('INT_T', m),
+            }
+        
+        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0)
+        return var
+
 
 class FuncDecl(Statement):
     def __init__(self, line, id, id_type, params_seq, seq):

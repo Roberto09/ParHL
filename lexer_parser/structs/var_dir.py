@@ -17,6 +17,16 @@ class Var(Typed):
     def __repr__(self):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
+class Tensor(Var):
+    def __init__(self, name, type, mem_dir, addr_var, value=None, isTensor=False, dims=[]):
+        super().__init__(name, type, mem_dir, value)
+        self.isTensor = isTensor
+        self.dims = dims
+        self.addr_var = addr_var
+
+    def __repr__(self):
+        return f"({super().__repr__()}, isTensor: {self.isTensor}, BaseAddress: {self.addr_var}, Dims: {self.dims})"
+
 class Block():
     _ID_COUNTER = 0
     def __init__(self):
@@ -32,6 +42,7 @@ class Block():
             'GPU_INT_T': 0,
             'GPU_FLOAT_T': 0,
             'GPU_BOOL_T': 0,
+            'ADDR': 0,
         }
         self.var_counter = 0
         self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
@@ -51,6 +62,10 @@ class Block():
         curr_func = {self.id: self.self_to_ir_repr()}
         all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_ir_repr() for b in list(self.funcs.values()) + self.blocks])
         return all_funcs
+    def get_new_tensor_memdir(self, m0):
+        new_mem_dir = f"{self.id}.{self.var_counter}"
+        self.var_counter += m0
+        return new_mem_dir
 
 class Func(Typed, Block):
     def __init__(self, name, type, q_index, func_var=None):
@@ -116,6 +131,16 @@ class FuncDir:
     def end_block_stack(self):
         self.func_stack.pop()
 
+    def add_tensor(self, name, type, dims, m0):
+        # We only care about the most inner scope when it comes to re-definitions.
+        assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
+        # Obtain location of next memory of specified type
+        base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
+        addr_var = self.new_temp('ADDR', value=base_mem_dir)
+        var = Tensor(name, type, base_mem_dir, addr_var, isTensor=True, dims=dims)
+        self.curr_scope.vars[name] = var
+        return var
+
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
         assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
@@ -130,6 +155,12 @@ class FuncDir:
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
+
+    def new_address_temp(self, type):
+        new_temp = self.new_temp(type)
+        base_mem_dir = new_temp.mem_dir
+        new_temp.mem_dir = "(" + new_temp.mem_dir + ")"
+        return (base_mem_dir, new_temp)
 
     def _find_in_ordered_scopes(self, name, attr):
         """
