@@ -44,11 +44,15 @@ def assig_op(q, mem):
     mem.set_mem_w_mem(q[1], q[3])
 
 def run_func(mem : MemoryManager, quads, q_idx):
-    basic_op_hanlder = {
+    basic_op_handler = {
         "ASSIG" : lambda q : assig_op(q, mem),
         "PARAM" : lambda q : mem.set_dorm_mem_w_mem(q[1], q[3]),
-        "PLUS" : lambda q : bin_op(q, mem, lambda x,y:x+y),
-        "MINUS" : lambda q : bin_op(q, mem, lambda x,y:x-y),
+        "PLUS" : lambda q : bin_op(q, mem, lambda x,y:x+y) 
+                                if q[2] != None else 
+                            mem.set_mem_w_val(q[3], 1 * mem.get_mem(q[1])),
+        "MINUS" : lambda q : bin_op(q, mem, lambda x,y:x-y)
+                                if q[2] != None else
+                            mem.set_mem_w_val(q[3], -1 * mem.get_mem(q[1])),
         "DIV" : lambda q : bin_op(q, mem, lambda x,y:x/y),
         "MULT" : lambda q : bin_op(q, mem, lambda x,y:x*y),
         "EXP" : lambda q : bin_op(q, mem, lambda x,y:x**y),
@@ -65,7 +69,6 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "PRINT" : lambda q : print(mem.get_mem(q[3])),
         "CONST" : lambda q : mem.set_mem_w_val(q[3], q[1]),
     }
-
     while(q_idx < len(quads)):
         q = quads[q_idx]
         q_op = q[0]
@@ -94,7 +97,7 @@ def run_func(mem : MemoryManager, quads, q_idx):
         elif q_op == "ENDFUNC":
             break
         else:
-            basic_op_hanlder[q_op](q)
+            basic_op_handler[q_op](q)
         q_idx = nxt_q_idx
 
 def run_global(func_dir, quads):

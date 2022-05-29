@@ -103,5 +103,5 @@ class UnExpr(Expression):
         op_name = symbol_to_token[self.op]
         new_type = ctx.semantic_cube.get_type(op_name, right_var.type)
         new_var = ctx.func_dir.new_temp(new_type)
-        ctx.add_quadruple(Quadruple(op_name, right_var.mem_dir, None, new_var.name))
+        ctx.add_quadruple(Quadruple(op_name, right_var.mem_dir, None, new_var.mem_dir))
         return new_var
