@@ -18,14 +18,14 @@ class Var(Typed):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, addr_var, value=None, isTensor=False, dims=[]):
+    def __init__(self, name, type, mem_dir, addr_vars, value=None, is_tensor=False, dims=[]):
         super().__init__(name, type, mem_dir, value)
-        self.isTensor = isTensor
+        self.is_tensor = is_tensor
         self.dims = dims
-        self.addr_var = addr_var
+        self.addr_vars = addr_vars
 
     def __repr__(self):
-        return f"({super().__repr__()}, isTensor: {self.isTensor}, BaseAddress: {self.addr_var}, Dims: {self.dims})"
+        return f"({super().__repr__()}, is_tensor: {self.is_tensor}, BaseAddress: {self.addr_vars}, Dims: {self.dims})"
 
 class Block():
     _ID_COUNTER = 0
@@ -51,7 +51,7 @@ class Block():
         return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
 
     def get_new_memdir(self):
-        new_mem_dir = (self.id, self.var_counter)
+        new_mem_dir = (self.id, self.var_counter, False) # Func, var, dereference
         self.var_counter += 1
         return new_mem_dir
     
@@ -62,9 +62,10 @@ class Block():
         curr_func = {self.id: self.self_to_ir_repr()}
         all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_ir_repr() for b in list(self.funcs.values()) + self.blocks])
         return all_funcs
+
     def get_new_tensor_memdir(self, m0):
-        new_mem_dir = f"{self.id}.{self.var_counter}"
-        self.var_counter += m0
+        new_mem_dir = self.get_new_memdir()
+        self.var_counter += (m0 - 1)
         return new_mem_dir
 
 class Func(Typed, Block):
@@ -136,8 +137,12 @@ class FuncDir:
         assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
         # Obtain location of next memory of specified type
         base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
-        addr_var = self.new_temp('ADDR', value=base_mem_dir)
-        var = Tensor(name, type, base_mem_dir, addr_var, isTensor=True, dims=dims)
+        addr_vars = [
+            self.new_temp("INT_T", base_mem_dir[0]),
+            self.new_temp("INT_T", base_mem_dir[1]),
+            self.new_temp("BOOL_T", base_mem_dir[2]),
+        ]
+        var = Tensor(name, type, base_mem_dir, addr_vars, is_tensor=True, dims=dims)
         self.curr_scope.vars[name] = var
         return var
 

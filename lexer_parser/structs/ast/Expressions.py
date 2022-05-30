@@ -74,11 +74,15 @@ class Access(Expression):
     def gen_impl(self, ctx: ParseContext):
         tens = ctx.func_dir.get_var(self.id)
         exprs = self.expr_seq.gen_ret_list(ctx)
+        if not tens.is_tensor:
+            raise ParhlException(f"Identifier {tens.name} is not a tensor")
         if len(tens.dims) != len(exprs):
-            raise ParhlException('Not enough indices provided to array accessor')
+            raise ParhlException('Not enough indices provided to tensor accessor')
         
         last = len(exprs) - 1
         total_var = ctx.func_dir.new_temp('INT_T',0)
+        ctx.add_quadruple(Quadruple('CONST', 0, result=total_var.mem_dir))
+
         for i, var in enumerate(exprs):
             if var.type != 'INT_T':
                 raise ParhlException(f"Expected integer at dimension {i} but got {var.type}")
@@ -88,9 +92,16 @@ class Access(Expression):
                 ctx.add_quadruple(Quadruple('MULT', var.mem_dir, tens.dims[i]['m'].mem_dir, new_temp.mem_dir))
                 ctx.add_quadruple(Quadruple('PLUS', new_temp.mem_dir, total_var.mem_dir, total_var.mem_dir))
             if i == last:
-                base_mem_dir, new_temp = ctx.func_dir.new_address_temp(tens.type)
-                ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_var.mem_dir, base_mem_dir))
-                return new_temp
+                # Copy vars from base addr variables
+                copy = [None] * len(tens.addr_vars)
+                for i, addr_var in enumerate(tens.addr_vars):
+                    copy[i] = ctx.func_dir.new_temp(addr_var.type, addr_var.value)
+                    ctx.add_quadruple(Quadruple('CONST', copy[i].value, result=copy[i].mem_dir))
+                ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_vars[1].mem_dir, copy[1].mem_dir))
+                # Inital val's deref is changed to true to use result addr
+                func, var, deref = copy[0].mem_dir
+                copy[0].mem_dir = (func, var, True)
+                return copy[0]
 
 class UnExpr(Expression):
     def __init__(self, line, op, right):

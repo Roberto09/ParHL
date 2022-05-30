@@ -166,13 +166,20 @@ class TensorDecl(Statement):
         dims =[{}] * size
         m = m0
         for i, r in enumerate(rs):
+
             m = floor(m/r)
             dims[i] = {
                 'limit': ctx.func_dir.new_temp('INT_T', r),
                 'm':  ctx.func_dir.new_temp('INT_T', m),
             }
+            ctx.add_quadruple(Quadruple("CONST", r, result=dims[i]['limit'].mem_dir))
+            ctx.add_quadruple(Quadruple("CONST", m, result=dims[i]['m'].mem_dir))
         
-        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0)
+        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0) 
+        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[0], result=var.addr_vars[0].mem_dir))
+        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[1], result=var.addr_vars[1].mem_dir))
+        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[2], result=var.addr_vars[2].mem_dir))
+
         return var
 
 
