@@ -11,7 +11,7 @@ class ParseContext():
 
     def output(self, file):
         output = json.dumps(self.func_dir.to_ir_repr()
-        | {"quads": [q.to_ir_repr() for q in self._quadruples]}, default=lambda x: x.__dict__)
+        | {"quads": [q.to_ir_repr() for q in self._quadruples]})
         with open(file, "w") as out_file:
             out_file.write(output)
 

@@ -42,19 +42,9 @@ class MemoryManager():
         func_ttl_vars = self.func_dir[func_id][0]
         self.dormant_mem_stack[func_id].append([None] * func_ttl_vars)
         const_dicts = self.func_dir[func_id][1]
-        for k, type_dict in const_dicts.items():
-            for v, var in type_dict.items():
-                val = None
-                if k == 'INT_T':
-                    val = int(v)
-                elif k == 'FLOAT_T':
-                    val = float(v)
-                elif k == 'BOOL_T':
-                    val = v == "True"
-                else:
-                    val = v
-                func_id, mem_dir, deref = var['mem_dir'] # should not need to deref
-                self.dormant_mem_stack[func_id][-1][mem_dir] = val
+        for _, consts in const_dicts.items():
+            for val, mem_dir in consts:
+                self.dormant_mem_stack[mem_dir[0]][-1][mem_dir[1]] = val
 
 
     def start_func_stack(self, func_id):

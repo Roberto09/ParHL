@@ -16,6 +16,9 @@ class Var(Typed):
     def __repr__(self):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir})"
 
+    def to_ir_repr(self):
+        return self.mem_dir 
+
 class Tensor(Var):
     def __init__(self, name, type, mem_dir, addr_vars, is_tensor=False, dims=[]):
         super().__init__(name, type, mem_dir)
@@ -61,7 +64,8 @@ class Block():
         return new_mem_dir
     
     def self_to_ir_repr(self):
-        return [self.var_counter,self.consts] # (vars)
+        consts_ir_repr = {k: [(k, v.to_ir_repr()) for k, v in v.items()] for k, v in self.consts.items()}
+        return [self.var_counter, consts_ir_repr] # (# vars, consts table)
     
     def to_ir_repr(self):
         curr_func = {self.id: self.self_to_ir_repr()}
