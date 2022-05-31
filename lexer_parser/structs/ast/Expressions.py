@@ -99,7 +99,7 @@ class Access(Expression):
                     ctx.add_quadruple(Quadruple('ASSIG', addr_var.mem_dir, result=copy[i].mem_dir))
                 ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_vars[1].mem_dir, copy[1].mem_dir))
                 # Inital val's deref is changed to true to use result addr
-                func, var, deref = copy[0].mem_dir
+                func, var, _ = copy[0].mem_dir
                 copy[0].mem_dir = (func, var, True)
                 return copy[0]
 

@@ -5,7 +5,6 @@ from .Node import Node
 from .Expressions import Assign, Expression
 from ...lexer import type_to_token
 from functools import reduce
-from math import floor
 
 Statement = Node
 
@@ -166,7 +165,7 @@ class TensorDecl(Statement):
         dims =[{}] * size
         m = m0
         for i, r in enumerate(rs):
-            m = floor(m/r)
+            m = m//r
             dims[i] = {
                 'limit': ctx.func_dir.get_or_new_const('INT_T', r),
                 'm':  ctx.func_dir.get_or_new_const('INT_T', m),
