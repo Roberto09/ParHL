@@ -89,7 +89,6 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "AND" : lambda q : bin_op(q, mem, lambda x,y:x and y),
         "NOT" : lambda q : mem.set_mem_w_val(q[3], not mem.get_mem(q[1])),
         "PRINT" : lambda q : print(mem.get_mem(q[3])),
-        "CONST" : lambda q : mem.set_mem_w_val(q[3], q[1]),
         "VERIFY": lambda q : verify_op(q, mem),
     }
     try: 
