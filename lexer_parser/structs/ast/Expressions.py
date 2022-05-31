@@ -49,7 +49,7 @@ class Const(Expression):
         
     def gen_impl(self, ctx: ParseContext):
         # Guardar en memoria de constantes
-        const_var = ctx.func_dir.new_temp(self.type, self.value)
+        const_var = ctx.func_dir.get_or_new_const(self.type, self.value)
         ctx.add_quadruple(Quadruple("CONST", self.value, result=const_var.mem_dir))
         return const_var
 
@@ -80,8 +80,9 @@ class Access(Expression):
             raise ParhlException('Not enough indices provided to tensor accessor')
         
         last = len(exprs) - 1
-        total_var = ctx.func_dir.new_temp('INT_T',0)
-        ctx.add_quadruple(Quadruple('CONST', 0, result=total_var.mem_dir))
+        zero_var = ctx.func_dir.get_or_new_const('INT_T',0)
+        total_var = ctx.func_dir.new_temp('INT_T');
+        ctx.add_quadruple(Quadruple('ASSIG', zero_var.mem_dir, result=total_var.mem_dir))
 
         for i, var in enumerate(exprs):
             if var.type != 'INT_T':
@@ -95,8 +96,8 @@ class Access(Expression):
                 # Copy vars from base addr variables
                 copy = [None] * len(tens.addr_vars)
                 for i, addr_var in enumerate(tens.addr_vars):
-                    copy[i] = ctx.func_dir.new_temp(addr_var.type, addr_var.value)
-                    ctx.add_quadruple(Quadruple('CONST', copy[i].value, result=copy[i].mem_dir))
+                    copy[i] = ctx.func_dir.new_temp(addr_var.type)
+                    ctx.add_quadruple(Quadruple('ASSIG', addr_var.mem_dir, result=copy[i].mem_dir))
                 ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_vars[1].mem_dir, copy[1].mem_dir))
                 # Inital val's deref is changed to true to use result addr
                 func, var, deref = copy[0].mem_dir

@@ -166,20 +166,13 @@ class TensorDecl(Statement):
         dims =[{}] * size
         m = m0
         for i, r in enumerate(rs):
-
             m = floor(m/r)
             dims[i] = {
-                'limit': ctx.func_dir.new_temp('INT_T', r),
-                'm':  ctx.func_dir.new_temp('INT_T', m),
+                'limit': ctx.func_dir.get_or_new_const('INT_T', r),
+                'm':  ctx.func_dir.get_or_new_const('INT_T', m),
             }
-            ctx.add_quadruple(Quadruple("CONST", r, result=dims[i]['limit'].mem_dir))
-            ctx.add_quadruple(Quadruple("CONST", m, result=dims[i]['m'].mem_dir))
         
         var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0) 
-        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[0], result=var.addr_vars[0].mem_dir))
-        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[1], result=var.addr_vars[1].mem_dir))
-        ctx.add_quadruple(Quadruple('CONST', var.mem_dir[2], result=var.addr_vars[2].mem_dir))
-
         return var
 
 
@@ -202,8 +195,8 @@ class FuncDecl(Statement):
         ctx.func_dir.end_func_stack(self.id.id)
         last_q = ctx.get_quadruples()[-1]
         # func must have a return value if not void
-        if self.id_type != 'void' and last_q.op != 'RETURN':
-            raise ParhlException(f"function {self.id.id} missing return value.")
+        if self.id_type != 'VOID' and last_q.op != 'RETURN':
+            raise ParhlException(f"function {self.id.id} missing return value of type {self.id_type}")
         ctx.add_quadruple(Quadruple('ENDFUNC'))
         ctx.set_goto_position(goto_index) # fill goto
 
@@ -243,7 +236,7 @@ class FuncCall(Statement):
 
         ctx.add_quadruple(Quadruple('GOSUB', func.q_index, result=func.id))
         
-        if func.type != 'void':
+        if func.type != 'VOID':
             temp_var = ctx.func_dir.new_temp(func.type)
             ctx.add_quadruple(Quadruple('ASSIG', func.func_var.mem_dir, result=temp_var.mem_dir))
             return temp_var

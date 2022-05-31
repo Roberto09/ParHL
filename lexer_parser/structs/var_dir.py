@@ -9,17 +9,16 @@ class Typed():
     def __repr__(self):
         return f"name: {self.name}, type: {self.type}"
 class Var(Typed):
-    def __init__(self, name, type, mem_dir, value=None):
+    def __init__(self, name, type, mem_dir):
         super().__init__(name, type)
         self.mem_dir = mem_dir # "location" in instance memory
-        self.value = value
 
     def __repr__(self):
-        return f"({super().__repr__()}, mem_dir: {self.mem_dir}, value: {self.value})"
+        return f"({super().__repr__()}, mem_dir: {self.mem_dir})"
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, addr_vars, value=None, is_tensor=False, dims=[]):
-        super().__init__(name, type, mem_dir, value)
+    def __init__(self, name, type, mem_dir, addr_vars, is_tensor=False, dims=[]):
+        super().__init__(name, type, mem_dir)
         self.is_tensor = is_tensor
         self.dims = dims
         self.addr_vars = addr_vars
@@ -34,6 +33,12 @@ class Block():
         self.funcs: dict[str, Func] = {} # name : Func
         self.blocks: list[Block] = [] # Block
         self.temps: dict[str, Var] = {} # name : var
+        self.consts = {
+            'BOOL_T': {}, # val : var
+            'INT_T': {}, # val : var
+            'FLOAT_T': {}, # val : var
+            'STRING_T': {}, # val : var
+        } 
         self.temp_counters: dict[str, int] = { # type : next_temp/total_temps
             'INT_T': 0,
             'FLOAT_T': 0,
@@ -48,7 +53,7 @@ class Block():
         self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
     
     def __repr__(self):
-        return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}))"
+        return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}, consts: {self.consts})"
 
     def get_new_memdir(self):
         new_mem_dir = (self.id, self.var_counter, False) # Func, var, dereference
@@ -56,7 +61,7 @@ class Block():
         return new_mem_dir
     
     def self_to_ir_repr(self):
-        return [self.var_counter,] # (vars)
+        return [self.var_counter,self.consts] # (vars)
     
     def to_ir_repr(self):
         curr_func = {self.id: self.self_to_ir_repr()}
@@ -138,9 +143,9 @@ class FuncDir:
         # Obtain location of next memory of specified type
         base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
         addr_vars = [
-            self.new_temp("INT_T", base_mem_dir[0]),
-            self.new_temp("INT_T", base_mem_dir[1]),
-            self.new_temp("BOOL_T", base_mem_dir[2]),
+            self.get_or_new_const("INT_T", base_mem_dir[0]),
+            self.get_or_new_const("INT_T", base_mem_dir[1]),
+            self.get_or_new_const("BOOL_T", base_mem_dir[2]),
         ]
         var = Tensor(name, type, base_mem_dir, addr_vars, is_tensor=True, dims=dims)
         self.curr_scope.vars[name] = var
@@ -154,9 +159,18 @@ class FuncDir:
         self.curr_scope.vars[name] = var
         return var
 
-    def new_temp(self, type, value=None):
+    def get_or_new_const(self, type, value):
+        for func in reversed(self.func_stack):
+            if func.consts[type].get(value) != None:
+                return func.consts[type][value]
+        # Was not found
+        var = self.new_temp(type)
+        self.func_stack[-1].consts[type][value] = var
+        return var
+        
+    def new_temp(self, type):
         temp_var_name = type + str(self.curr_scope.temp_counters[type])
-        temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir(), value)
+        temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir())
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
