@@ -98,10 +98,9 @@ class Access(Expression):
             if var.type != 'INT_T':
                 raise ParhlException(f"Expected integer at dimension {i} but got {var.type}")
             ctx.add_quadruple(Quadruple('VERIFY', tens.dims[i]['limit'].mem_dir, result=var.mem_dir))
-            if i != last:
-                new_temp = ctx.func_dir.new_temp('INT_T')
-                ctx.add_quadruple(Quadruple('MULT', var.mem_dir, tens.dims[i]['m'].mem_dir, new_temp.mem_dir))
-                ctx.add_quadruple(Quadruple('PLUS', new_temp.mem_dir, total_var.mem_dir, total_var.mem_dir))
+            new_temp = ctx.func_dir.new_temp('INT_T')
+            ctx.add_quadruple(Quadruple('MULT', var.mem_dir, tens.dims[i]['m'].mem_dir, new_temp.mem_dir))
+            ctx.add_quadruple(Quadruple('PLUS', new_temp.mem_dir, total_var.mem_dir, total_var.mem_dir))
             if i == last:
                 # Copy vars from base addr variables
                 copy = [None] * len(tens.addr_vars)
