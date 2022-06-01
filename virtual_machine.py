@@ -65,6 +65,16 @@ def verify_op(q, mem):
     if  index_val >= limit:
         raise Exception(f"Out of bounds: tensor index with value {index_val} must be lower than {limit}")
 
+def parse_input(input, type_str):
+    if type_str in ['INT_T', 'GPU_INT_T']:
+        return int(input)
+    elif type_str in ['FLOAT_T', 'GPU_FLOAT_T']:
+        return float(input)
+    elif type_str in ['BOOL_T', 'GPU_BOOL_T']:
+        return input == "True"
+    else: # string
+        return input
+
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
         "ASSIG" : lambda q : assig_op(q, mem),
@@ -90,6 +100,7 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "NOT" : lambda q : mem.set_mem_w_val(q[3], not mem.get_mem(q[1])),
         "PRINT" : lambda q : print(mem.get_mem(q[3])),
         "VERIFY": lambda q : verify_op(q, mem),
+        "READ_LINE": lambda q : mem.set_mem_w_val(q[3], parse_input(input(), q[1]))
     }
     try: 
         while(q_idx < len(quads)):
