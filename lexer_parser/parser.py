@@ -130,21 +130,21 @@ class ParhlParser(Parser):
     def factor_1(self, p):
         return Id(p.lineno, p[0])
 
-    @_('READ_LINE L_PAREN R_PAREN')
+    @_('READ_LINE L_PAREN const_type R_PAREN')
     def read_line(self, p):
-        return IOFunc(p.lineno, p[0])
+        return IOFunc(p.lineno, p[0], return_type=p[2])
     
     @_('PRINT L_PAREN func_call_1')
     def print_rule(self, p):
-        return IOFunc(p.lineno, p[0], p[2])
+        return IOFunc(p.lineno, p[0], args_seq=p[2])
 
-    @_('READ_FILE L_PAREN expr R_PAREN')
+    @_('READ_FILE L_PAREN const_type COMMA expr R_PAREN')
     def read_file(self, p):
-        return IOFunc(p.lineno, p[0], Seq(p[2]))
+        return IOFunc(p.lineno, p[0], return_type=p[2], args_seq=Seq(p.lineno, p[4]))
 
     @_('WRITE_FILE L_PAREN func_call_1')
     def write_file(self, p):
-        return IOFunc(p.lineno, p[0], p[2])
+        return IOFunc(p.lineno, p[0], args_seq=p[2])
 
     @_('ID L_PAREN func_call_1')
     def func_call(self, p):
