@@ -184,7 +184,7 @@ class ParhlParser(Parser):
             return Seq(p[0].lineno, p[0])
         return Seq(p.lineno, p[0], p[2])
 
-    @_('var_3', 'var_3 ASSIG expr', 'tens_decl ASSIG expr')
+    @_('var_3', 'var_3 ASSIG expr', 'tens_decl', 'tens_decl ASSIG expr')
     def var_2(self, p):
         if len(p) == 3:
             p[0].do_assign(p[2])

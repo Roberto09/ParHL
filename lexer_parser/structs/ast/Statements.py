@@ -157,6 +157,7 @@ class TensorDecl(Statement):
         self.id = id
         self.id_type = id_type
         self.dim_seq = dim_seq
+        self.assign = Empty()
 
     def do_assign(self, expr):
         self.assign = Assign(self.lineno, self.id, expr)

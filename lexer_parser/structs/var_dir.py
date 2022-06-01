@@ -12,6 +12,7 @@ class Var(Typed):
     def __init__(self, name, type, mem_dir):
         super().__init__(name, type)
         self.mem_dir = mem_dir # "location" in instance memory
+        self.is_tensor = False
 
     def __repr__(self):
         return f"({super().__repr__()}, mem_dir: {self.mem_dir})"
@@ -20,9 +21,9 @@ class Var(Typed):
         return self.mem_dir 
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, addr_vars=[], is_tensor=False, dims=[]):
+    def __init__(self, name, type, mem_dir, addr_vars=[], dims=[]):
         super().__init__(name, type, mem_dir)
-        self.is_tensor = is_tensor
+        self.is_tensor = True
         self.dims = dims
         self.addr_vars = addr_vars
 
@@ -153,7 +154,7 @@ class FuncDir:
             self.get_or_new_const("INT_T", base_mem_dir[1]),
             self.get_or_new_const("BOOL_T", base_mem_dir[2]),
         ]
-        var = Tensor(name, type, base_mem_dir, addr_vars, is_tensor=True, dims=dims)
+        var = Tensor(name, type, base_mem_dir, addr_vars, dims=dims)
         self.curr_scope.vars[name] = var
         return var
 
@@ -185,7 +186,7 @@ class FuncDir:
     def new_tens_temp(self, type, dims):
         temp_var_name = "TENS_" + str(self.curr_scope.temp_counters[type])
         total_vars = reduce(lambda x, y: x*y, dims)
-        temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_tensor_memdir(total_vars), is_tensor=True, dims=dims)
+        temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_tensor_memdir(total_vars), dims=dims)
         return temp_var
 
     def new_address_temp(self, type):
