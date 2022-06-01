@@ -20,14 +20,13 @@ class Var(Typed):
         return self.mem_dir 
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, addr_vars, is_tensor=False, dims=[]):
+    def __init__(self, name, type, mem_dir, addr_vars, dims=[]):
         super().__init__(name, type, mem_dir)
-        self.is_tensor = is_tensor
         self.dims = dims
         self.addr_vars = addr_vars
 
     def __repr__(self):
-        return f"({super().__repr__()}, is_tensor: {self.is_tensor}, BaseAddress: {self.addr_vars}, Dims: {self.dims})"
+        return f"({super().__repr__()}, BaseAddress: {self.addr_vars}, Dims: {self.dims})"
 
 class Block():
     _ID_COUNTER = 0
@@ -65,13 +64,13 @@ class Block():
 
     def get_new_memdir(self, type, offset=1):
         if type[:3] != "GPU":
-            new_mem_dir = (self.id, self.cpu_var_counter, False) # Func, var, dereference
+            new_mem_dir = (self.id, self.cpu_var_counter, False, type) # Func, var, dereference
             self.cpu_var_counter += offset
         else:
-            new_mem_dir = (self.id, self.gpu_var_counter[type], False)
-            self.gpu_var_counter[type] += 1
+            new_mem_dir = (self.id, self.gpu_var_counter[type], False, type)
+            self.gpu_var_counter[type] += offset
         return new_mem_dir
-    
+
     def self_to_ir_repr(self):
         consts_ir_repr = {k: [(k, v.to_ir_repr()) for k, v in v.items()] for k, v in self.consts.items()}
         return [self.cpu_var_counter, consts_ir_repr, self.gpu_var_counter] # (# vars, consts table)
@@ -80,10 +79,6 @@ class Block():
         curr_func = {self.id: self.self_to_ir_repr()}
         all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_ir_repr() for b in list(self.funcs.values()) + self.blocks])
         return all_funcs
-
-    def get_new_tensor_memdir(self, m0, type):
-        new_mem_dir = self.get_new_memdir(type, offset=m0)
-        return new_mem_dir
 
 class Func(Typed, Block):
     def __init__(self, name, type, q_index, func_var=None):
@@ -155,13 +150,14 @@ class FuncDir:
         if name in self.curr_scope.vars or name in self.curr_scope.funcs:
             raise ParhlException(f"Id '{name}' already declared in this scope")
         # Obtain location of next memory of specified type
-        base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0, type)
+        base_mem_dir = self.curr_scope.get_new_memdir(type, offset=m0)
         addr_vars = [
             self.get_or_new_const("INT_T", base_mem_dir[0]),
             self.get_or_new_const("INT_T", base_mem_dir[1]),
             self.get_or_new_const("BOOL_T", base_mem_dir[2]),
+            self.get_or_new_const("STRING_T", type),
         ]
-        var = Tensor(name, type, base_mem_dir, addr_vars, is_tensor=True, dims=dims)
+        var = Tensor(name, type, base_mem_dir, addr_vars, dims=dims)
         self.curr_scope.vars[name] = var
         return var
 
@@ -189,12 +185,6 @@ class FuncDir:
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
-
-    def new_address_temp(self, type):
-        new_temp = self.new_temp(type)
-        base_mem_dir = new_temp.mem_dir
-        new_temp.mem_dir = "(" + new_temp.mem_dir + ")"
-        return (base_mem_dir, new_temp)
 
     def _find_in_ordered_scopes(self, name, attr):
         """

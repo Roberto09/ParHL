@@ -1,4 +1,6 @@
 from ast import Expression
+
+from lexer_parser.structs.var_dir import Tensor
 from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
@@ -73,7 +75,7 @@ class Access(Expression):
     def gen_impl(self, ctx: ParseContext):
         tens = ctx.func_dir.get_var(self.id)
         exprs = self.expr_seq.gen_ret_list(ctx)
-        if not tens.is_tensor:
+        if type(tens) != Tensor:
             raise ParhlException(f"Identifier {tens.name} is not a tensor")
         if len(tens.dims) != len(exprs):
             raise ParhlException('Not enough indices provided to tensor accessor')
@@ -97,9 +99,10 @@ class Access(Expression):
                     copy[i] = ctx.func_dir.new_temp(addr_var.type)
                     ctx.add_quadruple(Quadruple('ASSIG', addr_var.mem_dir, result=copy[i].mem_dir))
                 ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_vars[1].mem_dir, copy[1].mem_dir))
-                # Inital val's deref is changed to true to use result addr
-                func, var, _ = copy[0].mem_dir
-                copy[0].mem_dir = (func, var, True)
+                func, var, _, p_type = copy[0].mem_dir
+                # copy[0] is actually a pointer
+                copy[0].type = tens.type
+                copy[0].mem_dir = (func, var, True, p_type)
                 return copy[0]
 
 class UnExpr(Expression):
