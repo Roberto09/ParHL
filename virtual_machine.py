@@ -82,6 +82,11 @@ def read_from_file(mem: MemoryManager, q):
     typed_data = parse_input(data, q[1])
     mem.set_mem_w_val(q[3], typed_data)
 
+def write_to_file(mem: MemoryManager, q):
+    filename = mem.get_mem(q[3])
+    f = open(filename, "w")
+    f.write(str(mem.get_mem(q[1])))
+
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
         "ASSIG" : lambda q : assig_op(q, mem),
@@ -139,6 +144,8 @@ def run_func(mem : MemoryManager, quads, q_idx):
                 break
             elif q_op == "READ_FILE":
                 read_from_file(mem, q)
+            elif q_op == "WRITE_FILE":
+                write_to_file(mem, q)
             else:
                 basic_op_handler[q_op](q)
             q_idx = nxt_q_idx

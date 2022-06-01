@@ -252,10 +252,19 @@ class IOFunc(FuncCall):
             new_var = ctx.func_dir.new_temp(self.return_type)
             ctx.add_quadruple(Quadruple('READ_LINE', self.return_type, None, new_var.mem_dir))
             return new_var
-        if self.id == 'read_file' and seq is not None:
+        if self.id == 'read_file':
             new_var = ctx.func_dir.new_temp(self.return_type)
             ctx.add_quadruple(Quadruple('READ_FILE', self.return_type, seq[0].mem_dir, new_var.mem_dir))
             return new_var
-        for arg in seq:
-            ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
+        if self.id == 'write_file':
+            if len(seq) > 2:
+                raise ParhlException("Too many arguments on 'write_file' call")
+            if len(seq) < 2:
+                raise ParhlException("Too few arguments on 'write_file' call")
+            if seq[0].type != "STRING_T":
+                raise ParhlException("File name not a string value")
+            ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, None, seq[0].mem_dir))
+        else:
+            for arg in seq:
+                ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
             
