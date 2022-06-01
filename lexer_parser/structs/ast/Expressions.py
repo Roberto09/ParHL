@@ -22,7 +22,7 @@ class Assign(Expression):
             if len(left_var.dims) != len(right_var.dims):
                 raise ParhlException('Array assign failed: dims do not match')
             
-            total = reduce(lambda x,y: x*y, right_var.dims)
+            total = reduce(lambda x,y: x*y, [dim['n'] for dim in right_var.dims])
             for i in range(0, total):
                 origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2])
                 dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2])

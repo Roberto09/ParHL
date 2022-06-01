@@ -164,18 +164,7 @@ class TensorDecl(Statement):
 
     def gen_impl(self, ctx: ParseContext):
         rs = self.dim_seq.gen_ret_list(ctx)
-        m0 = reduce((lambda x, y: x*y), rs)
-        size = len(rs)
-        dims =[{}] * size
-        m = m0
-        for i, r in enumerate(rs):
-            m = m//r
-            dims[i] = {
-                'limit': ctx.func_dir.get_or_new_const('INT_T', r),
-                'm':  ctx.func_dir.get_or_new_const('INT_T', m),
-            }
-        
-        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], dims, m0) 
+        var = ctx.func_dir.add_tensor(self.id.id, type_to_token[self.id_type], rs) 
         self.assign.gen(ctx)
         return var
 
@@ -266,6 +255,22 @@ class IOFunc(FuncCall):
             for arg in seq:
                 ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
             return
+        if self.id == 'write_file':
+            if len(seq) > 2:
+                raise ParhlException("Too many arguments on 'write_file' call")
+            if len(seq) < 2:
+                raise ParhlException("Too few arguments on 'write_file' call")
+            if seq[0].type != "STRING_T":
+                raise ParhlException("File name not a string value")
+
+            if seq[1].is_tensor:
+                n = [dim['n'] for dim in seq[1].dims]
+                print('n', n)
+                ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, n, seq[0].mem_dir))
+            else:
+                ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, None, seq[0].mem_dir))
+            return
+
         dims = self.dim_const.gen(ctx)
         dims = [] if dims == None else dims
         return_type = dims[0]
@@ -281,12 +286,3 @@ class IOFunc(FuncCall):
                 new_var = ctx.func_dir.new_temp(return_type)
             ctx.add_quadruple(Quadruple('READ_FILE', dims, seq[0].mem_dir, new_var.mem_dir))
             return new_var
-        if self.id == 'write_file':
-            if len(seq) > 2:
-                raise ParhlException("Too many arguments on 'write_file' call")
-            if len(seq) < 2:
-                raise ParhlException("Too few arguments on 'write_file' call")
-            if seq[0].type != "STRING_T":
-                raise ParhlException("File name not a string value")
-            ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, None, seq[0].mem_dir))
-            

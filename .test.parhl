@@ -4,10 +4,11 @@ let cube[3][3][3] : int := read_file(int[3][3][3], "input.txt")
 for(let i:int := 0; i < 5; i := i + 1) {
   a[i] := 1
 }
-cube[1][1][1] := 2
+cube[1][1][1] := 0
 matrix[1][4]:=0
 matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
 print("cube")
+let b : float := 2.1
 for(let i:int := 0; i<3; i:= i+1) {
   for(let j:int := 0; j<3; j:= j+1) {
     for(let k:int :=0; k<3; k:= k+1) {
@@ -43,3 +44,4 @@ let main(): int {
 
 main()
 
+write_file("output.txt", cube +b)
