@@ -53,7 +53,7 @@ class Block():
             'ADDR': 0,
         }
         self.cpu_var_counter = 0
-        self.gpu_var_coutner = {
+        self.gpu_var_counter = {
             "GPU_INT_T" : 0,
             "GPU_FLOAT_T" : 0,
             "GPU_BOOL_T" : 0,
@@ -68,13 +68,13 @@ class Block():
             new_mem_dir = (self.id, self.cpu_var_counter, False) # Func, var, dereference
             self.cpu_var_counter += offset
         else:
-            new_mem_dir = (self.id, self.gpu_var_coutner[type], False)
-            self.gpu_var_coutner[type] += 1
+            new_mem_dir = (self.id, self.gpu_var_counter[type], False)
+            self.gpu_var_counter[type] += 1
         return new_mem_dir
     
     def self_to_ir_repr(self):
         consts_ir_repr = {k: [(k, v.to_ir_repr()) for k, v in v.items()] for k, v in self.consts.items()}
-        return [self.cpu_var_counter, consts_ir_repr] # (# vars, consts table)
+        return [self.cpu_var_counter, consts_ir_repr, self.gpu_var_counter] # (# vars, consts table)
     
     def to_ir_repr(self):
         curr_func = {self.id: self.self_to_ir_repr()}
