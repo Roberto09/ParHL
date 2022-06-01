@@ -242,21 +242,29 @@ class FuncCall(Statement):
 
 
 class IOFunc(FuncCall):
-    def __init__(self, line, id, args_seq=Empty()):
+    def __init__(self, line, id, args_seq=Empty(), return_type='void'):
         super().__init__(line, id, args_seq)
+        self.return_type = type_to_token[return_type]
     
     def gen_impl(self, ctx: ParseContext):
         seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else []
         if self.id in 'read_line':
-            new_var = ctx.func_dir.new_temp('STRING_T')
-            ctx.add_quadruple(Quadruple('READ_LINE', None, None, new_var.mem_dir))
+            new_var = ctx.func_dir.new_temp(self.return_type)
+            ctx.add_quadruple(Quadruple('READ_LINE', self.return_type, None, new_var.mem_dir))
             return new_var
-        if self.id == 'read_file' and seq is not None:
-            new_var = ctx.func_dir.new_temp('STRING_T')
-            ctx.add_quadruple(Quadruple('READ_FILE', seq[0].mem_dir, None, new_var.mem_dir))
+        if self.id == 'read_file':
+            new_var = ctx.func_dir.new_temp(self.return_type)
+            ctx.add_quadruple(Quadruple('READ_FILE', self.return_type, seq[0].mem_dir, new_var.mem_dir))
             return new_var
-        if seq == None:
-            seq = []
-        for arg in seq:
-            ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
+        if self.id == 'write_file':
+            if len(seq) > 2:
+                raise ParhlException("Too many arguments on 'write_file' call")
+            if len(seq) < 2:
+                raise ParhlException("Too few arguments on 'write_file' call")
+            if seq[0].type != "STRING_T":
+                raise ParhlException("File name not a string value")
+            ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, None, seq[0].mem_dir))
+        else:
+            for arg in seq:
+                ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
             

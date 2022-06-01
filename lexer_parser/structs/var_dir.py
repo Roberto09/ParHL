@@ -114,7 +114,8 @@ class FuncDir:
 
     def start_func_stack(self, name, type, q_index):
         # We only care about the most inner scope when it comes to re-definitions. 
-        assert (name not in self.curr_scope.vars) and (name not in self.curr_scope.funcs)
+        if name in self.curr_scope.vars or name in self.curr_scope.funcs:
+            raise ParhlException(f"Id '{name}' already declared in this scope")
         if type == 'VOID': 
             nxt_func = Func(name, type, q_index)
         else: 
@@ -143,7 +144,8 @@ class FuncDir:
 
     def add_tensor(self, name, type, dims, m0):
         # We only care about the most inner scope when it comes to re-definitions.
-        assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
+        if name in self.curr_scope.vars or name in self.curr_scope.funcs:
+            raise ParhlException(f"Id '{name}' already declared in this scope")
         # Obtain location of next memory of specified type
         base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
         addr_vars = [
@@ -157,7 +159,8 @@ class FuncDir:
 
     def add_var(self, name, type):
         # We only care about the most inner scope when it comes to re-definitions.
-        assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
+        if name in self.curr_scope.vars or name in self.curr_scope.funcs:
+            raise ParhlException(f"Id '{name}' already declared in this scope")
         # Obtain location of next memory of specified type
         var = Var(name, type, self.curr_scope.get_new_memdir())
         self.curr_scope.vars[name] = var
