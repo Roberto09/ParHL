@@ -4,6 +4,7 @@ from .Node import Node
 from ..parse_context import ParseContext
 from ..quadruples import Quadruple
 from ...lexer import symbol_to_token
+from functools import reduce
 
 Expression = Node
 
@@ -17,7 +18,17 @@ class Assign(Expression):
         right_var = self.right.gen(ctx)
         left_var = self.left.gen(ctx)
         ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
-        ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, None, left_var.mem_dir))
+        if left_var.is_tensor and right_var.is_tensor:
+            if len(left_var.dims) != len(right_var.dims):
+                raise ParhlException('Array assign failed: dims do not match')
+            
+            total = reduce(lambda x,y: x*y, right_var.dims)
+            for i in range(0, total):
+                origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2])
+                dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2])
+                ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
+        else:
+            ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
 
 
 class BinExpr(Expression):

@@ -75,12 +75,26 @@ def parse_input(input, type_str):
     else: # string
         return input
 
+def recursive_assign(mem: MemoryManager, mem_dir_dst, data, type,  dims):
+    assert len(data) == dims[0]
+    for item in data:
+        if isinstance(item, list):
+            mem_dir_dst = recursive_assign(mem, mem_dir_dst, item, type, dims[1:] )
+        else:
+            mem.set_mem_w_val(mem_dir_dst, parse_input(item, type))
+            mem_dir_dst = (mem_dir_dst[0], mem_dir_dst[1] + 1, mem_dir_dst[2])
+    return mem_dir_dst
+
 def read_from_file(mem: MemoryManager, q):
     filename = mem.get_mem(q[2])
     f = open(filename, 'r')
     data = f.read()
-    typed_data = parse_input(data, q[1])
-    mem.set_mem_w_val(q[3], typed_data)
+    if len(q[1]) > 1:
+        evaluated = eval(data)
+        recursive_assign(mem, q[3], evaluated, q[0], q[1][1:])
+    else:
+        typed_data = parse_input(data, q[1][0])
+        mem.set_mem_w_val(q[3], typed_data)
 
 def write_to_file(mem: MemoryManager, q):
     filename = mem.get_mem(q[3])
