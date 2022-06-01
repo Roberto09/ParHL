@@ -1,5 +1,6 @@
 from .parhl_exceptions import ParhlException
 from functools import reduce
+from ..lexer import type_token_to_mem_id 
 
 class Typed():
     def __init__(self, name, type):
@@ -64,10 +65,10 @@ class Block():
 
     def get_new_memdir(self, type, offset=1):
         if type[:3] != "GPU":
-            new_mem_dir = (self.id, self.cpu_var_counter, False, type) # Func, var, dereference
+            new_mem_dir = (self.id, self.cpu_var_counter, False, type_token_to_mem_id[type]) # Func, var, dereference
             self.cpu_var_counter += offset
         else:
-            new_mem_dir = (self.id, self.gpu_var_counter[type], False, type)
+            new_mem_dir = (self.id, self.gpu_var_counter[type], False, type_token_to_mem_id[type])
             self.gpu_var_counter[type] += offset
         return new_mem_dir
 
@@ -155,7 +156,7 @@ class FuncDir:
             self.get_or_new_const("INT_T", base_mem_dir[0]),
             self.get_or_new_const("INT_T", base_mem_dir[1]),
             self.get_or_new_const("BOOL_T", base_mem_dir[2]),
-            self.get_or_new_const("STRING_T", type),
+            self.get_or_new_const("INT_T", type_token_to_mem_id[type]),
         ]
         var = Tensor(name, type, base_mem_dir, addr_vars, dims=dims)
         self.curr_scope.vars[name] = var

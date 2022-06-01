@@ -6,7 +6,6 @@ import torch
 DEVICE = "cpu"
 
 class MemoryManager():
-    # TODO: we must refactor s.t. types are ints for more efficient and clean access
     def __init__(self, func_dir):
         # track memory relevant information
         self.mem_stack = [[] for _ in range(len(func_dir))]
@@ -15,48 +14,27 @@ class MemoryManager():
         self.dormant_mem_stack = [[] for _ in range(len(func_dir))]
         self.func_dir = func_dir
 
-    def set_at_mem_block(mem_block, mem_dir, val):
-        idx, type = mem_dir[1], mem_dir[3]
-        if type[:3] == "GPU":
-            mem_block[type][idx] = val
-        else:
-            mem_block["cpu"][idx] = val
-
-    def get_from_mem_block(mem_block, mem_dir, id_off=0):
-        idx, type = mem_dir[1] + id_off, mem_dir[3]
-        if type[:3] == "GPU":
-            return mem_block[type][idx]
-        return mem_block["cpu"][idx]
-
     def dereference(self, initial_mem_dir):
         while(initial_mem_dir[2]):
-            # Rewriting manually bc tuple doesnt support item assignment
-            func_dir = MemoryManager.get_from_mem_block(self.mem_stack[initial_mem_dir[0]][-1], initial_mem_dir)
-            var_dir = MemoryManager.get_from_mem_block(self.mem_stack[initial_mem_dir[0]][-1],initial_mem_dir, 1)
-            deref = MemoryManager.get_from_mem_block(self.mem_stack[initial_mem_dir[0]][-1], initial_mem_dir, 2)
-            type = MemoryManager.get_from_mem_block(self.mem_stack[initial_mem_dir[0]][-1], initial_mem_dir, 3)
-            initial_mem_dir = (func_dir, var_dir, deref, type)
-            
+            fid, idx, _, tid = initial_mem_dir
+            initial_mem_dir = tuple(self.mem_stack[fid][-1][tid][idx+i] for i in range(4))
         return initial_mem_dir
 
     def get_mem(self, mem_dir):
-        mem_dir = self.dereference(mem_dir)
-        func_id = mem_dir[0]
-        return MemoryManager.get_from_mem_block(self.mem_stack[func_id][-1], mem_dir)
+        fid, idx, _, tid = self.dereference(mem_dir)
+        return self.mem_stack[fid][-1][tid][idx]
 
     def set_mem_w_val(self, mem_dir_dst, val):
-        mem_dir_dst = self.dereference(mem_dir_dst)
-        func_id = mem_dir_dst[0]
-        MemoryManager.set_at_mem_block(self.mem_stack[func_id][-1], mem_dir_dst, val)
+        fid, idx, _, tid = self.dereference(mem_dir_dst)
+        self.mem_stack[fid][-1][tid][idx] = val
 
     def set_mem_w_mem(self, mem_dir_src, mem_dir_dst):
         val = self.get_mem(mem_dir_src)
         self.set_mem_w_val(mem_dir_dst, val)
 
     def set_dorm_mem_w_val(self, dorm_mem_dir_dst, val):
-        dorm_mem_dir_dst = self.dereference(dorm_mem_dir_dst)
-        func_id = dorm_mem_dir_dst[0]
-        MemoryManager.set_at_mem_block(self.dormant_mem_stack[func_id][-1], dorm_mem_dir_dst, val)
+        fid, idx, _, tid = self.dereference(dorm_mem_dir_dst)
+        self.dormant_mem_stack[fid][-1][tid][idx] = val
     
     def set_dorm_mem_w_mem(self, mem_dir_src, dorm_mem_dir_dst):
         val = self.get_mem(mem_dir_src)
@@ -64,12 +42,12 @@ class MemoryManager():
 
     def malloc_dormant(self, func_id):
         cpu_var_counter, gpu_var_counters = self.func_dir[func_id][0], self.func_dir[func_id][2]
-        mem = {
-            "cpu": [None] * cpu_var_counter,
-            "GPU_INT_T" : torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device=DEVICE),
-            "GPU_FLOAT_T" : torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device=DEVICE),
-            "GPU_BOOL_T" : torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device=DEVICE),
-        }
+        mem = [
+            [None] * cpu_var_counter,
+            torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device=DEVICE),
+            torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device=DEVICE),
+            torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device=DEVICE),
+        ]
         self.dormant_mem_stack[func_id].append(mem)
         return self.dormant_mem_stack[func_id]
 
