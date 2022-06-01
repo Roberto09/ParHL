@@ -1,6 +1,9 @@
 import json
+from os import device_encoding
 from sys import argv
 import torch
+
+DEVICE = "cpu"
 
 class MemoryManager():
     # TODO: we must refactor s.t. types are ints for more efficient and clean access
@@ -63,9 +66,9 @@ class MemoryManager():
         cpu_var_counter, gpu_var_counters = self.func_dir[func_id][0], self.func_dir[func_id][2]
         mem = {
             "cpu": [None] * cpu_var_counter,
-            "GPU_INT_T" : torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device='cpu'),
-            "GPU_FLOAT_T" : torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device='cpu'),
-            "GPU_BOOL_T" : torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device='cpu'),
+            "GPU_INT_T" : torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device=DEVICE),
+            "GPU_FLOAT_T" : torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device=DEVICE),
+            "GPU_BOOL_T" : torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device=DEVICE),
         }
         self.dormant_mem_stack[func_id].append(mem)
         return self.dormant_mem_stack[func_id]
@@ -197,6 +200,20 @@ def run_global(func_dir, quads):
     run_func(memory_manager, quads, 0)
     memory_manager.end_func_stack(0)
 
+def setup_device():
+    global DEVICE
+    if len(argv) > 2:
+        DEVICE = argv[2]
+        alowed_devs = ["cuda", "cpu"]
+        if DEVICE not in alowed_devs:
+            raise Exception(f"Error with device: {dev} not in {alowed_devs}")
+    if torch.cuda.is_available():
+        DEVICE = "cuda"
+    else:
+        DEVICE = "cpu"
+    print("CUDA device not found. Using CPU for GPU operations)." + 
+        "\nNote this is still faster due to vectorization.\n")
+
 def main():
     filename = argv[1]
     with open(filename, "r") as ir_file:
@@ -204,6 +221,7 @@ def main():
         compiler_dict = json.loads(ir)
     func_dir = compiler_dict["func_dir"]
     quads = compiler_dict["quads"]
+    setup_device()
     run_global(func_dir, quads)
 
 if __name__ == '__main__':
