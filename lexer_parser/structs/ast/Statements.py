@@ -253,8 +253,8 @@ class IOFunc(FuncCall):
             ctx.add_quadruple(Quadruple('READ_LINE', self.return_type, None, new_var.mem_dir))
             return new_var
         if self.id == 'read_file' and seq is not None:
-            new_var = ctx.func_dir.new_temp('STRING_T')
-            ctx.add_quadruple(Quadruple('READ_FILE', seq[0].mem_dir, None, new_var.mem_dir))
+            new_var = ctx.func_dir.new_temp(self.return_type)
+            ctx.add_quadruple(Quadruple('READ_FILE', self.return_type, seq[0].mem_dir, new_var.mem_dir))
             return new_var
         for arg in seq:
             ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))

@@ -138,9 +138,9 @@ class ParhlParser(Parser):
     def print_rule(self, p):
         return IOFunc(p.lineno, p[0], args_seq=p[2])
 
-    @_('READ_FILE L_PAREN expr R_PAREN')
+    @_('READ_FILE L_PAREN const_type COMMA expr R_PAREN')
     def read_file(self, p):
-        return IOFunc(p.lineno, p[0], args_seq=Seq(p[2]))
+        return IOFunc(p.lineno, p[0], return_type=p[2], args_seq=Seq(p.lineno, p[4]))
 
     @_('WRITE_FILE L_PAREN func_call_1')
     def write_file(self, p):
