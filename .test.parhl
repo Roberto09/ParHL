@@ -35,3 +35,24 @@ let main(): int {
 
 main()
 
+
+
+print("doing cuda stuff")
+
+let c_a[5] : gpu_int;
+c_a[3] := 10;
+for(let i : int := 0; i < 5; i := i+1){
+    print(c_a[i])
+}
+
+let c_b[5] : gpu_bool;
+for(let i : int := 0; i < 5; i := i+1){
+    print(c_b[i])
+    c_b[i] := False
+}
+print("done")
+c_b[1] := c_a[3] > 9;
+for(let i : int := 0; i < 5; i := i+1){
+    print(c_b[i])
+    c_b[i] := False
+}
