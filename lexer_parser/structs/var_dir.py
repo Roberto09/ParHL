@@ -52,29 +52,37 @@ class Block():
             'GPU_BOOL_T': 0,
             'ADDR': 0,
         }
-        self.var_counter = 0
+        self.cpu_var_counter = 0
+        self.gpu_var_coutner = {
+            "GPU_INT_T" : 0,
+            "GPU_FLOAT_T" : 0,
+            "GPU_BOOL_T" : 0,
+        }
         self.id = Block._ID_COUNTER; Block._ID_COUNTER += 1
     
     def __repr__(self):
         return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}, consts: {self.consts})"
 
-    def get_new_memdir(self):
-        new_mem_dir = (self.id, self.var_counter, False) # Func, var, dereference
-        self.var_counter += 1
+    def get_new_memdir(self, type, offset=1):
+        if type[:3] != "GPU":
+            new_mem_dir = (self.id, self.cpu_var_counter, False) # Func, var, dereference
+            self.cpu_var_counter += offset
+        else:
+            new_mem_dir = (self.id, self.gpu_var_coutner[type], False)
+            self.gpu_var_coutner[type] += 1
         return new_mem_dir
     
     def self_to_ir_repr(self):
         consts_ir_repr = {k: [(k, v.to_ir_repr()) for k, v in v.items()] for k, v in self.consts.items()}
-        return [self.var_counter, consts_ir_repr] # (# vars, consts table)
+        return [self.cpu_var_counter, consts_ir_repr] # (# vars, consts table)
     
     def to_ir_repr(self):
         curr_func = {self.id: self.self_to_ir_repr()}
         all_funcs = reduce(lambda x,y : x|y, [curr_func]+[b.to_ir_repr() for b in list(self.funcs.values()) + self.blocks])
         return all_funcs
 
-    def get_new_tensor_memdir(self, m0):
-        new_mem_dir = self.get_new_memdir()
-        self.var_counter += (m0 - 1)
+    def get_new_tensor_memdir(self, m0, type):
+        new_mem_dir = self.get_new_memdir(type, offset=m0)
         return new_mem_dir
 
 class Func(Typed, Block):
@@ -145,7 +153,7 @@ class FuncDir:
         # We only care about the most inner scope when it comes to re-definitions.
         assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
         # Obtain location of next memory of specified type
-        base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0)
+        base_mem_dir = self.curr_scope.get_new_tensor_memdir(m0, type)
         addr_vars = [
             self.get_or_new_const("INT_T", base_mem_dir[0]),
             self.get_or_new_const("INT_T", base_mem_dir[1]),
@@ -159,7 +167,7 @@ class FuncDir:
         # We only care about the most inner scope when it comes to re-definitions.
         assert name not in self.curr_scope.vars and name not in self.curr_scope.funcs
         # Obtain location of next memory of specified type
-        var = Var(name, type, self.curr_scope.get_new_memdir())
+        var = Var(name, type, self.curr_scope.get_new_memdir(type))
         self.curr_scope.vars[name] = var
         return var
 
@@ -174,7 +182,7 @@ class FuncDir:
         
     def new_temp(self, type):
         temp_var_name = type + str(self.curr_scope.temp_counters[type])
-        temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir())
+        temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir(type))
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
