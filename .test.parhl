@@ -65,3 +65,4 @@ for(let i : int := 0; i < 5; i := i+1){
     c_b[i] := False
 }
 write_file("output.txt", cube)
+print("cube", cube)
