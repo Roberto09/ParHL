@@ -200,7 +200,6 @@ def run_func(mem : MemoryManager, quads, q_idx):
             else:
                 basic_op_handler[q_op](q)
             q_idx = nxt_q_idx
-        print(mem.mem_stack)
     except Exception as e:
         raise Exception(f"Error executing op: {q_idx} - {quads[q_idx]}") from e
 
