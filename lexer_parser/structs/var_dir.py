@@ -21,7 +21,7 @@ class Var(Typed):
         return self.mem_dir 
 
 class Tensor(Var):
-    def __init__(self, name, type, mem_dir, addr_vars, dims=[]):
+    def __init__(self, name, type, mem_dir, addr_vars=[], dims=[]):
         super().__init__(name, type, mem_dir)
         self.dims = dims
         self.addr_vars = addr_vars
@@ -185,6 +185,12 @@ class FuncDir:
         temp_var = Var(temp_var_name, type, self.curr_scope.get_new_memdir(type))
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
+        return temp_var
+
+    def new_tens_temp(self, type, dims):
+        temp_var_name = "TENS_" + str(self.curr_scope.temp_counters[type])
+        total_vars = reduce(lambda x, y: x*y, dims)
+        temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_memdir(type, total_vars), dims=dims)
         return temp_var
 
     def _find_in_ordered_scopes(self, name, attr):

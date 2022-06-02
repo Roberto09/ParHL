@@ -1,6 +1,6 @@
 from lexer_parser.structs.parhl_exceptions import ParhlException
 from .structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from .structs.ast.Statements import TensorDecl, TensorDim, FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
+from .structs.ast.Statements import DimConst, TensorDecl, TensorDim, FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
 from sly import Parser
 from .lexer import ParhlLexer
 
@@ -130,7 +130,7 @@ class ParhlParser(Parser):
     def factor_1(self, p):
         return Id(p.lineno, p[0])
 
-    @_('READ_LINE L_PAREN const_type R_PAREN')
+    @_('READ_LINE L_PAREN dim_const R_PAREN')
     def read_line(self, p):
         return IOFunc(p.lineno, p[0], return_type=p[2])
     
@@ -138,9 +138,16 @@ class ParhlParser(Parser):
     def print_rule(self, p):
         return IOFunc(p.lineno, p[0], args_seq=p[2])
 
-    @_('READ_FILE L_PAREN const_type COMMA expr R_PAREN')
+    @_('const_type var_dims', 'const_type')
+    def dim_const(self, p ):
+        if len(p) == 2:
+            return DimConst(-1, p[0], p[1])
+
+        return DimConst(-1, p[0], Seq(-1, Empty()))
+
+    @_('READ_FILE L_PAREN dim_const COMMA expr R_PAREN')
     def read_file(self, p):
-        return IOFunc(p.lineno, p[0], return_type=p[2], args_seq=Seq(p.lineno, p[4]))
+        return IOFunc(p.lineno, p[0], dim_const=p[2], args_seq=Seq(p.lineno, p[4]))
 
     @_('WRITE_FILE L_PAREN func_call_1')
     def write_file(self, p):
@@ -177,7 +184,7 @@ class ParhlParser(Parser):
             return Seq(p[0].lineno, p[0])
         return Seq(p.lineno, p[0], p[2])
 
-    @_('var_3', 'var_3 ASSIG expr', 'tens_decl')
+    @_('var_3', 'var_3 ASSIG expr', 'tens_decl', 'tens_decl ASSIG expr')
     def var_2(self, p):
         if len(p) == 3:
             p[0].do_assign(p[2])

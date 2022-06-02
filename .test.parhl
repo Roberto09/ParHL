@@ -1,13 +1,21 @@
-let a[5]:int
+let a[5]:int;
 let matrix[10][10]: int;
-let cube[3][3][3]: int
+let cube[3][3][3] : int := read_file(int[3][3][3], "input.txt") 
 for(let i:int := 0; i < 5; i := i + 1) {
   a[i] := 1
 }
 cube[1][1][1] := 2
 matrix[1][4]:=0
 matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
-
+print("cube")
+for(let i:int := 0; i<3; i:= i+1) {
+  for(let j:int := 0; j<3; j:= j+1) {
+    for(let k:int :=0; k<3; k:= k+1) {
+      print(cube[i][j][k])
+    }
+  }
+}
+print("endcube")
 print("matrix", matrix[2][0])
 let factorial (n : int) : int {
     if(n <= 1) {
