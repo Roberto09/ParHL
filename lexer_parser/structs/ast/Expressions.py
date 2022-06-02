@@ -1,5 +1,3 @@
-from ast import Expression
-
 from ..var_dir import Tensor, TensorConst
 from ..parhl_exceptions import ParhlException
 from .Node import Node
@@ -73,31 +71,6 @@ class Const(Expression):
         # Guardar en memoria de constantes
         const_var = ctx.func_dir.get_or_new_const(self.type, self.value)
         return const_var
-
-class TensConst(Expression):
-    def __init__(self, lineno, expr_seq):
-        super().__init__(lineno)
-        self.expr_seq = expr_seq;
-    
-    def gen_impl(self, ctx: ParseContext):
-        vars = self.expr_seq.gen_ret_list(ctx) if self.expr_seq else []
-        # Check all vars are of same top size (inners should already be checked)
-        size = vars[0].dims[0] if type(vars[0]) == TensorConst else 1
-        # Check all of same type
-        checked_type = vars[0].type
-        for var in vars[1:]:
-            if type(var) == TensorConst and size != var.dims[0]:
-                print(size)
-                print(var.dims[0]['n'])
-                raise ParhlException('Constant tensor missing values')
-            if checked_type != var.type:
-                raise ParhlException('Tensor values not of same type')
-        # Make new tensor with new dim + previous dims
-        dims =[len(vars)]
-        if type(vars[0]) == TensorConst:
-            dims.extend(vars[0].dims)
-        tens_const = ctx.func_dir.new_tens_const(checked_type, vars, dims)
-        return tens_const
 
 class Id(Expression):
     def __init__(self, line, id):

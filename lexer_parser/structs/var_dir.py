@@ -209,11 +209,8 @@ class FuncDir:
         self.curr_scope.temp_counters[type] += 1
         return temp_var
     
-    def new_tens_const(self, type, vars, dims):
-        if len(dims) > 1: # passing table of mem_dirs
-            return TensorConst("TENS_CONST", type, reduce(lambda x, y: x.mem_dirs+y.mem_dirs,  vars) if len(vars) > 1 else vars[0].mem_dirs, dims)
-        else:
-            return TensorConst("TENS_CONST", type, [var.mem_dir for var in vars], dims)    
+    def new_tens_const(self, type, mem_dirs, dims):
+        return TensorConst("TENS_CONST", type,  mem_dirs, dims)
 
     def new_tens_temp(self, type, dims):
         temp_var_name = "TENS_" + type + str(self.curr_scope.temp_counters[type])

@@ -1,4 +1,4 @@
-from lexer_parser.structs.var_dir import Tensor
+from ..var_dir import Tensor, TensorConst
 from ..parhl_exceptions import ParhlException
 from ..quadruples import Quadruple
 from ..parse_context import ParseContext
@@ -169,6 +169,50 @@ class TensorDecl(Statement):
         self.assign.gen(ctx)
         return var
 
+class TensConst(Statement):
+    def __init__(self, lineno, expr_seq: Seq):
+        super().__init__(lineno)
+        self.expr_seq = expr_seq;
+        self.is_first = True # assume we are on the top level tensor
+    
+    def gen_impl(self, ctx: ParseContext):
+        # First always make subsequent tensors know they are not first
+        curr = self.expr_seq
+        is_tensor_const = type(curr.stmt) == TensConst
+        while type(curr) != Empty and is_tensor_const: # no need to do if not tensors
+            curr.stmt.is_first = False
+            curr = curr.seq
+        
+        # Create new tensor const with this dim
+
+        vars = self.expr_seq.gen_ret_list(ctx) if self.expr_seq else []
+        # Check all vars are of same top size (inners should already be checked)
+        size = vars[0].dims[0] if type(vars[0]) == TensorConst else 1
+        # Check all of same type
+        checked_type = vars[0].type
+        for var in vars[1:]:
+            if type(var) == TensorConst and size != var.dims[0]:
+                raise ParhlException('Constant tensor missing values')
+            if checked_type != var.type:
+                raise ParhlException('Tensor values not of same type')
+        # Make new tensor with new dim + previous dims
+        dims =[len(vars)]
+        if type(vars[0]) == TensorConst:
+            dims.extend(vars[0].dims)
+            mem_dirs = reduce(lambda x, y: x.mem_dirs+y.mem_dirs, vars) if len(vars) > 1 else vars[0].mem_dirs
+        else:
+            mem_dirs = [var.mem_dir for var in vars]
+        if not self.is_first: # if not first just return the built tens const
+            return ctx.func_dir.new_tens_const(checked_type, mem_dirs, dims)
+        
+        # We know we are on first, so allocate memory to tensor and assign it all values
+
+        tens_temp : Tensor = ctx.func_dir.new_tens_temp(checked_type, dims)
+        #Assign all values to temp tens
+        for i, origin_mem_dir in enumerate(mem_dirs):
+            dest_mem_dir = (tens_temp.mem_dir[0], tens_temp.mem_dir[1] + i, tens_temp.mem_dir[2], tens_temp.mem_dir[3])
+            ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
+        return tens_temp
 
 class FuncDecl(Statement):
     def __init__(self, line, id, id_type, params_seq, seq):
