@@ -120,7 +120,7 @@ class Access(Expression):
                 func, var, _, p_type = copy[0].mem_dir
                 # copy[0] is actually a pointer
                 copy[0].type = tens.type
-                copy[0].mem_dir = (func, var, True, p_type)
+                copy[0].mem_dir = (func, var, 1, p_type)
                 return copy[0]
 
 class UnExpr(Expression):

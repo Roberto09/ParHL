@@ -63,7 +63,12 @@ class Block():
             'GPU_BOOL_T': 0,
             'ADDR': 0,
         }
-        self.cpu_var_counter = 0
+        self.cpu_var_counter = {
+            'INT_T' : 0,
+            'FLOAT_T' : 0,
+            'STRING_T' : 0,
+            'BOOL_T' : 0,
+        }
         self.gpu_var_counter = {
             "GPU_INT_T" : 0,
             "GPU_FLOAT_T" : 0,
@@ -74,13 +79,11 @@ class Block():
     def __repr__(self):
         return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}, consts: {self.consts})"
 
+    # Tuple meaning (func_id, var_num, [0-1]: dereference, type)
     def get_new_memdir(self, type, offset=1):
-        if type[:3] != "GPU":
-            new_mem_dir = (self.id, self.cpu_var_counter, False, type_token_to_mem_id[type]) # Func, var, dereference
-            self.cpu_var_counter += offset
-        else:
-            new_mem_dir = (self.id, self.gpu_var_counter[type], False, type_token_to_mem_id[type])
-            self.gpu_var_counter[type] += offset
+        var_counter = self.cpu_var_counter if type[:3] != "GPU" else self.gpu_var_counter
+        new_mem_dir = (self.id, var_counter[type], 0, type_token_to_mem_id[type]) # Func, var, dereference
+        var_counter[type] += offset
         return new_mem_dir
 
     def self_to_ir_repr(self):
@@ -177,7 +180,7 @@ class FuncDir:
         addr_vars = [
             self.get_or_new_const("INT_T", base_mem_dir[0]),
             self.get_or_new_const("INT_T", base_mem_dir[1]),
-            self.get_or_new_const("BOOL_T", base_mem_dir[2]),
+            self.get_or_new_const("INT_T", base_mem_dir[2]),
             self.get_or_new_const("INT_T", type_token_to_mem_id[type]),
         ]
         var = Tensor(name, type, base_mem_dir, addr_vars, dims=dims)

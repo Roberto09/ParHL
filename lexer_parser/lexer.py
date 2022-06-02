@@ -131,13 +131,13 @@ type_to_token = {
 }
 
 type_token_to_mem_id = {
-    'INT_T' : 0,
-    'FLOAT_T' : 0,
-    'STRING_T' : 0,
-    'BOOL_T' : 0,
-    'GPU_INT_T' : 1,
-    'GPU_FLOAT_T' : 2,
-    'GPU_BOOL_T' : 3,
+    'STRING_T' : 0, # 0 is for strings and pointers
+    'INT_T' : 1,
+    'FLOAT_T' : 2,
+    'BOOL_T' : 3,
+    'GPU_INT_T' : 4,
+    'GPU_FLOAT_T' : 5,
+    'GPU_BOOL_T' : 6,
 }
 
 symbol_to_token = {
