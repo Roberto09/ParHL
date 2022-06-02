@@ -254,7 +254,10 @@ class IOFunc(FuncCall):
         seq = self.args_seq.gen_ret_list(ctx) if self.args_seq else []
         if self.id == 'print':
             for arg in seq:
-                ctx.add_quadruple(Quadruple(self.id.upper(), None, None, arg.mem_dir))
+                if type(arg) == Tensor:
+                    ctx.add_quadruple(Quadruple('PRINT', result=(arg.mem_dir, [dim['n'] for dim in arg.dims])))
+                else:
+                    ctx.add_quadruple(Quadruple('PRINT', None, None, arg.mem_dir))
             return
         if self.id == 'write_file':
             if len(seq) > 2:

@@ -129,12 +129,16 @@ def write_to_file(mem: MemoryManager, q):
     f.write(str(data))
 
 def print_op(q, mem):
-    val = mem.get_mem(q[3])
-    if type(val) == torch.Tensor:
-        if val.dim() == 0:
-            print(f"GPU({val.item()})")
-            return
-    print(val)
+    if len(q[3]) == 2: # tensor dims provided
+        data, m = create_tensor_from_dims(mem, q[3][0], q[3][1])
+        print(data)
+    else:
+        val = mem.get_mem(q[3])
+        if type(val) == torch.Tensor:
+            if val.dim() == 0:
+                print(f"GPU({val.item()})")
+                return
+        print(val)
 
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
