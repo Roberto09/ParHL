@@ -1,7 +1,7 @@
 from .parhl_exceptions import ParhlException
 
 def _produce_all_same(prod_type, but={}):
-    return {t: prod_type for t in ['INT_T', 'FLOAT_T', 'BOOL_T', 'STRING_T', 'GPU_INT_T', 'FLOAT_T', 'GPU_BOOL_T']
+    return {t: prod_type for t in ['INT_T', 'FLOAT_T', 'BOOL_T', 'STRING_T', 'GPU_INT_T', 'GPU_FLOAT_T', 'GPU_BOOL_T']
             if t not in but}
 
 class SemanticCube():

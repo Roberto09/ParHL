@@ -1,4 +1,6 @@
 from ast import Expression
+
+from lexer_parser.structs.var_dir import Tensor
 from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
@@ -18,14 +20,14 @@ class Assign(Expression):
         right_var = self.right.gen(ctx)
         left_var = self.left.gen(ctx)
         ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
-        if left_var.is_tensor and right_var.is_tensor:
+        if type(left_var) == Tensor and type(Tensor):
             if len(left_var.dims) != len(right_var.dims):
                 raise ParhlException('Array assign failed: dims do not match')
             
             total = reduce(lambda x,y: x*y, [dim['n'] for dim in right_var.dims])
             for i in range(0, total):
-                origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2])
-                dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2])
+                origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2], right_var.mem_dir[3])
+                dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])
                 ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
         else:
             ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
@@ -84,7 +86,7 @@ class Access(Expression):
     def gen_impl(self, ctx: ParseContext):
         tens = ctx.func_dir.get_var(self.id)
         exprs = self.expr_seq.gen_ret_list(ctx)
-        if not tens.is_tensor:
+        if type(tens) != Tensor:
             raise ParhlException(f"Identifier {tens.name} is not a tensor")
         if len(tens.dims) != len(exprs):
             raise ParhlException('Not enough indices provided to tensor accessor')
@@ -108,9 +110,10 @@ class Access(Expression):
                     copy[i] = ctx.func_dir.new_temp(addr_var.type)
                     ctx.add_quadruple(Quadruple('ASSIG', addr_var.mem_dir, result=copy[i].mem_dir))
                 ctx.add_quadruple(Quadruple('PLUS', total_var.mem_dir, tens.addr_vars[1].mem_dir, copy[1].mem_dir))
-                # Inital val's deref is changed to true to use result addr
-                func, var, _ = copy[0].mem_dir
-                copy[0].mem_dir = (func, var, True)
+                func, var, _, p_type = copy[0].mem_dir
+                # copy[0] is actually a pointer
+                copy[0].type = tens.type
+                copy[0].mem_dir = (func, var, True, p_type)
                 return copy[0]
 
 class UnExpr(Expression):

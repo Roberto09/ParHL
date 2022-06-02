@@ -1,5 +1,9 @@
 import json
+from os import device_encoding
 from sys import argv
+import torch
+
+DEVICE = "cpu"
 
 class MemoryManager():
     def __init__(self, func_dir):
@@ -12,40 +16,47 @@ class MemoryManager():
 
     def dereference(self, initial_mem_dir):
         while(initial_mem_dir[2]):
-            # Rewriting manually bc tuple doesnt support item assignment
-            func_dir = self.mem_stack[initial_mem_dir[0]][-1][initial_mem_dir[1]]
-            var_dir = self.mem_stack[initial_mem_dir[0]][-1][initial_mem_dir[1]+1]
-            deref = self.mem_stack[initial_mem_dir[0]][-1][initial_mem_dir[1]+2]
-            initial_mem_dir = (func_dir, var_dir, deref)
-            
-        return (initial_mem_dir[0], initial_mem_dir[1])
+            fid, idx, _, tid = initial_mem_dir
+            initial_mem_dir = tuple(self.mem_stack[fid][-1][tid][idx+i] for i in range(4))
+        return initial_mem_dir
 
     def get_mem(self, mem_dir):
-        func_id, mem_dir = self.dereference(mem_dir)
-        return self.mem_stack[func_id][-1][mem_dir]
+        fid, idx, _, tid = self.dereference(mem_dir)
+        return self.mem_stack[fid][-1][tid][idx]
 
     def set_mem_w_val(self, mem_dir_dst, val):
-        func_id, mem_dir_dst = self.dereference(mem_dir_dst)
-        
-        self.mem_stack[func_id][-1][mem_dir_dst] = val
+        fid, idx, _, tid = self.dereference(mem_dir_dst)
+        self.mem_stack[fid][-1][tid][idx] = val
 
     def set_mem_w_mem(self, mem_dir_src, mem_dir_dst):
         val = self.get_mem(mem_dir_src)
         self.set_mem_w_val(mem_dir_dst, val)
 
+    def set_dorm_mem_w_val(self, dorm_mem_dir_dst, val):
+        fid, idx, _, tid = self.dereference(dorm_mem_dir_dst)
+        self.dormant_mem_stack[fid][-1][tid][idx] = val
+    
     def set_dorm_mem_w_mem(self, mem_dir_src, dorm_mem_dir_dst):
         val = self.get_mem(mem_dir_src)
-        func_id, dorm_mem_dir_dst = self.dereference(dorm_mem_dir_dst)
-        self.dormant_mem_stack[func_id][-1][dorm_mem_dir_dst] = val
+        self.set_dorm_mem_w_val(dorm_mem_dir_dst, val)
+
+    def malloc_dormant(self, func_id):
+        cpu_var_counter, gpu_var_counters = self.func_dir[func_id][0], self.func_dir[func_id][2]
+        mem = [
+            [None] * cpu_var_counter,
+            torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device=DEVICE),
+            torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device=DEVICE),
+            torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device=DEVICE),
+        ]
+        self.dormant_mem_stack[func_id].append(mem)
+        return self.dormant_mem_stack[func_id]
 
     def era_func_stack(self, func_id):
-        func_ttl_vars = self.func_dir[func_id][0]
-        self.dormant_mem_stack[func_id].append([None] * func_ttl_vars)
+        self.malloc_dormant(func_id)
         const_dicts = self.func_dir[func_id][1]
         for _, consts in const_dicts.items():
             for val, mem_dir in consts:
-                self.dormant_mem_stack[mem_dir[0]][-1][mem_dir[1]] = val
-
+                self.set_dorm_mem_w_val(mem_dir, val)
 
     def start_func_stack(self, func_id):
         self.mem_stack[func_id].append(self.dormant_mem_stack[func_id].pop())        
@@ -82,7 +93,7 @@ def recursive_assign(mem: MemoryManager, mem_dir_dst, data, type,  dims):
             mem_dir_dst = recursive_assign(mem, mem_dir_dst, item, type, dims[1:] )
         else:
             mem.set_mem_w_val(mem_dir_dst, parse_input(item, type))
-            mem_dir_dst = (mem_dir_dst[0], mem_dir_dst[1] + 1, mem_dir_dst[2])
+            mem_dir_dst = (mem_dir_dst[0], mem_dir_dst[1] + 1, mem_dir_dst[2], mem_dir_dst[3])
     return mem_dir_dst
 
 def read_from_file(mem: MemoryManager, q):
@@ -105,7 +116,7 @@ def create_tensor_from_dims(mem: MemoryManager, mem_dir, dims):
     else:
         for d in range(0, dims[0]):
             t.append(mem.get_mem(mem_dir))
-            mem_dir = (mem_dir[0], mem_dir[1]+1, mem_dir[2])
+            mem_dir = (mem_dir[0], mem_dir[1]+1, mem_dir[2], mem_dir[3])
     return t, mem_dir
 
 def write_to_file(mem: MemoryManager, q):
@@ -116,6 +127,14 @@ def write_to_file(mem: MemoryManager, q):
     else:
         data = mem.get_mem(q[1])
     f.write(str(data))
+
+def print_op(q, mem):
+    val = mem.get_mem(q[3])
+    if type(val) == torch.Tensor:
+        if val.dim() == 0:
+            print(f"GPU({val.item()})")
+            return
+    print(val)
 
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
@@ -140,7 +159,7 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "OR" : lambda q : bin_op(q, mem, lambda x,y:x or y),
         "AND" : lambda q : bin_op(q, mem, lambda x,y:x and y),
         "NOT" : lambda q : mem.set_mem_w_val(q[3], not mem.get_mem(q[1])),
-        "PRINT" : lambda q : print(mem.get_mem(q[3])),
+        "PRINT" : lambda q : print_op(q, mem),
         "VERIFY": lambda q : verify_op(q, mem),
         "READ_LINE": lambda q : mem.set_mem_w_val(q[3], parse_input(input(), q[1]))
     }
@@ -189,6 +208,20 @@ def run_global(func_dir, quads):
     run_func(memory_manager, quads, 0)
     memory_manager.end_func_stack(0)
 
+def setup_device():
+    global DEVICE
+    if len(argv) > 2:
+        DEVICE = argv[2]
+        alowed_devs = ["cuda", "cpu"]
+        if DEVICE not in alowed_devs:
+            raise Exception(f"Error with device: {DEVICE} not in {alowed_devs}")
+    if torch.cuda.is_available():
+        DEVICE = "cuda"
+    else:
+        DEVICE = "cpu"
+    print("CUDA device not found. Using CPU for GPU operations)." + 
+        "\nNote this is still faster due to vectorization.\n")
+
 def main():
     filename = argv[1]
     with open(filename, "r") as ir_file:
@@ -196,6 +229,7 @@ def main():
         compiler_dict = json.loads(ir)
     func_dir = compiler_dict["func_dir"]
     quads = compiler_dict["quads"]
+    setup_device()
     run_global(func_dir, quads)
 
 if __name__ == '__main__':

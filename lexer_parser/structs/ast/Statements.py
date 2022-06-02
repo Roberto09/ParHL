@@ -1,3 +1,4 @@
+from lexer_parser.structs.var_dir import Tensor
 from ..parhl_exceptions import ParhlException
 from ..quadruples import Quadruple
 from ..parse_context import ParseContext
@@ -263,9 +264,8 @@ class IOFunc(FuncCall):
             if seq[0].type != "STRING_T":
                 raise ParhlException("File name not a string value")
 
-            if seq[1].is_tensor:
+            if type(seq[1]) == Tensor:
                 n = [dim['n'] for dim in seq[1].dims]
-                print('n', n)
                 ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, n, seq[0].mem_dir))
             else:
                 ctx.add_quadruple(Quadruple('WRITE_FILE', seq[1].mem_dir, None, seq[0].mem_dir))
