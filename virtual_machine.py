@@ -41,9 +41,12 @@ class MemoryManager():
         self.set_dorm_mem_w_val(dorm_mem_dir_dst, val)
 
     def malloc_dormant(self, func_id):
-        cpu_var_counter, gpu_var_counters = self.func_dir[func_id][0], self.func_dir[func_id][2]
+        cpu_var_counters, gpu_var_counters = self.func_dir[func_id][0], self.func_dir[func_id][2]
         mem = [
-            [None] * cpu_var_counter,
+            [None] * cpu_var_counters["STRING_T"],
+            torch.empty(cpu_var_counters["INT_T"], dtype=torch.int64, device='cpu'),
+            torch.empty(cpu_var_counters["FLOAT_T"], dtype=torch.float64, device='cpu'),
+            torch.empty(cpu_var_counters["BOOL_T"], dtype=torch.bool, device='cpu'),
             torch.empty(gpu_var_counters["GPU_INT_T"], dtype=torch.int64, device=DEVICE),
             torch.empty(gpu_var_counters["GPU_FLOAT_T"], dtype=torch.float64, device=DEVICE),
             torch.empty(gpu_var_counters["GPU_BOOL_T"], dtype=torch.bool, device=DEVICE),
@@ -129,11 +132,12 @@ def print_op(q, mem):
         print(data)
     else:
         val = mem.get_mem(q[3])
-        if type(val) == torch.Tensor:
-            if val.dim() == 0:
-                print(f"GPU({val.item()})")
-                return
-        print(val)
+        if q[3][3] == 0: # STRING_T, PTRs
+            print(val)
+        elif q[3][3] <= 3: # INT_T, FLOAT_T, BOOL_T
+            print(val.item())
+        else: # GPU_INT_T, GPU_FLOAT_T, GPU_BOOL_T
+            print(f"GPU({val.item()})")
 
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
