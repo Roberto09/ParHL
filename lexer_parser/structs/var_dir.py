@@ -146,12 +146,23 @@ class FuncDir:
     def end_block_stack(self):
         self.func_stack.pop()
 
-    def add_tensor(self, name, type, dims, m0):
+    def add_tensor(self, name, type, rs):
         # We only care about the most inner scope when it comes to re-definitions.
         if name in self.curr_scope.vars or name in self.curr_scope.funcs:
             raise ParhlException(f"Id '{name}' already declared in this scope")
         # Obtain location of next memory of specified type
-        base_mem_dir = self.curr_scope.get_new_memdir(type, offset=m0)
+        m0 = reduce((lambda x, y: x*y), rs)
+        size = len(rs)
+        dims =[{}] * size
+        m = m0
+        for i, r in enumerate(rs):
+            m = m//r
+            dims[i] = {
+                'n': r, #For semantic validation
+                'limit': self.get_or_new_const('INT_T', r),
+                'm':  self.get_or_new_const('INT_T', m),
+            }
+        base_mem_dir = self.curr_scope.get_new_memdir(type, m0)
         addr_vars = [
             self.get_or_new_const("INT_T", base_mem_dir[0]),
             self.get_or_new_const("INT_T", base_mem_dir[1]),
@@ -190,7 +201,8 @@ class FuncDir:
     def new_tens_temp(self, type, dims):
         temp_var_name = "TENS_" + str(self.curr_scope.temp_counters[type])
         total_vars = reduce(lambda x, y: x*y, dims)
-        temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_memdir(type, total_vars), dims=dims)
+        dims_dict = [{'n': dim} for dim in dims]
+        temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_memdir(type, total_vars), dims=dims_dict)
         return temp_var
 
     def _find_in_ordered_scopes(self, name, attr):

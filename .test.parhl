@@ -4,7 +4,7 @@ let cube[3][3][3] : int := read_file(int[3][3][3], "input.txt")
 for(let i:int := 0; i < 5; i := i + 1) {
   a[i] := 1
 }
-cube[1][1][1] := 2
+cube[1][1][1] := 0
 matrix[1][4]:=0
 matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
 print("cube")
@@ -64,3 +64,4 @@ for(let i : int := 0; i < 5; i := i+1){
     print(c_b[i])
     c_b[i] := False
 }
+write_file("output.txt", cube)

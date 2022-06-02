@@ -107,10 +107,26 @@ def read_from_file(mem: MemoryManager, q):
         typed_data = parse_input(data, q[1][0])
         mem.set_mem_w_val(q[3], typed_data)
 
+def create_tensor_from_dims(mem: MemoryManager, mem_dir, dims):
+    t = []
+    if len(dims) > 1:
+        for i in range(0, dims[-1]):
+            item, mem_dir = create_tensor_from_dims(mem, mem_dir, dims[:-1])
+            t.append(item)
+    else:
+        for d in range(0, dims[0]):
+            t.append(mem.get_mem(mem_dir))
+            mem_dir = (mem_dir[0], mem_dir[1]+1, mem_dir[2], mem_dir[3])
+    return t, mem_dir
+
 def write_to_file(mem: MemoryManager, q):
     filename = mem.get_mem(q[3])
     f = open(filename, "w")
-    f.write(str(mem.get_mem(q[1])))
+    if q[2] != None: # has tensor dimensions
+        data, m = create_tensor_from_dims(mem, q[1], q[2])
+    else:
+        data = mem.get_mem(q[1])
+    f.write(str(data))
 
 def print_op(q, mem):
     val = mem.get_mem(q[3])
