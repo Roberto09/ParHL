@@ -278,8 +278,11 @@ class IOFunc(FuncCall):
         dims = [] if dims == None else dims
         return_type = dims[0]
         if self.id in 'read_line':
-            new_var = ctx.func_dir.new_temp(return_type)
-            ctx.add_quadruple(Quadruple('READ_LINE', return_type, None, new_var.mem_dir))
+            if len(dims) > 1:
+                new_var = ctx.func_dir.new_tens_temp(return_type, dims[1:])
+            else:
+                new_var = ctx.func_dir.new_temp(return_type)
+            ctx.add_quadruple(Quadruple('READ_LINE', dims, None, new_var.mem_dir))
             return new_var
         if self.id == 'read_file':
             new_var = None

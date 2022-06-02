@@ -96,16 +96,11 @@ def recursive_assign(mem: MemoryManager, mem_dir_dst, data, type,  dims):
             mem_dir_dst = (mem_dir_dst[0], mem_dir_dst[1] + 1, mem_dir_dst[2], mem_dir_dst[3])
     return mem_dir_dst
 
-def read_from_file(mem: MemoryManager, q):
-    filename = mem.get_mem(q[2])
-    f = open(filename, 'r')
-    data = f.read()
-    if len(q[1]) > 1:
-        evaluated = eval(data)
-        recursive_assign(mem, q[3], evaluated, q[0], q[1][1:])
+def read(mem: MemoryManager, q, input):
+    if len(q[1]) > 1: # has tensor dims
+        recursive_assign(mem, q[3], eval(input), q[1][0], q[1][1:])
     else:
-        typed_data = parse_input(data, q[1][0])
-        mem.set_mem_w_val(q[3], typed_data)
+        mem.set_mem_w_val(q[3], parse_input(input, q[1][0]))
 
 def create_tensor_from_dims(mem: MemoryManager, mem_dir, dims):
     t = []
@@ -165,7 +160,7 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "NOT" : lambda q : mem.set_mem_w_val(q[3], not mem.get_mem(q[1])),
         "PRINT" : lambda q : print_op(q, mem),
         "VERIFY": lambda q : verify_op(q, mem),
-        "READ_LINE": lambda q : mem.set_mem_w_val(q[3], parse_input(input(), q[1]))
+        "READ_LINE": lambda q : read(mem, q, input())
     }
     try: 
         while(q_idx < len(quads)):
@@ -196,7 +191,10 @@ def run_func(mem : MemoryManager, quads, q_idx):
             elif q_op == "ENDFUNC":
                 break
             elif q_op == "READ_FILE":
-                read_from_file(mem, q)
+                filename = mem.get_mem(q[2])
+                f = open(filename, 'r')
+                data = f.read()
+                read(mem, q, data)
             elif q_op == "WRITE_FILE":
                 write_to_file(mem, q)
             else:

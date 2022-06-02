@@ -132,7 +132,7 @@ class ParhlParser(Parser):
 
     @_('READ_LINE L_PAREN dim_const R_PAREN')
     def read_line(self, p):
-        return IOFunc(p.lineno, p[0], return_type=p[2])
+        return IOFunc(p.lineno, p[0], dim_const=p[2])
     
     @_('PRINT L_PAREN func_call_1')
     def print_rule(self, p):
