@@ -105,8 +105,8 @@ def read(mem: MemoryManager, q, input):
 def create_tensor_from_dims(mem: MemoryManager, mem_dir, dims):
     t = []
     if len(dims) > 1:
-        for i in range(0, dims[-1]):
-            item, mem_dir = create_tensor_from_dims(mem, mem_dir, dims[:-1])
+        for i in range(0, dims[0]):
+            item, mem_dir = create_tensor_from_dims(mem, mem_dir, dims[1:])
             t.append(item)
     else:
         for d in range(0, dims[0]):

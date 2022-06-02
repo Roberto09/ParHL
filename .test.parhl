@@ -70,3 +70,5 @@ print("cube", cube)
 let singleDimTest[3]:int := read_line(int[3])
 
 print(singleDimTest)
+
+let x[2][3] : int := [[1,2,3],[4,5,6]]

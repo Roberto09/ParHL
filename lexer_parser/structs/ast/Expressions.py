@@ -1,6 +1,6 @@
 from ast import Expression
 
-from lexer_parser.structs.var_dir import Tensor
+from ..var_dir import Tensor, TensorConst
 from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
@@ -20,16 +20,25 @@ class Assign(Expression):
         right_var = self.right.gen(ctx)
         left_var = self.left.gen(ctx)
         ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
-        if type(left_var) == Tensor and type(Tensor):
-            if len(left_var.dims) != len(right_var.dims):
-                raise ParhlException('Array assign failed: dims do not match')
+        if type(right_var) == Tensor:
+            if type(left_var) != Tensor:
+                raise ParhlException('Cannot assign a tensor to a primitive')
+            if [dim['n'] for dim in left_var.dims] != [dim['n'] for dim in right_var.dims]:
+                raise ParhlException('Tensor assign failed: tensor dimensions do not match')
             
             total = reduce(lambda x,y: x*y, [dim['n'] for dim in right_var.dims])
             for i in range(0, total):
                 origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2], right_var.mem_dir[3])
                 dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])
                 ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
-        else:
+        elif type(right_var) == TensorConst: # assigning from const
+            if type(left_var) != Tensor:
+                raise ParhlException('Cannot assign a tensor to a primitive')
+            if [dim['n'] for dim in left_var.dims] != [dim for dim in right_var.dims]:
+                raise ParhlException('Tensor assign failed: tensor dimensions do not match')
+            for i, mem_dir in enumerate(right_var.mem_dirs):
+                ctx.add_quadruple(Quadruple('ASSIG', mem_dir, result=(left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])))
+        else: # regular primitive assign
             ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
 
 
@@ -64,6 +73,31 @@ class Const(Expression):
         # Guardar en memoria de constantes
         const_var = ctx.func_dir.get_or_new_const(self.type, self.value)
         return const_var
+
+class TensConst(Expression):
+    def __init__(self, lineno, expr_seq):
+        super().__init__(lineno)
+        self.expr_seq = expr_seq;
+    
+    def gen_impl(self, ctx: ParseContext):
+        vars = self.expr_seq.gen_ret_list(ctx) if self.expr_seq else []
+        # Check all vars are of same top size (inners should already be checked)
+        size = vars[0].dims[0] if type(vars[0]) == TensorConst else 1
+        # Check all of same type
+        checked_type = vars[0].type
+        for var in vars[1:]:
+            if type(var) == TensorConst and size != var.dims[0]:
+                print(size)
+                print(var.dims[0]['n'])
+                raise ParhlException('Constant tensor missing values')
+            if checked_type != var.type:
+                raise ParhlException('Tensor values not of same type')
+        # Make new tensor with new dim + previous dims
+        dims =[len(vars)]
+        if type(vars[0]) == TensorConst:
+            dims.extend(vars[0].dims)
+        tens_const = ctx.func_dir.new_tens_const(checked_type, vars, dims)
+        return tens_const
 
 class Id(Expression):
     def __init__(self, line, id):
