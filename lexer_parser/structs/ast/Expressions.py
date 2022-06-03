@@ -30,6 +30,8 @@ class Assign(Expression):
                 dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])
                 ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
         else: # regular primitive assign
+            if type(left_var) == Tensor:
+                raise ParhlException('Cannot assign a primitive to a tensor')
             ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
 
 
