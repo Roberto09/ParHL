@@ -92,6 +92,9 @@ w := q % b
 
 print(w)
 
+print("Access")
+print(w[0][1])
+
 let singleDimTest[3]:int := read_line(int[3])
 
 print(singleDimTest)
