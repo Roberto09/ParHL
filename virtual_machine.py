@@ -181,12 +181,19 @@ def print_op(q, mem: MemoryManager):
             data, m = create_tensor_from_dims(mem, q[3][0], q[3][1])
         else: # INT_T, FLOAT_T, BOOL_T
             data = mem.get_tens(q[3][0], q[3][1]).tolist()
-        print(data)
+        
+        if q[3][0][3] <= 3:
+            print(data)
+        else:
+            print(f"GPU({data})")
+            
     else:
-        val = mem.get_mem(q[3])
-        if q[3][3] == 0: # STRING_T, PTRs
+        resolved_mem_dir = mem.dereference(q[3]) # resolving first to see data type
+        val = mem.get_mem(resolved_mem_dir)
+
+        if resolved_mem_dir[3] == 0: # STRING_T, PTRs
             print(val)
-        elif q[3][3] <= 3: # INT_T, FLOAT_T, BOOL_T
+        elif resolved_mem_dir[3] <= 3: # INT_T, FLOAT_T, BOOL_T
             print(val.item())
         else: # GPU_INT_T, GPU_FLOAT_T, GPU_BOOL_T
             print(f"GPU({val.item()})")
