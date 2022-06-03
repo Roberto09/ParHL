@@ -29,6 +29,17 @@ class Tensor(Var):
     def __repr__(self):
         return f"({super().__repr__()}, BaseAddress: {self.addr_vars}, Dims: {self.dims})"
 
+# Tensor consts do not represent a space in memory, but points to a set 
+# of mem_dirs that will be used to assign values to a tensor
+class TensorConst(Typed):
+    def __init__(self, name, type, mem_dirs, dims):
+        super().__init__(name, type)
+        self.mem_dirs = mem_dirs
+        self.dims = dims
+
+    def __repr__(self):
+        return f"({super().__repr__()}, MemDirs: {self.mem_dirs}, dims: {self.dims})"
+
 class Block():
     _ID_COUNTER = 0
     def __init__(self):
@@ -68,6 +79,7 @@ class Block():
     def __repr__(self):
         return f"(block, id:{self.id} vars: {list(self.vars.values())}, funcs: {list(self.funcs.values())}, blocks:{self.blocks}, consts: {self.consts})"
 
+    # Tuple meaning (func_id, var_num, [0-1]: dereference, type)
     def get_new_memdir(self, type, offset=1):
         var_counter = self.cpu_var_counter if type[:3] != "GPU" else self.gpu_var_counter
         new_mem_dir = (self.id, var_counter[type], 0, type_token_to_mem_id[type]) # Func, var, dereference
@@ -199,9 +211,12 @@ class FuncDir:
         self.curr_scope.temps[temp_var_name] = temp_var
         self.curr_scope.temp_counters[type] += 1
         return temp_var
+    
+    def new_tens_const(self, type, mem_dirs, dims):
+        return TensorConst("TENS_CONST", type,  mem_dirs, dims)
 
     def new_tens_temp(self, type, dims):
-        temp_var_name = "TENS_" + str(self.curr_scope.temp_counters[type])
+        temp_var_name = "TENS_" + type + str(self.curr_scope.temp_counters[type])
         total_vars = reduce(lambda x, y: x*y, dims)
         dims_dict = [{'n': dim} for dim in dims]
         temp_var = Tensor(temp_var_name, type, self.curr_scope.get_new_memdir(type, total_vars), dims=dims_dict)

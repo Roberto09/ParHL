@@ -1,6 +1,4 @@
-from ast import Expression
-
-from lexer_parser.structs.var_dir import Tensor
+from ..var_dir import Tensor, TensorConst
 from ..parhl_exceptions import ParhlException
 from .Node import Node
 from ..parse_context import ParseContext
@@ -20,16 +18,20 @@ class Assign(Expression):
         right_var = self.right.gen(ctx)
         left_var = self.left.gen(ctx)
         ctx.semantic_cube.get_type('ASSIG',left_var.type, right_var.type)
-        if type(left_var) == Tensor and type(Tensor):
-            if len(left_var.dims) != len(right_var.dims):
-                raise ParhlException('Array assign failed: dims do not match')
+        if type(right_var) == Tensor:
+            if type(left_var) != Tensor:
+                raise ParhlException('Cannot assign a tensor to a primitive')
+            if [dim['n'] for dim in left_var.dims] != [dim['n'] for dim in right_var.dims]:
+                raise ParhlException('Tensor assign failed: tensor dimensions do not match')
             
             total = reduce(lambda x,y: x*y, [dim['n'] for dim in right_var.dims])
             for i in range(0, total):
                 origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2], right_var.mem_dir[3])
                 dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])
                 ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
-        else:
+        else: # regular primitive assign
+            if type(left_var) == Tensor:
+                raise ParhlException('Cannot assign a primitive to a tensor')
             ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
 
 
