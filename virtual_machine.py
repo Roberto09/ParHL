@@ -1,5 +1,5 @@
+from functools import reduce
 import json
-from os import device_encoding
 from sys import argv
 import torch
 
@@ -20,13 +20,18 @@ class MemoryManager():
             initial_mem_dir = tuple(self.mem_stack[fid][-1][tid][idx+i] for i in range(4))
         return initial_mem_dir
 
-    def get_mem(self, mem_dir):
+    def get_mem(self, mem_dir, offset=None):
         fid, idx, _, tid = self.dereference(mem_dir)
+        if offset is not None:
+            return self.mem_stack[fid][-1][tid][idx:idx+offset]
         return self.mem_stack[fid][-1][tid][idx]
 
-    def set_mem_w_val(self, mem_dir_dst, val):
+    def set_mem_w_val(self, mem_dir_dst, val, offset=None):
         fid, idx, _, tid = self.dereference(mem_dir_dst)
-        self.mem_stack[fid][-1][tid][idx] = val
+        if offset is not None:
+            self.mem_stack[fid][-1][tid][idx:idx+offset] = val
+        else:
+            self.mem_stack[fid][-1][tid][idx] = val
 
     def set_mem_w_mem(self, mem_dir_src, mem_dir_dst):
         val = self.get_mem(mem_dir_src)
@@ -68,7 +73,33 @@ class MemoryManager():
         self.mem_stack[func_id].pop()
 
 def bin_op(q, mem, op):
-    mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
+    reg_op, tens_op = op
+    if len(q[1]) == 2: # We are dealing with tensors
+        if not tens_op: tens_op = reg_op
+        l_dir, l_dims = q[1]
+        r_dir, r_dims = q[2]
+        l_size = reduce(lambda x,y : x*y, l_dims + [1])
+        r_size = reduce(lambda x,y : x*y, r_dims + [1])
+        l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
+        r_tens = mem.get_mem(r_dir, r_size).view(r_dims)
+        res_tens = tens_op(l_tens, r_tens).view(-1) # back to 1d
+        mem.set_mem_w_val(q[3], res_tens, len(res_tens))
+    else: # We are dealing with reg values
+        mem.set_mem_w_val(q[3], reg_op(mem.get_mem(q[1]), mem.get_mem(q[2])))
+
+def un_op(q, mem, op):
+    reg_op, tens_op = op
+    if len(q[1]) == 2: # We are dealing with a tensor
+        l_dir, l_dims = q[1]
+        l_size = reduce(lambda x,y : x*y, l_dims + [1])
+        l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
+        res_tens = tens_op(l_tens).view(-1) # back to 1d
+        mem.set_mem_w_val(q[3], res_tens, len(res_tens))
+    else: # We are dealing with reg values
+        mem.set_mem_w_val(q[3], reg_op(mem.get_mem(q[1])))
+
+def assig_op(q, mem):
+    mem.set_mem_w_mem(q[1], q[3])
 
 def assig_op(q, mem):
     mem.set_mem_w_mem(q[1], q[3])
@@ -143,25 +174,23 @@ def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
         "ASSIG" : lambda q : assig_op(q, mem),
         "PARAM" : lambda q : mem.set_dorm_mem_w_mem(q[1], q[3]),
-        "PLUS" : lambda q : bin_op(q, mem, lambda x,y:x+y) 
-                                if q[2] != None else 
-                            mem.set_mem_w_val(q[3], 1 * mem.get_mem(q[1])),
-        "MINUS" : lambda q : bin_op(q, mem, lambda x,y:x-y)
-                                if q[2] != None else
-                            mem.set_mem_w_val(q[3], -1 * mem.get_mem(q[1])),
-        "DIV" : lambda q : bin_op(q, mem, lambda x,y:x/y),
-        "MULT" : lambda q : bin_op(q, mem, lambda x,y:x*y),
-        "EXP" : lambda q : bin_op(q, mem, lambda x,y:x**y),
-        "MOD" : lambda q : bin_op(q, mem, lambda x,y:x%y),
-        "EQ" : lambda q : bin_op(q, mem, lambda x,y:x==y),
-        "NOT_EQ" : lambda q : bin_op(q, mem, lambda x,y:x!=y),
-        "GEQT" : lambda q : bin_op(q, mem, lambda x,y:x>=y),
-        "LEQT" : lambda q : bin_op(q, mem, lambda x,y:x<=y),
-        "GT" : lambda q : bin_op(q, mem, lambda x,y:x>y),
-        "LT" : lambda q : bin_op(q, mem, lambda x,y:x<y),
-        "OR" : lambda q : bin_op(q, mem, lambda x,y:x or y),
-        "AND" : lambda q : bin_op(q, mem, lambda x,y:x and y),
-        "NOT" : lambda q : mem.set_mem_w_val(q[3], not mem.get_mem(q[1])),
+        "PLUS" : lambda q : bin_op(q, mem, (lambda x,y:x+y, None))  if q[2] != None
+            else un_op(q, mem, (lambda x:x, None)),
+        "MINUS" : lambda q : bin_op(q, mem, (lambda x,y:x-y, None)) if q[2] != None
+            else un_op(q, mem, (lambda x:-x, None)),
+        "DIV" : lambda q : bin_op(q, mem, (lambda x,y:x/y, None)),
+        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, torch.matmul)),
+        "EXP" : lambda q : bin_op(q, mem, (lambda x,y:x**y, torch.matrix_power)),
+        "MOD" : lambda q : bin_op(q, mem, (lambda x,y:x%y, None)),
+        "EQ" : lambda q : bin_op(q, mem, (lambda x,y:x==y, lambda x,y:(x==y).all())),
+        "NOT_EQ" : lambda q : bin_op(q, mem, (lambda x,y:x!=y, lambda x,y:(x!=y).all())),
+        "GEQT" : lambda q : bin_op(q, mem, (lambda x,y:x>=y, lambda x,y:(x>=y).all())),
+        "LEQT" : lambda q : bin_op(q, mem, (lambda x,y:x<=y, lambda x,y:(x<=y).all())),
+        "GT" : lambda q : bin_op(q, mem, (lambda x,y:x>y, lambda x,y:(x>y).all())),
+        "LT" : lambda q : bin_op(q, mem, (lambda x,y:x<y, lambda x,y:(x<y).all())),
+        "OR" : lambda q : bin_op(q, mem, (lambda x,y:x|y, None)),
+        "AND" : lambda q : bin_op(q, mem, (lambda x,y:x&y, None)),
+        "NOT" : lambda q : un_op(q, mem, (lambda x:~x, None)),
         "PRINT" : lambda q : print_op(q, mem),
         "VERIFY": lambda q : verify_op(q, mem),
         "READ_LINE": lambda q : read(mem, q, input())
