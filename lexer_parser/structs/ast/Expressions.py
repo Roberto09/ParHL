@@ -29,13 +29,6 @@ class Assign(Expression):
                 origin_mem_dir = (right_var.mem_dir[0], right_var.mem_dir[1] + i, right_var.mem_dir[2], right_var.mem_dir[3])
                 dest_mem_dir = (left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])
                 ctx.add_quadruple(Quadruple('ASSIG', origin_mem_dir, result=dest_mem_dir))
-        elif type(right_var) == TensorConst: # assigning from const
-            if type(left_var) != Tensor:
-                raise ParhlException('Cannot assign a tensor to a primitive')
-            if [dim['n'] for dim in left_var.dims] != [dim for dim in right_var.dims]:
-                raise ParhlException('Tensor assign failed: tensor dimensions do not match')
-            for i, mem_dir in enumerate(right_var.mem_dirs):
-                ctx.add_quadruple(Quadruple('ASSIG', mem_dir, result=(left_var.mem_dir[0], left_var.mem_dir[1] + i, left_var.mem_dir[2], left_var.mem_dir[3])))
         else: # regular primitive assign
             ctx.add_quadruple(Quadruple('ASSIG', right_var.mem_dir, result=left_var.mem_dir))
 
