@@ -92,6 +92,7 @@ class SemanticCube():
             'MINUS_BIN': basic_arithmetic_ops_bin,
             'MINUS_UN': basic_arithmetic_ops_un,
             'DIV_BIN': basic_arithmetic_ops_bin,
+            'MMULT_BIN': basic_arithmetic_ops_bin,
             'MULT_BIN': basic_arithmetic_ops_bin,
             'EXP_BIN': basic_arithmetic_ops_bin,
             'MOD_BIN': {

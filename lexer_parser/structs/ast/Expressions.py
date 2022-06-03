@@ -47,7 +47,7 @@ class BinExpr(Expression):
         left_dims = [d['n'] for d in left_var.dims] if type(left_var) == Tensor else []
         right_dims = [d['n'] for d in right_var.dims] if type(right_var) == Tensor else []
         dims_res_func = broadcast
-        if self.op == "*":
+        if self.op == "**":
             dims_res_func = matmul
         elif self.op == "^":
             dims_res_func = matpow

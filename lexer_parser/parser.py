@@ -14,7 +14,7 @@ class ParhlParser(Parser):
         ('left', AND),
         ('left', EQ, NOT_EQ, GT, LT, GEQT, LEQT),
         ('left', PLUS, MINUS),
-        ('left', MULT, DIV, MOD),
+        ('left', MMULT, MULT, DIV, MOD),
         ('left', EXP)
     )
     
@@ -100,7 +100,7 @@ class ParhlParser(Parser):
         else:
             return BinExpr(p.lineno, p[0], p[1], p[2])
 
-    @_('exp_factor', 'term MULT exp_factor', 'term DIV exp_factor', 'term MOD exp_factor')
+    @_('exp_factor', 'term MMULT exp_factor' , 'term MULT exp_factor', 'term DIV exp_factor', 'term MOD exp_factor')
     def term(self, p):
         if(len(p) == 1):
             return p[0]

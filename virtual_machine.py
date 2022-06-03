@@ -201,7 +201,8 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "MINUS" : lambda q : bin_op(q, mem, (lambda x,y:x-y, None)) if q[2] != None
             else un_op(q, mem, (lambda x:-x, None)),
         "DIV" : lambda q : bin_op(q, mem, (lambda x,y:x/y, None)),
-        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, torch.matmul)),
+        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, None)),
+        "MMULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, torch.matmul)),
         "EXP" : lambda q : bin_op(q, mem, (lambda x,y:x**y, torch.matrix_power)),
         "MOD" : lambda q : bin_op(q, mem, (lambda x,y:x%y, None)),
         "EQ" : lambda q : bin_op(q, mem, (lambda x,y:x==y, lambda x,y:(x==y).all())),
