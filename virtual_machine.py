@@ -102,6 +102,7 @@ def bin_op(q, mem, op):
 def un_op(q, mem, op):
     reg_op, tens_op = op
     if len(q[1]) == 2: # We are dealing with a tensor
+        if not tens_op: tens_op = reg_op
         l_dir, l_dims = q[1]
         l_size = reduce(lambda x,y : x*y, l_dims + [1])
         l_tens = mem.get_mem(l_dir, l_size).view(l_dims)

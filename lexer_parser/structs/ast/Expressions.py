@@ -143,9 +143,18 @@ class UnExpr(Expression):
         self.op = op
         self.right = right
 
+    def _gen_impl_tens(self, ctx:ParseContext, right_var, op_name):
+        right_dims = [d['n'] for d in right_var.dims] if type(right_var) == Tensor else []
+        new_type = ctx.semantic_cube.get_type(op_name, right_var.type)
+        temp_var = ctx.func_dir.new_tens_temp(new_type, right_dims)
+        ctx.add_quadruple(Quadruple(op_name, (right_var.mem_dir, right_dims), None, temp_var.mem_dir))
+        return temp_var
+
     def gen_impl(self, ctx: ParseContext):
         right_var = self.right.gen(ctx)
         op_name = symbol_to_token[self.op]
+        if type(right_var) == Tensor:
+            return self._gen_impl_tens(ctx, right_var, op_name)
         new_type = ctx.semantic_cube.get_type(op_name, right_var.type)
         new_var = ctx.func_dir.new_temp(new_type)
         ctx.add_quadruple(Quadruple(op_name, right_var.mem_dir, None, new_var.mem_dir))
