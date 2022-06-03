@@ -103,6 +103,7 @@ def bin_op(q, mem, op):
 def un_op(q, mem, op):
     reg_op, tens_op = op
     if len(q[1]) == 2: # We are dealing with a tensor
+        if not tens_op: tens_op = reg_op
         l_dir, l_dims = q[1]
         l_size = reduce(lambda x,y : x*y, l_dims + [1])
         l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
@@ -208,7 +209,8 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "MINUS" : lambda q : bin_op(q, mem, (lambda x,y:x-y, None)) if q[2] != None
             else un_op(q, mem, (lambda x:-x, None)),
         "DIV" : lambda q : bin_op(q, mem, (lambda x,y:x/y, None)),
-        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y,
+        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, None)),
+        "MMULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y,
             lambda x,y: torch.matmul(x.double(), y.double()).long())),
         "EXP" : lambda q : bin_op(q, mem, (lambda x,y:x**y,
             lambda x,y: torch.matrix_power(x.double(), y).long())),

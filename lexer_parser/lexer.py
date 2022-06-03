@@ -23,7 +23,7 @@ class ParhlLexer(Lexer):
         # Scopes
         L_BRACE, R_BRACE,
         # Operators
-        PLUS, MINUS, DIV, MULT, EXP, MOD, EQ, ASSIG, NOT_EQ, GEQT, LEQT, GT, LT, L_PAREN, R_PAREN,  
+        PLUS, MINUS, DIV, MULT, MMULT, EXP, MOD, EQ, ASSIG, NOT_EQ, GEQT, LEQT, GT, LT, L_PAREN, R_PAREN,  
         # Misc
         COLON, SEMICOLON, COMMA, NEWLINE, ID,        
     }
@@ -77,6 +77,7 @@ class ParhlLexer(Lexer):
     PLUS = r"\+"
     MINUS = r"\-"
     DIV = r"\/"
+    MMULT = r"\*\*"
     MULT = r"\*"
     EXP = r"\^"
     MOD = r"\%"
@@ -141,6 +142,7 @@ type_token_to_mem_id = {
 }
 
 symbol_to_token = {
+    "**": 'MMULT',
     "*": 'MULT',
     "+": 'PLUS',
     "-": 'MINUS',
