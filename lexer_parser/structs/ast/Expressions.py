@@ -5,6 +5,7 @@ from ..parse_context import ParseContext
 from ..quadruples import Quadruple
 from ...lexer import symbol_to_token
 from functools import reduce
+from ..tensor_shape_utils import matmul, broadcast, matpow
 
 Expression = Node
 
@@ -42,13 +43,31 @@ class BinExpr(Expression):
         self.right = right
         self.op = op
 
+    def _gen_impl_tens(self, ctx:ParseContext, left_var, right_var, op_name):
+        left_dims = [d['n'] for d in left_var.dims] if type(left_var) == Tensor else []
+        right_dims = [d['n'] for d in right_var.dims] if type(right_var) == Tensor else []
+        dims_res_func = broadcast
+        if self.op == "*":
+            dims_res_func = matmul
+        elif self.op == "^":
+            dims_res_func = matpow
+        try:
+            res_dims = dims_res_func(left_dims, right_dims)
+        except Exception:
+            raise ParhlException(f"Can not perform {op_name} in tensors with dims {left_dims} and {right_dims}")
+        new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
+        temp_var = ctx.func_dir.new_tens_temp(new_type, res_dims)
+        ctx.add_quadruple(Quadruple(op_name, (left_var.mem_dir, left_dims), (right_var.mem_dir, right_dims), temp_var.mem_dir))
+        return temp_var
+
     def gen_impl(self, ctx: ParseContext):
         left_var = self.left.gen(ctx)
         right_var = self.right.gen(ctx)
         op_name = symbol_to_token[self.op]
+        if type(left_var) == Tensor or type(right_var) == Tensor:
+            return self._gen_impl_tens(ctx, left_var, right_var, op_name)
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
         temp_var = ctx.func_dir.new_temp(new_type)
-        # Need to change names to mem_dirs when they are functioning
         ctx.add_quadruple(Quadruple(op_name, left_var.mem_dir, right_var.mem_dir, temp_var.mem_dir))
         return temp_var
 
