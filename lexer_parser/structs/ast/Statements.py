@@ -199,7 +199,7 @@ class TensConst(Statement):
         dims =[len(vars)]
         if type(vars[0]) == TensorConst:
             dims.extend(vars[0].dims)
-            mem_dirs = reduce(lambda x, y: x.mem_dirs+y.mem_dirs, vars) if len(vars) > 1 else vars[0].mem_dirs
+            mem_dirs = reduce(lambda x, y: x+y, [v.mem_dirs for v in vars]) if len(vars) > 1 else vars[0].mem_dirs
         else:
             mem_dirs = [var.mem_dir for var in vars]
         if not self.is_first: # if not first just return the built tens const
