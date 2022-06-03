@@ -85,24 +85,31 @@ class MemoryManager():
         last = m0+idx
         self.mem_stack[fid][-1][tid][idx:last] = tens_w_vals
 
+def _bin_op_tens(q, mem, op):
+    l_dir, l_dims = q[1]
+    r_dir, r_dims = q[2]
+    l_size = reduce(lambda x,y : x*y, l_dims + [1])
+    r_size = reduce(lambda x,y : x*y, r_dims + [1])
+    l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
+    r_tens = mem.get_mem(r_dir, r_size).view(r_dims)
+    res_tens = op(l_tens, r_tens).view(-1) # back to 1d
+    mem.set_mem_w_val(q[3], res_tens, len(res_tens))
+
+def _bin_op_reg(q, mem, op):
+    mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
+
 def bin_op(q, mem, op):
     reg_op, tens_op = op
     if len(q[1]) == 2: # We are dealing with tensors
         if not tens_op: tens_op = reg_op
-        l_dir, l_dims = q[1]
-        r_dir, r_dims = q[2]
-        l_size = reduce(lambda x,y : x*y, l_dims + [1])
-        r_size = reduce(lambda x,y : x*y, r_dims + [1])
-        l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
-        r_tens = mem.get_mem(r_dir, r_size).view(r_dims)
-        res_tens = tens_op(l_tens, r_tens).view(-1) # back to 1d
-        mem.set_mem_w_val(q[3], res_tens, len(res_tens))
+        _bin_op_tens(q, mem, tens_op)
     else: # We are dealing with reg values
-        mem.set_mem_w_val(q[3], reg_op(mem.get_mem(q[1]), mem.get_mem(q[2])))
+        _bin_op_reg(q, mem, reg_op)
 
 def un_op(q, mem, op):
     reg_op, tens_op = op
     if len(q[1]) == 2: # We are dealing with a tensor
+        if not tens_op: tens_op = reg_op
         l_dir, l_dims = q[1]
         l_size = reduce(lambda x,y : x*y, l_dims + [1])
         l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
@@ -199,6 +206,26 @@ def print_op(q, mem: MemoryManager):
         else: # GPU_INT_T, GPU_FLOAT_T, GPU_BOOL_T
             print(f"GPU({val.item()})")
 
+def mmult_op(q, mem):
+    if len(q[1]) == 2: # We are dealing with tensors
+        if q[1][0][3] == 4: # GPU_INT_T
+            _bin_op_tens(q, mem,
+                lambda x,y: torch.matmul(x.double(), y.double()).long())
+        else:
+            _bin_op_tens(q, mem, torch.matmul)
+    else:
+        _bin_op_reg(q, mem, lambda x,y:x*y)
+
+def exp_op(q, mem):
+    if len(q[1]) == 2: # We are dealing with tensors
+        if q[1][0][3] == 4: # GPU_INT_T
+            _bin_op_tens(q, mem,
+                lambda x,y: torch.matrix_power(x.double(), y).long())
+        else:
+            _bin_op_tens(q, mem, torch.matrix_power)
+    else:
+        _bin_op_reg(q, mem, lambda x,y:x**y)
+
 def run_func(mem : MemoryManager, quads, q_idx):
     basic_op_handler = {
         "ASSIG" : lambda q : assig_op(q, mem),
@@ -208,8 +235,9 @@ def run_func(mem : MemoryManager, quads, q_idx):
         "MINUS" : lambda q : bin_op(q, mem, (lambda x,y:x-y, None)) if q[2] != None
             else un_op(q, mem, (lambda x:-x, None)),
         "DIV" : lambda q : bin_op(q, mem, (lambda x,y:x/y, None)),
-        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, torch.matmul)),
-        "EXP" : lambda q : bin_op(q, mem, (lambda x,y:x**y, torch.matrix_power)),
+        "MULT" : lambda q : bin_op(q, mem, (lambda x,y:x*y, None)),
+        "MMULT" : lambda q : mmult_op(q, mem),
+        "EXP" : lambda q : exp_op(q, mem),
         "MOD" : lambda q : bin_op(q, mem, (lambda x,y:x%y, None)),
         "EQ" : lambda q : bin_op(q, mem, (lambda x,y:x==y, lambda x,y:(x==y).all())),
         "NOT_EQ" : lambda q : bin_op(q, mem, (lambda x,y:x!=y, lambda x,y:(x!=y).all())),
@@ -279,12 +307,12 @@ def setup_device():
         alowed_devs = ["cuda", "cpu"]
         if DEVICE not in alowed_devs:
             raise Exception(f"Error with device: {DEVICE} not in {alowed_devs}")
-    if torch.cuda.is_available():
+    elif torch.cuda.is_available():
         DEVICE = "cuda"
     else:
         DEVICE = "cpu"
-    print("CUDA device not found. Using CPU for GPU operations)." + 
-        "\nNote this is still faster due to vectorization.\n")
+        print("CUDA device not found. Using CPU for GPU operations)." + 
+            "\nNote this is still faster due to vectorization.\n")
 
 def main():
     filename = argv[1]
