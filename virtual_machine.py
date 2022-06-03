@@ -74,6 +74,11 @@ class MemoryManager():
         last = m0+idx
         return self.mem_stack[fid][-1][tid][idx:last].view(dims)
 
+    def set_tens_w_tens(self, mem_dir, dims, tens_w_vals):
+        fid, idx, _, tid = self.dereference(mem_dir)
+        m0 = reduce(lambda x, y: x*y, dims)
+        last = m0+idx
+        self.mem_stack[fid][-1][tid][idx:last] = tens_w_vals
 
 def bin_op(q, mem, op):
     mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
@@ -109,7 +114,10 @@ def recursive_assign(mem: MemoryManager, mem_dir_dst, data, type,  dims):
 
 def read(mem: MemoryManager, q, input):
     if len(q[1]) > 1: # has tensor dims
-        recursive_assign(mem, q[3], eval(input), q[1][0], q[1][1:])
+        if q[3][3] == 0: # STRING_T
+            recursive_assign(mem, q[3], eval(input), q[1][0], q[1][1:])
+        else: # all other types are stored in torch Tensors
+            mem.set_tens_w_tens(q[3], q[1][1:], torch.flatten(torch.tensor(eval(input))))
     else:
         mem.set_mem_w_val(q[3], parse_input(input, q[1][0]))
 
@@ -129,9 +137,9 @@ def write_to_file(mem: MemoryManager, q):
     filename = mem.get_mem(q[3])
     f = open(filename, "w")
     if q[2] != None: # has tensor dimensions
-        if q[1][3] == 0:
+        if q[1][3] == 0: # STRING_T, PTRs
             data, m = create_tensor_from_dims(mem, q[1], q[2])
-        else:
+        else: # INT_T, FLOAT_T, BOOL_T
             data = mem.get_tens(q[1], q[2]).tolist()
     else:
         data = mem.get_mem(q[1])
@@ -141,7 +149,7 @@ def print_op(q, mem: MemoryManager):
     if len(q[3]) == 2: # tensor dims provided
         if q[3][0][3] == 0: # STRING_T, PTRs
             data, m = create_tensor_from_dims(mem, q[3][0], q[3][1])
-        else:
+        else: # INT_T, FLOAT_T, BOOL_T
             data = mem.get_tens(q[3][0], q[3][1]).tolist()
         print(data)
     else:
