@@ -60,7 +60,7 @@ class ParhlLexer(Lexer):
     # Values
     FLOAT_V = r'[0-9]+\.[0-9]+'
     INT_V = r'[0-9]+'
-    STRING_V = r'\".*\"'
+    STRING_V = r'\"[^\"]*\"'
     BOOL_V = r"True|False"
     # IO
     PRINT = r"print"
