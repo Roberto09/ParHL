@@ -76,22 +76,25 @@ for(let i: int := 0; i < 5; i := i+1){
     b[i][0] := i*2;
 }
 
-let x[5][5] : gpu_int;
+let w[5][5] : gpu_int;
 
-x := q * b
+w := q * b
 
-x := q ^ 2
+w := q ^ 2
 
-x := q - b
+w := q - b
 
 
 q := q + 1
 b := q
 
-x := q % b
+w := q % b
 
-print(x)
+print(w)
 
 let singleDimTest[3]:int := read_line(int[3])
 
 print(singleDimTest)
+
+let e[2][3] : int := [[1,2,3],[4,5,6]]
+print(e)

@@ -1,6 +1,6 @@
-from lexer_parser.structs.parhl_exceptions import ParhlException
+from .structs.parhl_exceptions import ParhlException
 from .structs.ast.Expressions import Assign, BinExpr, Const, Id, UnExpr, Access
-from .structs.ast.Statements import DimConst, TensorDecl, TensorDim, FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty
+from .structs.ast.Statements import DimConst, TensorDecl, TensorDim, FuncDecl, VarDecl, Seq, If, While, For, Ret, FuncCall, IOFunc, Empty, TensConst
 from sly import Parser
 from .lexer import ParhlLexer
 
@@ -35,11 +35,13 @@ class ParhlParser(Parser):
 
     @_('L_BRACKET expr tens_1')
     def tens(self, p):
-        pass
+        return TensConst(p.lineno, Seq(p.lineno, p[1], p[2]))
 
     @_('R_BRACKET', 'COMMA expr tens_1')
     def tens_1(self, p):
-        pass
+        if len(p) == 1:
+            return Empty()
+        return Seq(p.lineno, p[1], p[2])
 
     @_('ID tens_id_1')
     def tens_id(self,p):
@@ -141,9 +143,8 @@ class ParhlParser(Parser):
     @_('const_type var_dims', 'const_type')
     def dim_const(self, p ):
         if len(p) == 2:
-            return DimConst(-1, p[0], p[1])
-
-        return DimConst(-1, p[0], Seq(-1, Empty()))
+            return DimConst(p[1].lineno, p[0], p[1])
+        return DimConst(p[1].lineno, p[0], Seq(-1, Empty()))
 
     @_('READ_FILE L_PAREN dim_const COMMA expr R_PAREN')
     def read_file(self, p):
