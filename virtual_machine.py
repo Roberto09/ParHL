@@ -1,3 +1,4 @@
+from functools import reduce
 import json
 from os import device_encoding
 from sys import argv
@@ -66,6 +67,13 @@ class MemoryManager():
 
     def end_func_stack(self, func_id):
         self.mem_stack[func_id].pop()
+    
+    def get_tens(self, mem_dir, dims):
+        fid, idx, _, tid = self.dereference(mem_dir)
+        m0 = reduce(lambda x, y: x*y, dims)
+        last = m0+idx
+        return self.mem_stack[fid][-1][tid][idx:last].view(dims)
+
 
 def bin_op(q, mem, op):
     mem.set_mem_w_val(q[3], op(mem.get_mem(q[1]), mem.get_mem(q[2])))
@@ -121,14 +129,20 @@ def write_to_file(mem: MemoryManager, q):
     filename = mem.get_mem(q[3])
     f = open(filename, "w")
     if q[2] != None: # has tensor dimensions
-        data, m = create_tensor_from_dims(mem, q[1], q[2])
+        if q[1][3] == 0:
+            data, m = create_tensor_from_dims(mem, q[1], q[2])
+        else:
+            data = mem.get_tens(q[1], q[2]).tolist()
     else:
         data = mem.get_mem(q[1])
     f.write(str(data))
 
-def print_op(q, mem):
+def print_op(q, mem: MemoryManager):
     if len(q[3]) == 2: # tensor dims provided
-        data, m = create_tensor_from_dims(mem, q[3][0], q[3][1])
+        if q[3][0][3] == 0: # STRING_T, PTRs
+            data, m = create_tensor_from_dims(mem, q[3][0], q[3][1])
+        else:
+            data = mem.get_tens(q[3][0], q[3][1]).tolist()
         print(data)
     else:
         val = mem.get_mem(q[3])
