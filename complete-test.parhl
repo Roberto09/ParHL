@@ -1,0 +1,9 @@
+# Declaring primitives
+
+let iVar : int;
+let fVar : float
+let bVar : bool
+let sVar : string
+let gpuiVar : gpu_int
+let gpufVar : gpu_float
+let gpubVar : gpu_bool

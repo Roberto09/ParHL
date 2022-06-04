@@ -1,0 +1,1 @@
+{"func_dir": [[{"INT_T": 1, "FLOAT_T": 1, "STRING_T": 1, "BOOL_T": 1}, {"BOOL_T": [], "INT_T": [], "FLOAT_T": [], "STRING_T": []}, {"GPU_INT_T": 1, "GPU_FLOAT_T": 1, "GPU_BOOL_T": 1}, null]], "quads": []}
