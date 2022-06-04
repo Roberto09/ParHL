@@ -1,4 +1,4 @@
-print("Starting tests.")
+print("Starting tests.\n")
 
 # Declaring primitives
 
@@ -20,5 +20,54 @@ let gpuiVarInit : gpu_int := 3
 let gpufVarInit : gpu_float := 4.4  
 let gpubVarInit : gpu_bool := False
 
+# Prints all primitive types
+
+print("Printing int: ", iVarInit, "\n")
+print("Printing float: ", fVarInit, "\n")
+print("Printing bool: ", bVarInit, "\n")
+print("Printing string: ", sVarInit, "\n")
+print("Printing gpu_int: ", gpuiVarInit, "\n")
+print("Printing gpu_float: ", gpufVarInit, "\n")
+print("Printing gpu_bool: ", gpubVarInit, "\n")
+
+# Loops
+
+for(let i : int := 0; i < 3; i := i + 1) {
+  print("This should print 3 times.\n")
+}
+
+let counter : int := 0
+
+while(counter < 4) {
+  print("This should print 4 times.\n")
+  counter := counter + 1
+}
+
+# Conditionals
+
+let pass : bool := True
+
+if(pass) {
+  print("This 'if' should always print.\n")
+} else {
+  print("This 'else' should never print.\n")
+}
+
+if(not pass) {
+  print("This 'if' should never print.\n")
+} else {
+  print("This 'else' should always print.\n")
+}
+
+if(not pass) {
+  print("This 'if' should never print.\n")
+} else if(pass) {
+  print("This 'else if' should always print.\n")
+} else {
+  print("This 'else' should never print.\n")
+}
+
+# Boolean Operators
 
 print("Done.")
+
