@@ -1,9 +1,24 @@
+print("Starting tests.")
+
 # Declaring primitives
 
-let iVar : int;
+let iVar : int
 let fVar : float
 let bVar : bool
 let sVar : string
 let gpuiVar : gpu_int
 let gpufVar : gpu_float
 let gpubVar : gpu_bool
+
+# Declaring primitives with initial value
+
+let iVarInit : int := 1
+let fVarInit : float := 2.2
+let bVarInit : bool := True
+let sVarInit : string := "initialized"
+let gpuiVarInit : gpu_int := 3
+let gpufVarInit : gpu_float := 4.4  
+let gpubVarInit : gpu_bool := False
+
+
+print("Done.")
