@@ -65,7 +65,7 @@ class ParhlParser(Parser):
 
     @_('INT_T', 'FLOAT_T', 'STRING_T', 'BOOL_T', 'GPU_INT_T', 'GPU_FLOAT_T','GPU_BOOL_T')
     def const_type(self, p):
-        return p[0]
+        return (p.lineno, p[0])
     
     @_('t_expr', 'expr OR t_expr')
     def expr(self, p):
@@ -143,8 +143,8 @@ class ParhlParser(Parser):
     @_('const_type var_dims', 'const_type')
     def dim_const(self, p ):
         if len(p) == 2:
-            return DimConst(p[1].lineno, p[0], p[1])
-        return DimConst(p[1].lineno, p[0], Seq(-1, Empty()))
+            return DimConst(p[0][0], p[0][1], p[1])
+        return DimConst(p[0][0], p[0][1], None)
 
     @_('READ_FILE L_PAREN dim_const COMMA expr R_PAREN')
     def read_file(self, p):
@@ -193,11 +193,11 @@ class ParhlParser(Parser):
 
     @_('ID COLON const_type')
     def var_3(self, p):
-        return VarDecl(p.lineno, Id(p.lineno, p[0]), p[2])
+        return VarDecl(p.lineno, Id(p.lineno, p[0]), p[2][1])
 
     @_('ID var_dims COLON const_type')
     def tens_decl(self, p):
-        return TensorDecl(p.lineno, Id(p.lineno, p[0]), p[3], p[1])
+        return TensorDecl(p.lineno, Id(p.lineno, p[0]), p[3][1], p[1])
 
     @_('L_BRACKET INT_V R_BRACKET','L_BRACKET INT_V R_BRACKET var_dims')
     def var_dims(self, p):
@@ -258,12 +258,12 @@ class ParhlParser(Parser):
     @_('ID COLON const_type ', 'ID COLON const_type COMMA func_params_1')
     def func_params_1(self, p):
         if len(p) == 3:
-            return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2]))
-        return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2]), p[4])
+            return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2][1]))
+        return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2][1]), p[4])
 
     @_('const_type', 'VOID')
     def func_type(self, p):
-        return p[0]
+        return p[0][1]
 
     @_('RETURN expr')
     def ret(self, p):

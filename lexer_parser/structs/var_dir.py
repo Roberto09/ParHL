@@ -61,7 +61,6 @@ class Block():
             'GPU_INT_T': 0,
             'GPU_FLOAT_T': 0,
             'GPU_BOOL_T': 0,
-            'ADDR': 0,
         }
         self.cpu_var_counter = {
             'INT_T' : 0,

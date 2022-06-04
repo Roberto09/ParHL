@@ -8,16 +8,18 @@ for(let i:int := 0; i < 5; i := i + 1) { # for loop
 cube[1][1][1] := 0
 matrix[1][4]:=0
 matrix[ cube[ a[2] ] [ a[1] ] [ a[0] ]  ][ matrix[1][2+2] ]  := 2
-print("cube")
+print("cube: \n")
 for(let i:int := 0; i<3; i:= i+1) {
   for(let j:int := 0; j<3; j:= j+1) {
     for(let k:int :=0; k<3; k:= k+1) {
-      print(cube[i][j][k])
+      print(cube[i][j][k], " ")
     }
+    print("\n")
   }
+  print("\n")
 }
-print("endcube")
-print("matrix", matrix[2][0])
+print("endcube\n")
+print("matrix: ", matrix[2][0], "\n")
 let factorial (n : int) : int {
     if(n <= 1) {
         let a:int:=2
@@ -38,7 +40,7 @@ let main(): int {
         }
         return fibo(n-1) + fibo(n-2)
     }
-    print("fibo ", fibo(3))
+    print("fibo: ", fibo(3), "\n")
     return 0
 }
 
@@ -46,27 +48,28 @@ main()
 
 
 
-print("doing cuda stuff")
+print("doing cuda stuff\n")
 
 let c_a[5] : gpu_int;
 c_a[3] := 10;
 for(let i : int := 0; i < 5; i := i+1){
-    print(c_a[i])
+    print(c_a[i], " ")
 }
+print("\n")
 
 let c_b[5] : gpu_bool;
 for(let i : int := 0; i < 5; i := i+1){
-    print(c_b[i])
+    print(c_b[i], " ")
     c_b[i] := False
 }
-print("done")
+print("\ndone\n")
 c_b[1] := c_a[3] > 9;
 for(let i : int := 0; i < 5; i := i+1){
-    print(c_b[i])
+    print(c_b[i], " ")
     c_b[i] := False
 }
 write_file("output.txt", cube)
-print("cube", cube)
+print("\ncube: ", cube, "\n")
 
 
 let q[5][5] : gpu_int;
@@ -91,13 +94,14 @@ b := q
 
 w := q % b
 
-print(w)
+print("w: ", w)
 
-print("Access", w[0][1], "endaccess")
+print("Access ", w[0][1], " endaccess\n")
 
+print("enter 3 nums:\n")
 let singleDimTest[3]:int := read_line(int[3])
 
-print(singleDimTest)
+print(singleDimTest, "\n")
 
 let e[2][3] : int := [[1,2,3],[4,5,6]]
 print(e)
