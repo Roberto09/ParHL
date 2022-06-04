@@ -165,6 +165,21 @@ print("\tGPU(1) * GPU(3) = ", gpuiArithmeticTest * gpuiVarInit, "\n")
 #gpu float
 print("\tGPU(1.2) * GPU(4.4) = ", gpufArithmeticTest * gpufVarInit, "\n")
 
+print("MMult:\n")
+#ints
+print("\t1 ** 2 = ", 1**2, "\n")
+print("\t1 ** 2.1 = ", 1**2.1, "\n")
+print("\t1 ** GPU(3) = ", 1**gpuiVarInit, "\n")
+print("\t1 ** GPU(4.4) = ", 1**gpufVarInit, "\n")
+#floats
+print("\t1.2 ** 3.4 = ", 1.2**3.4, "\n")
+print("\t1.2 ** GPU(3) = ", 1.2**gpuiVarInit, "\n")
+print("\t1.2 ** GPU(4.4) = ", 1.2**gpufVarInit, "\n")
+#gpu int
+print("\tGPU(1) ** GPU(3) = ", gpuiArithmeticTest ** gpuiVarInit, "\n")
+#gpu float
+print("\tGPU(1.2) ** GPU(4.4) = ", gpufArithmeticTest ** gpufVarInit, "\n")
+
 print("Exponent:\n")
 #ints
 print("\t1 ^ 2 = ", 1^2, "\n")
@@ -173,7 +188,7 @@ print("\t1 ^ GPU(3) = ", 1^gpuiVarInit, "\n")
 print("\t1 ^ GPU(4.4) = ", 1^gpufVarInit, "\n")
 #floats
 print("\t1.2 ^ 3.4 = ", 1.2^3.4, "\n")
-print("\t1.2 ^ GPU(3) = ", 1.2^gpuiVarInit, "\n")
+print("\t1.2 ^ GPU(3) = ", 1.2^gpuiArithmeticTest, "\n")
 print("\t1.2 ^ GPU(4.4) = ", 1.2^gpufVarInit, "\n")
 #gpu int
 print("\tGPU(1) ^ GPU(3) = ", gpuiArithmeticTest ^ gpuiVarInit, "\n")
@@ -182,9 +197,70 @@ print("\tGPU(1.2) ^ GPU(4.4) = ", gpufArithmeticTest ^ gpufVarInit, "\n")
 
 print("Modulus :\n")
 print("\t5 % 2 = ", 5%2, "\n")
-print("\t5 % GPU(3) = ", 5%gpuiArithmeticTest, "\n")
-print("\tGPU(3) % 2 = ", gpuiArithmeticTest%2, "\n")
-print("\tGPU(3) % GPU(3) = ", gpuiArithmeticTest%gpuiArithmeticTest, "\n")
+print("\t5 % GPU(1) = ", 5%gpuiArithmeticTest, "\n")
+print("\tGPU(1) % 2 = ", gpuiArithmeticTest%2, "\n")
+print("\tGPU(1) % GPU(1) = ", gpuiArithmeticTest%gpuiArithmeticTest, "\n")
 
-print("Done.")
+print("\n-----PRIMITIVE COMPARATIVE OPERATORS-----\n")
+
+print("Equals:\n")
+#int
+print("1 = 1 : ", 1 = 1, "\n")
+print("1 = 1.2 : ", 1 = 1.2, "\n")
+print("1 = True : ", 1 = True, "\n")
+print("1 = 'hello' : ", 1 = "hello", "\n")
+print("1 = GPU(1) : ", 1 = gpuiArithmeticTest, "\n")
+print("1 = GPU(1.2) : ", 1 = gpufArithmeticTest, "\n")
+#float
+print("1.2 = 1.2 : ", 1.2 = 1.2, "\n")
+print("1.2 = 'hello' : ", 1.2 = "hello", "\n")
+print("1.2 = GPU(1) : ", 1.2 = gpuiArithmeticTest, "\n")
+print("1.2 = GPU(1.2) : ", 1.2 = gpufArithmeticTest, "\n")
+print("1.2 = True : ", 1.2 = True, "\n")
+#bool
+print("True = 'hello' : ", True = "hello", "\n")
+print("True = GPU(1) : ", True = gpuiArithmeticTest, "\n")
+print("True = GPU(1.2) : ", True = gpufArithmeticTest, "\n")
+print("True = True : ", True = True, "\n")
+#string
+print("'hello' = 'hello' : ", "hello" = "hello", "\n")
+print("'hello' = GPU(1) : ", "hello" = gpuiArithmeticTest, "\n")
+print("'hello' = GPU(1.2) : ", "hello" = gpufArithmeticTest, "\n")
+#gpu_int
+print("GPU(1) = GPU(1) : ", gpuiArithmeticTest = gpuiArithmeticTest, "\n")
+print("GPU(1) = GPU(1.2) : ", gpuiArithmeticTest = gpufArithmeticTest, "\n")
+#gpu_float
+print("GPU(1.2) = GPU(1.2) : ", gpufArithmeticTest = gpufArithmeticTest, "\n")
+
+print("Not equals:\n")
+#int
+print("1 <> 1 : ", 1 <> 1, "\n")
+print("1 <> 1.2 : ", 1 <> 1.2, "\n")
+print("1 <> True : ", 1 <> True, "\n")
+print("1 <> 'hello' : ", 1 <> "hello", "\n")
+print("1 <> GPU(1) : ", 1 <> gpuiArithmeticTest, "\n")
+print("1 <> GPU(1.2) : ", 1 <> gpufArithmeticTest, "\n")
+#float
+print("1.2 <> 1.2 : ", 1.2 <> 1.2, "\n")
+print("1.2 <> 'hello' : ", 1.2 <> "hello", "\n")
+print("1.2 <> GPU(1) : ", 1.2 <> gpuiArithmeticTest, "\n")
+print("1.2 <> GPU(1.2) : ", 1.2 <> gpufArithmeticTest, "\n")
+print("1.2 <> True : ", 1.2 <> True, "\n")
+#bool
+print("True <> 'hello' : ", True <> "hello", "\n")
+print("True <> GPU(1) : ", True <> gpuiArithmeticTest, "\n")
+print("True <> GPU(1.2) : ", True <> gpufArithmeticTest, "\n")
+print("True <> True : ", True <> True, "\n")
+#string
+print("'hello' <> 'hello' : ", "hello" <> "hello", "\n")
+print("'hello' <> GPU(1) : ", "hello" <> gpuiArithmeticTest, "\n")
+print("'hello' <> GPU(1.2) : ", "hello" <> gpufArithmeticTest, "\n")
+#gpu_int
+print("GPU(1) <> GPU(1) : ", gpuiArithmeticTest <> gpuiArithmeticTest, "\n")
+print("GPU(1) <> GPU(1.2) : ", gpuiArithmeticTest <> gpufArithmeticTest, "\n")
+#gpu_float
+print("GPU(1.2) <> GPU(1.2) : ", gpufArithmeticTest <> gpufArithmeticTest, "\n")
+
+
+print("\nDone.")
 
