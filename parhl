@@ -86,12 +86,14 @@ class MemoryManager():
         self.mem_stack[fid][-1][tid][idx:last] = tens_w_vals
 
 def _bin_op_tens(q, mem, op):
+    dev_to_use = DEVICE if q[1][0][3] >= 4 or q[2][0][3] >= 4 else 'cpu'
     l_dir, l_dims = q[1]
     r_dir, r_dims = q[2]
     l_size = reduce(lambda x,y : x*y, l_dims + [1])
     r_size = reduce(lambda x,y : x*y, r_dims + [1])
-    l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
-    r_tens = mem.get_mem(r_dir, r_size).view(r_dims)
+    # .to(dev_to_use) does not cause a new malloc unless the device is different
+    l_tens = mem.get_mem(l_dir, l_size).view(l_dims).to(dev_to_use)
+    r_tens = mem.get_mem(r_dir, r_size).view(r_dims).to(dev_to_use)
     res_tens = op(l_tens, r_tens).view(-1) # back to 1d
     mem.set_mem_w_val(q[3], res_tens, len(res_tens))
 
