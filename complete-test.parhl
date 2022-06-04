@@ -1,6 +1,6 @@
 print("Starting tests.\n")
 
-# Declaring primitives
+print("\n-----DECLARING PRIMITIVES-----\n")
 
 let iVar : int
 let fVar : float
@@ -10,7 +10,7 @@ let gpuiVar : gpu_int
 let gpufVar : gpu_float
 let gpubVar : gpu_bool
 
-# Declaring primitives with initial value
+print("\n-----DECLARING PRIMITIVES WITH INITIAL VALUE-----\n")
 
 let iVarInit : int := 1
 let fVarInit : float := 2.2
@@ -20,7 +20,7 @@ let gpuiVarInit : gpu_int := 3
 let gpufVarInit : gpu_float := 4.4  
 let gpubVarInit : gpu_bool := False
 
-# Prints all primitive types
+print("\n----PRINT ALL PRIMITIVES-----\n")
 
 print("Printing int: ", iVarInit, "\n")
 print("Printing float: ", fVarInit, "\n")
@@ -30,20 +30,21 @@ print("Printing gpu_int: ", gpuiVarInit, "\n")
 print("Printing gpu_float: ", gpufVarInit, "\n")
 print("Printing gpu_bool: ", gpubVarInit, "\n")
 
-# Loops
+print("\n-----LOOPS-----\n")
 
+print("For:\n")
 for(let i : int := 0; i < 3; i := i + 1) {
-  print("This should print 3 times.\n")
+  print("\tThis should print 3 times.\n")
 }
 
+print("While:\n")
 let counter : int := 0
-
 while(counter < 4) {
-  print("This should print 4 times.\n")
+  print("\tThis should print 4 times.\n")
   counter := counter + 1
 }
 
-# Conditionals
+print("\n-----CONDITIONALS-----\n")
 
 let pass : bool := True
 
@@ -67,7 +68,123 @@ if(not pass) {
   print("This 'else' should never print.\n")
 }
 
-# Boolean Operators
+print("\n-----PRIMITIVE BOOLEAN OPERATORS-----\n")
+print("And:\n")
+print("\tTrue and True: ", True and True, "\n")
+print("\tTrue and False: ", True and False, "\n")
+print("\tFalse and False: ", False and False, "\n")
+print("Or:\n")
+print("\tTrue or True: ", True or True, "\n")
+print("\tTrue or False: ", True or False, "\n")
+print("\tFalse or False: ", False or False, "\n")
+print("Not:\n")
+print("\tnot False: ", not False, "\n")
+print("\tnot True: ", not True, "\n")
+
+print("\n-----PRIMITIVE ARITHMETIC OPERATORS-----\n")
+
+print("Binary Sum:\n")
+#ints
+print("\t1 + 2 = ", 1+2, "\n")
+print("\t1 + 2.1 = ", 1+2.1, "\n")
+print("\t1 + GPU(3) = ", 1+gpuiVarInit, "\n")
+print("\t1 + GPU(4.4) = ", 1+gpufVarInit, "\n")
+#floats
+print("\t1.2 + 3.4 = ", 1.2+3.4, "\n")
+print("\t1.2 + GPU(3) = ", 1.2+gpuiVarInit, "\n")
+print("\t1.2 + GPU(4.4) = ", 1.2+gpufVarInit, "\n")
+#gpu int
+let gpuiArithmeticTest : gpu_int := 1
+print("\tGPU(1) + GPU(3) = ", gpuiArithmeticTest + gpuiVarInit, "\n")
+#gpu float
+let gpufArithmeticTest : gpu_float := 1.2
+print("\tGPU(1.2) + GPU(4.4) = ", gpufArithmeticTest + gpufVarInit, "\n")
+#string
+print("\t'hello ' + 'world!' = '", "hello " + "world!", "'\n")
+
+print("Unary Sum:\n")
+print("\t+1", +1, "\n")
+print("\t+1.2", +1.2, "\n")
+print("\t+GPU(1)", +gpuiArithmeticTest, "\n")
+print("\t+GPI(1.2)", +gpufArithmeticTest, "\n")
+
+print("Binary Minus:\n")
+print("\t3 - 2 = ", 3-2, "\n")
+print("\t1 - 3.4 = ", 1-3.4, "\n")
+print("\t3 - GPU(1) = ", 3 - gpuiArithmeticTest, "\n")
+print("\t3 - GPU(1.2) = ", 3 - gpufArithmeticTest, "\n")
+print("\t3.2 - 2 = ", 3.2-2, "\n")
+print("\t1.1 - 3.4 = ", 1.1-3.4, "\n")
+print("\t3.2 - GPU(1) = ", 3.2 - gpuiArithmeticTest, "\n")
+print("\t3.2 - GPU(1.2) = ", 3.2 - gpufArithmeticTest, "\n")
+print("\tGPU(1) - 2 = ", gpuiArithmeticTest-2, "\n")
+print("\tGPU(1) - 3.4 = ", gpuiArithmeticTest-3.4, "\n")
+print("\tGPU(1) - GPU(1) = ", gpuiArithmeticTest - gpuiArithmeticTest, "\n")
+print("\tGPU(1) - GPU(1.2) = ", gpuiArithmeticTest - gpufArithmeticTest, "\n")
+print("\tGPU(1.2) - 2 = ", gpufArithmeticTest-2, "\n")
+print("\tGPU(1.2) - 3.4 = ", gpufArithmeticTest-3.4, "\n")
+print("\tGPU(1.2) - GPU(1) = ", gpufArithmeticTest - gpuiArithmeticTest, "\n")
+print("\tGPU(1.2) - GPU(1.2) = ", gpufArithmeticTest - gpufArithmeticTest, "\n")
+
+print("Unary Minus:\n")
+print("\t-1", -1, "\n")
+print("\t-1.2", -1.2, "\n")
+print("\t-GPU(1)", -gpuiArithmeticTest, "\n")
+print("\t-GPI(1.2)", -gpufArithmeticTest, "\n")
+
+print("Division:\n")
+print("\t4 / 2 = ", 4/2, "\n")
+print("\t4 / 2.1 = ", 4/2.1, "\n")
+print("\t4 / GPU(3) = ", 4/gpuiVarInit, "\n")
+print("\t4 / GPU(4.4) = ", 4/gpufVarInit, "\n")
+print("\t4.2 / 2 = ", 4.2/2, "\n")
+print("\t4.2 / 2.1 = ", 4.2/2.1, "\n")
+print("\t4.2 / GPU(3) = ", 4.2/gpuiVarInit, "\n")
+print("\t4.2 / GPU(4.4) = ", 4.2/gpufVarInit, "\n")
+print("\tGPU(3) / 2 = ", gpuiVarInit/2, "\n")
+print("\tGPU(3) / 2.1 = ", gpuiVarInit/2.1, "\n")
+print("\tGPU(3) / GPU(3) = ", gpuiVarInit/gpuiVarInit, "\n")
+print("\tGPU(3) / GPU(4.4) = ", gpuiVarInit/gpufVarInit, "\n")
+print("\tGPU(4.4) / 2 = ", gpufVarInit/2, "\n")
+print("\tGPU(4.4) / 2.1 = ", gpufVarInit/2.1, "\n")
+print("\tGPU(4.4) / GPU(3) = ", gpufVarInit/gpuiVarInit, "\n")
+print("\tGPU(4.4) / GPU(4.4) = ", gpufVarInit/gpufVarInit, "\n")
+
+print("Multiplication:\n")
+#ints
+print("\t1 * 2 = ", 1*2, "\n")
+print("\t1 * 2.1 = ", 1*2.1, "\n")
+print("\t1 * GPU(3) = ", 1*gpuiVarInit, "\n")
+print("\t1 * GPU(4.4) = ", 1*gpufVarInit, "\n")
+#floats
+print("\t1.2 * 3.4 = ", 1.2*3.4, "\n")
+print("\t1.2 * GPU(3) = ", 1.2*gpuiVarInit, "\n")
+print("\t1.2 * GPU(4.4) = ", 1.2*gpufVarInit, "\n")
+#gpu int
+print("\tGPU(1) * GPU(3) = ", gpuiArithmeticTest * gpuiVarInit, "\n")
+#gpu float
+print("\tGPU(1.2) * GPU(4.4) = ", gpufArithmeticTest * gpufVarInit, "\n")
+
+print("Exponent:\n")
+#ints
+print("\t1 ^ 2 = ", 1^2, "\n")
+print("\t1 ^ 2.1 = ", 1^2.1, "\n")
+print("\t1 ^ GPU(3) = ", 1^gpuiVarInit, "\n")
+print("\t1 ^ GPU(4.4) = ", 1^gpufVarInit, "\n")
+#floats
+print("\t1.2 ^ 3.4 = ", 1.2^3.4, "\n")
+print("\t1.2 ^ GPU(3) = ", 1.2^gpuiVarInit, "\n")
+print("\t1.2 ^ GPU(4.4) = ", 1.2^gpufVarInit, "\n")
+#gpu int
+print("\tGPU(1) ^ GPU(3) = ", gpuiArithmeticTest ^ gpuiVarInit, "\n")
+#gpu float
+print("\tGPU(1.2) ^ GPU(4.4) = ", gpufArithmeticTest ^ gpufVarInit, "\n")
+
+print("Modulus :\n")
+print("\t5 % 2 = ", 5%2, "\n")
+print("\t5 % GPU(3) = ", 5%gpuiArithmeticTest, "\n")
+print("\tGPU(3) % 2 = ", gpuiArithmeticTest%2, "\n")
+print("\tGPU(3) % GPU(3) = ", gpuiArithmeticTest%gpuiArithmeticTest, "\n")
 
 print("Done.")
 
