@@ -38,6 +38,9 @@ print("From 'input/string.input' read: ", read_file(string, "input/string.input"
 print("From 'input/int.input' read: ", read_file(int, "input/int.input"), "\n")
 print("From 'input/float.input' read: ", read_file(float, "input/float.input"), "\n")
 print("From 'input/bool.input' read: ", read_file(bool, "input/bool.input"), "\n")
+print("From 'input/int.input' read: ", read_file(gpu_int, "input/int.input"), " with gpu type\n")
+print("From 'input/float.input' read: ", read_file(gpu_float, "input/float.input"), " with gpu type\n")
+print("From 'input/bool.input' read: ", read_file(gpu_bool, "input/bool.input"), " with gpu type\n")
 
 print("\n-----Testing write_file function-----\n")
 write_file("output/string.output", readLineStr)
