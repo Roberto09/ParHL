@@ -1,0 +1,57 @@
+
+print("Starting tests.\n")
+
+print("\n-----Testing print function-----\n")
+# print
+print("\n-----Testing read_line function-----\n")
+# string
+print("Type string to test read_line: ")
+let readLineStr: string := read_line(string);
+print("\tread_line read: '", readLineStr,"'\n")
+# int
+print("Type int to test read_line: ")
+let readLineInt: int := read_line(int);
+print("\tread_line read: ", readLineInt,"\n")
+# float
+print("Type float to test read_line: ")
+let readLineFloat: float := read_line(float);
+print("\tread_line read: ", readLineFloat,"\n")
+# bool
+print("Type bool to test read_line: ")
+let readLineBoolean: bool := read_line(bool);
+print("\tread_line read: ", readLineBoolean,"\n")
+# gpu_int
+print("Type gpu_int to test read_line: ")
+let readLineGpuInt: gpu_int := read_line(gpu_int);
+print("\tread_line read: ", readLineGpuInt,"\n")
+# gpu_float
+print("Type gpu_float to test read_line: ")
+let readLineGpuFloat: gpu_float := read_line(gpu_float);
+print("\tread_line read: ", readLineGpuFloat,"\n")
+# gpu_bool
+print("Type gpu_bool to test read_line: ")
+let readLineGpuBoolean: gpu_bool := read_line(gpu_bool);
+print("\tread_line read: ", readLineGpuBoolean,"\n")
+
+print("\n-----Testing read_file function-----\n")
+print("From 'string.input' read: ", read_file(string, "string.input"), "\n")
+print("From 'int.input' read: ", read_file(int, "int.input"), "\n")
+print("From 'float.input' read: ", read_file(float, "float.input"), "\n")
+print("From 'bool.input' read: ", read_file(bool, "bool.input"), "\n")
+
+print("\n-----Testing write_file function-----\n")
+write_file("string.output", readLineStr)
+print("Wrote to 'string.output'\n")
+write_file("int.output", readLineInt)
+print("Wrote to 'int.output'\n")
+write_file("float.output", readLineFloat)
+print("Wrote to 'float.output'\n")
+write_file("bool.output", readLineBoolean)
+print("Wrote to 'bool.output'\n")
+write_file("gpu_int.output", readLineGpuInt)
+print("Wrote to 'gpu_int.output'\n")
+write_file("gpu_float.output", readLineGpuFloat)
+print("Wrote to 'gpu_float.output'\n")
+write_file("gpu_bool.output", readLineGpuBoolean)
+print("Wrote to 'gpu_bool.output'\n")
+print("\nDone.")
