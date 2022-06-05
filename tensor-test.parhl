@@ -168,5 +168,192 @@ print("\tGPU([32,10,24]) ** [[3.2],[5.32],[12.3]] = ", giArrInitialized ** gfArr
 #gpu float
 print("\tGPU([3.2,5.32,12.3]) ** [[3.2],[5.32],[12.3]] = ", gfArrInitialized ** gfArrInverted, "\n")
 
+print("Exponent:\n")
+# print("\t[1,2,3] ^ [4,5,6] = ", [1,2,3] ^ [4,5,6], "\n")
+# print("\t[1,2,3] ^ [1.1,2.2,3.3] = ", [1,2,3] ^ [1.1,2.2,3.3], "\n")
+# print("\t[1,2,3] ^ GPU([32,10,24]) = ", [1,2,3] ^ giArrInitialized, "\n")
+# print("\t[1,2,3] ^ GPU([3.2,5.32,12.3]) = ", [1,2,3] ^ gfArrInitialized, "\n")
+# #floats
+# print("\t[1.1,2.2,3.3] ^ [3.2,5.32,12.3] = ", [1.1,2.2,3.3] ^ [3.2,5.32,12.3], "\n")
+# print("\t[1.1,2.2,3.3] ^ GPU([32,10,24]) = ", [1.1,2.2,3.3] ^ giArrInitialized, "\n")
+# print("\t[1.1,2.2,3.3] ^ GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] ^ gfArrInitialized, "\n")
+# #gpu int
+# print("\tGPU([32,10,24]) ^ GPU([32,10,24]) = ", giArrInitialized ^ giArrInitialized, "\n")
+# print("\tGPU([32,10,24]) ^ GPU([3.2,5.32,12.3]) = ", giArrInitialized ^ gfArrInitialized, "\n")
+# #gpu float
+# print("\tGPU([3.2,5.32,12.3]) ^ GPU([3.2,5.32,12.3]) = ", gfArrInitialized ^ gfArrInitialized, "\n")
+
+print("Modulus:\n")
+#int
+print("\t[1,2,3] % [4,4,4] = ", [1,2,3] % [4,4,4], "\n")
+print("\t[37,14,25] % GPU([32,10,24]) = ", [37,14,25] % giArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) % [10,4,5] = ", giArrInitialized % [10,4,5], "\n")
+print("\tGPU([32,10,24]) % GPU([32,10,24]) = ", giArrInitialized % giArrInitialized, "\n")
+
+print("\n-----COMPARATIVE OPERATORS-----\n")
+print("Equals:\n")
+#int
+print("\t[1,2,3] = [1,2,3] : ", [1,2,3] = [1,2,3], "\n")
+print("\t[1,2,3] = [1.1,2.2,3.3] : ", [1,2,3] = [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] = [True, False, True] : ", [1,2,3] = [True, False, True], "\n")
+# print("\t[1,2,3] = ['1', 'hello', 'world'] : ", [1,2,3] = ["1", "hello", "world"], "\n")
+print("\t[1,2,3] = GPU([32,10,24]) : ", [1,2,3] = giArrInitialized, "\n")
+print("\t[1,2,3] = GPU([3.2,5.32,12.3]) : ", [1,2,3] = gfArrInitialized, "\n")
+print("\t[1,2,3] = GPU([True, True, True]) : ", [1,2,3] = gbArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] = [3.2,5.32,12.3] : ", [1.1,2.2,3.3] = [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] = GPU([32,10,24]) : ", [1.1,2.2,3.3] = giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] = GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] = gfArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] = [True, False, True] : ", [1.1,2.2,3.3] = [True, False, True], "\n")
+# print("\t[1.1,2.2,3.3] = ['1', 'hello', 'world'] : ", [1.1,2.2,3.3] = ["1", "hello", "world"], "\n")
+print("\t[1.1,2.2,3.3] = GPU([True, True, True]) : ", [1.1,2.2,3.3] = gbArrInitialized, "\n")
+#bool
+print("\t[True, False, True] = GPU([32, 10, 24]) : ", [True, False, True] = giArrInitialized, "\n")
+print("\t[True, False, True] = GPU([3.2,5.32,12.3]) : ", [True, False, True] = gfArrInitialized, "\n")
+print("\t[True, False, True] = [True, False, True] : ", [True, False, True] = [True, False, True], "\n")
+# print("\t[True, False, True] = ['1', 'hello', 'world'] : ", [True, False, True] = ["1", "hello", "world"], "\n")
+print("\t[True, False, True] = GPU([True, True, True]) : ", [True, False, True] = gbArrInitialized, "\n")
+#string
+# print("\t['test', 'hello', '1'] = GPU([32, 10, 24]) : ", ["test", "hello", "1"] = giArrInitialized, "\n")
+# print("\t['test', 'hello', '1'] = GPU([3.2,5.32,12.3]) : ", ["test", "hello", "1"] = gfArrInitialized, "\n")
+# print("\t['test', 'hello', '1'] = ['1', 'hello', 'world'] : ", ["test", "hello", "1"] = ["1", "hello", "world"], "\n")
+# print("\t['test', 'hello', '1'] = GPU([True, True, True]) : ", ["test", "hello", "1"] = gbArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) = GPU([32,10,24]) : ", giArrInitialized = giArrInitialized, "\n")
+print("\tGPU([32,10,24]) = GPU([3.2,5.32,12.3]) : ", giArrInitialized = gfArrInitialized, "\n")
+print("\tGPU([32,10,24]) = GPU([True, True, True]) : ", giArrInitialized = gbArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) = GPU([3.2,5.32,12.3]) : ", gfArrInitialized = gfArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) = GPU([True, True, True]) : ", gfArrInitialized = gbArrInitialized, "\n")
+#gpu bool
+print("\tGPU([True, True, True]) = GPU([True, True, True]) : ", gbArrInitialized = gbArrInitialized, "\n")
+
+
+print("Not Equals:\n")
+#int
+print("\t[1,2,3] <> [1,2,3] : ", [1,2,3] <> [1,2,3], "\n")
+print("\t[1,2,3] <> [1.1,2.2,3.3] : ", [1,2,3] <> [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] <> [True, False, True] : ", [1,2,3] <> [True, False, True], "\n")
+# print("\t[1,2,3] <> ['1', 'hello', 'world'] : ", [1,2,3] <> ["1", "hello", "world"], "\n")
+print("\t[1,2,3] <> GPU([32,10,24]) : ", [1,2,3] <> giArrInitialized, "\n")
+print("\t[1,2,3] <> GPU([3.2,5.32,12.3]) : ", [1,2,3] <> gfArrInitialized, "\n")
+print("\t[1,2,3] <> GPU([True, True, True]) : ", [1,2,3] <> gbArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] <> [3.2,5.32,12.3] : ", [1.1,2.2,3.3] <> [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] <> GPU([32,10,24]) : ", [1.1,2.2,3.3] <> giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] <> GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] <> gfArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] <> [True, False, True] : ", [1.1,2.2,3.3] <> [True, False, True], "\n")
+# print("\t[1.1,2.2,3.3] <> ['1', 'hello', 'world'] : ", [1.1,2.2,3.3] <> ["1", "hello", "world"], "\n")
+print("\t[1.1,2.2,3.3] <> GPU([True, True, True]) : ", [1.1,2.2,3.3] <> gbArrInitialized, "\n")
+#bool
+print("\t[True, False, True] <> GPU([32, 10, 24]) : ", [True, False, True] <> giArrInitialized, "\n")
+print("\t[True, False, True] <> GPU([3.2,5.32,12.3]) : ", [True, False, True] <> gfArrInitialized, "\n")
+print("\t[True, False, True] <> [True, False, True] : ", [True, False, True] <> [True, False, True], "\n")
+# print("\t[True, False, True] <> ['1', 'hello', 'world'] : ", [True, False, True] <> ["1", "hello", "world"], "\n")
+print("\t[True, False, True] <> GPU([True, True, True]) : ", [True, False, True] <> gbArrInitialized, "\n")
+#string
+# print("\t['test', 'hello', '1'] <> GPU([32, 10, 24]) : ", ["test", "hello", "1"] <> giArrInitialized, "\n")
+# print("\t['test', 'hello', '1'] <> GPU([3.2,5.32,12.3]) : ", ["test", "hello", "1"] <> gfArrInitialized, "\n")
+# print("\t['test', 'hello', '1'] <> ['1', 'hello', 'world'] : ", ["test", "hello", "1"] <> ["1", "hello", "world"], "\n")
+# print("\t['test', 'hello', '1'] <> GPU([True, True, True]) : ", ["test", "hello", "1"] <> gbArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) <> GPU([32,10,24]) : ", giArrInitialized <> giArrInitialized, "\n")
+print("\tGPU([32,10,24]) <> GPU([3.2,5.32,12.3]) : ", giArrInitialized <> gfArrInitialized, "\n")
+print("\tGPU([32,10,24]) <> GPU([True, True, True]) : ", giArrInitialized <> gbArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) <> GPU([3.2,5.32,12.3]) : ", gfArrInitialized <> gfArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) <> GPU([True, True, True]) : ", gfArrInitialized <> gbArrInitialized, "\n")
+#gpu bool
+print("\tGPU([True, True, True]) <> GPU([True, True, True]) : ", gbArrInitialized <> gbArrInitialized, "\n")
+
+print("Greater than:\n")
+#int
+print("\t[1,2,3] > [4,5,6] : ", [1,2,3] > [4,5,6], "\n")
+print("\t[1,2,3] > [1.1,2.2,3.3] : ", [1,2,3] > [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] > GPU([32,10,24]) : ", [1,2,3] > giArrInitialized, "\n")
+print("\t[1,2,3] > GPU([3.2,5.32,12.3]) : ", [1,2,3] > gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] > [1,2,3] : ", [1.1,2.2,3.3] > [1,2,3], "\n")
+print("\t[1.1,2.2,3.3] > [3.2,5.32,12.3] : ", [1.1,2.2,3.3] > [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] > GPU([32,10,24]) : ", [1.1,2.2,3.3] > giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] > GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] > gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) > [1,2,3] : ", giArrInitialized > [1,2,3], "\n")
+print("\tGPU([32,10,24]) > [1.1, 2.2, 3.3] : ", giArrInitialized > [1.1, 2.2, 3.3], "\n")
+print("\tGPU([32,10,24]) > GPU([32,10,24]) : ", giArrInitialized > giArrInitialized, "\n")
+print("\tGPU([32,10,24]) > GPU([3.2,5.32,12.3]) : ", giArrInitialized > gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3] > [1,2,3] : ", gfArrInitialized > [1,2,3], "\n")
+print("\tGPU([3.2,5.32,12.3] > [1.1, 2.2, 3.3] : ", gfArrInitialized > [1.1, 2.2, 3.3], "\n")
+print("\tGPU([3.2,5.32,12.3] > GPU([32,10,24]) : ", gfArrInitialized > giArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) > GPU([3.2,5.32,12.3]) : ", gfArrInitialized > gfArrInitialized, "\n")
+
+print("Less than:\n")
+#int
+print("\t[1,2,3] < [4,5,6] : ", [1,2,3] < [4,5,6], "\n")
+print("\t[1,2,3] < [1.1,2.2,3.3] : ", [1,2,3] < [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] < GPU([32,10,24]) : ", [1,2,3] < giArrInitialized, "\n")
+print("\t[1,2,3] < GPU([3.2,5.32,12.3]) : ", [1,2,3] < gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] < [1,2,3] : ", [1.1,2.2,3.3] < [1,2,3], "\n")
+print("\t[1.1,2.2,3.3] < [3.2,5.32,12.3] : ", [1.1,2.2,3.3] < [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] < GPU([32,10,24]) : ", [1.1,2.2,3.3] < giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] < GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] < gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) < [1,2,3] : ", giArrInitialized < [1,2,3], "\n")
+print("\tGPU([32,10,24]) < [1.1, 2.2, 3.3] : ", giArrInitialized < [1.1, 2.2, 3.3], "\n")
+print("\tGPU([32,10,24]) < GPU([32,10,24]) : ", giArrInitialized < giArrInitialized, "\n")
+print("\tGPU([32,10,24]) < GPU([3.2,5.32,12.3]) : ", giArrInitialized < gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3] < [1,2,3] : ", gfArrInitialized < [1,2,3], "\n")
+print("\tGPU([3.2,5.32,12.3] < [1.1, 2.2, 3.3] : ", gfArrInitialized < [1.1, 2.2, 3.3], "\n")
+print("\tGPU([3.2,5.32,12.3] < GPU([32,10,24]) : ", gfArrInitialized < giArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) < GPU([3.2,5.32,12.3]) : ", gfArrInitialized < gfArrInitialized, "\n")
+
+print("Greater than or equals:\n")
+#int
+print("\t[1,2,3] >= [4,5,6] : ", [1,2,3] >= [4,5,6], "\n")
+print("\t[1,2,3] >= [1.1,2.2,3.3] : ", [1,2,3] >= [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] >= GPU([32,10,24]) : ", [1,2,3] >= giArrInitialized, "\n")
+print("\t[1,2,3] >= GPU([3.2,5.32,12.3]) : ", [1,2,3] >= gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] >= [1,2,3] : ", [1.1,2.2,3.3] >= [1,2,3], "\n")
+print("\t[1.1,2.2,3.3] >= [3.2,5.32,12.3] : ", [1.1,2.2,3.3] >= [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] >= GPU([32,10,24]) : ", [1.1,2.2,3.3] >= giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] >= GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] >= gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) >= [1,2,3] : ", giArrInitialized >= [1,2,3], "\n")
+print("\tGPU([32,10,24]) >= [1.1, 2.2, 3.3] : ", giArrInitialized >= [1.1, 2.2, 3.3], "\n")
+print("\tGPU([32,10,24]) >= GPU([32,10,24]) : ", giArrInitialized >= giArrInitialized, "\n")
+print("\tGPU([32,10,24]) >= GPU([3.2,5.32,12.3]) : ", giArrInitialized >= gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3] >= [1,2,3] : ", gfArrInitialized >= [1,2,3], "\n")
+print("\tGPU([3.2,5.32,12.3] >= [1.1, 2.2, 3.3] : ", gfArrInitialized >= [1.1, 2.2, 3.3], "\n")
+print("\tGPU([3.2,5.32,12.3] >= GPU([32,10,24]) : ", gfArrInitialized >= giArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) >= GPU([3.2,5.32,12.3]) : ", gfArrInitialized >= gfArrInitialized, "\n")
+
+print("Less than or equals:\n")
+#int
+print("\t[1,2,3] <= [4,5,6] : ", [1,2,3] <= [4,5,6], "\n")
+print("\t[1,2,3] <= [1.1,2.2,3.3] : ", [1,2,3] <= [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] <= GPU([32,10,24]) : ", [1,2,3] <= giArrInitialized, "\n")
+print("\t[1,2,3] <= GPU([3.2,5.32,12.3]) : ", [1,2,3] <= gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] <= [1,2,3] : ", [1.1,2.2,3.3] <= [1,2,3], "\n")
+print("\t[1.1,2.2,3.3] <= [3.2,5.32,12.3] : ", [1.1,2.2,3.3] <= [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] <= GPU([32,10,24]) : ", [1.1,2.2,3.3] <= giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] <= GPU([3.2,5.32,12.3]) : ", [1.1,2.2,3.3] <= gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) <= [1,2,3] : ", giArrInitialized <= [1,2,3], "\n")
+print("\tGPU([32,10,24]) <= [1.1, 2.2, 3.3] : ", giArrInitialized <= [1.1, 2.2, 3.3], "\n")
+print("\tGPU([32,10,24]) <= GPU([32,10,24]) : ", giArrInitialized <= giArrInitialized, "\n")
+print("\tGPU([32,10,24]) <= GPU([3.2,5.32,12.3]) : ", giArrInitialized <= gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3] <= [1,2,3] : ", gfArrInitialized <= [1,2,3], "\n")
+print("\tGPU([3.2,5.32,12.3] <= [1.1, 2.2, 3.3] : ", gfArrInitialized <= [1.1, 2.2, 3.3], "\n")
+print("\tGPU([3.2,5.32,12.3] <= GPU([32,10,24]) : ", gfArrInitialized <= giArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) <= GPU([3.2,5.32,12.3]) : ", gfArrInitialized <= gfArrInitialized, "\n")
+
 
 print("\nDone.")
