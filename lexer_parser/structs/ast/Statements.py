@@ -234,7 +234,7 @@ class FuncDecl(Statement):
         last_q = ctx.get_quadruples()[-1]
         # func must have a return value if not void
         if self.id_type != 'VOID' and last_q.op != 'RETURN':
-            raise ParhlException(f"function {self.id.id} missing return value of type {self.id_type}")
+            raise ParhlException(f"Function {self.id.id} missing return value of type {self.id_type}")
         ctx.add_quadruple(Quadruple('ENDFUNC'))
         ctx.set_goto_position(goto_index) # fill goto
 
@@ -248,7 +248,7 @@ class Ret(Statement):
         curr_func = ctx.func_dir.curr_func
         
         if curr_func.type == 'VOID':
-            raise ParhlException(f"function {curr_func.name} is of type void, cannot return value")
+            raise ParhlException(f"Function {curr_func.name} is of type void, cannot return value")
         var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
 
         # If not void, curr_func.func_var must exist
@@ -265,7 +265,7 @@ class FuncCall(Statement):
         vars = self.args_seq.gen_ret_list(ctx) if self.args_seq else []
         ctx.add_quadruple(Quadruple('ERA',result=func.id)) # on vm lookup func by id
         if len(vars) != len(func.params):
-            raise ParhlException(f"function {func.name} expected {len(func.params)} but received {len(vars)}")
+            raise ParhlException(f"Function {func.name} expected {len(func.params)} but received {len(vars)}")
 
         for (i, var) in enumerate([] if vars == None else vars):
             param = func.params[i]
