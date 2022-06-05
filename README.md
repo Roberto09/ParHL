@@ -13,27 +13,6 @@ $ conda activate parhl
 $ pytest
 ```
 
-## Progress
-
-Finished implementation for:
-
-- Lexer
-- Parser
-- Function Directory
-- Variable Directory
-- Const tables
-- If-elsif-else conditionals
-- while/for loops
-- function declaration and instantiation
-- array declaration and accessing
-- virtual machine, most quadruples
-
-Missing implementation for
-
-- virtual machine, read_line, read_file, write_file
-- handle gpu types and gpu operations
-
----
 # PARHL USER MANUAL
 **In this section we reference the file ./user_manual.parhl file.**
 
@@ -92,6 +71,13 @@ parhl string! concatenated
 ```
 
 ## Operations With Tensors:
+
+Here we would like to note some of the interesting features of the compiler as we allow special operations with tensors:
+- We can do matrix multiplication of 2 tensors using the ** operator.
+- We can do emelmentwise multiplication of 2 tensors using the * operator.
+- We can raise matrices to a given integer scalar by using the ^ operator
+- In general we can do all elementwise operations among tensors such as +, -, /, %, *, as long as the dimensions of this tensors allow it.
+
 Code:
 ```
 tens_g_y[0][0] := 3
@@ -113,6 +99,11 @@ GPU([[-265.45085100000006, 390.04839000000004, 542.9754270000001], [-319.3191861
 ```
 
 ### Broadcasting:
+
+Broadcasting allows us to do interesting stuff with tensors of different dimensions:
+- In general the rules for broadcasting that we follow, given our Pytorch backend are: https://pytorch.org/docs/stable/notes/broadcasting.html
+- Exmaples are listed below
+
 Code:
 ```
 let tens_y4[2][2] : int := [1000, 2000] + [[1, 2], [3, 4]]
