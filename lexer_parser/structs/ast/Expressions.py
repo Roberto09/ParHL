@@ -1,3 +1,4 @@
+from lexer_parser.structs.semantic_cube import SemanticCube
 from ..var_dir import Tensor, TensorConst
 from ..parhl_exceptions import ParhlException
 from .Node import Node
@@ -50,6 +51,10 @@ class BinExpr(Expression):
         if self.op == "**":
             dims_res_func = matmul
         elif self.op == "^":
+            if type(right_var) == Tensor:
+                SemanticCube.raise_type_error(f"tensor({left_var.type})", op_name, f"tensor({right_var.type})")
+            elif right_var.type[-5:] != "INT_T":
+                SemanticCube.raise_type_error(f"tensor({left_var.type})", op_name, f"{right_var.type}")
             dims_res_func = matpow
         try:
             res_dims = dims_res_func(left_dims, right_dims)
