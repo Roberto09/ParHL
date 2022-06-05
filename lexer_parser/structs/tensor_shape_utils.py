@@ -25,8 +25,8 @@ def broadcast(a: List[int], b: List[int]):
         if sizeA != sizeB and sizeA != 1 and sizeB != 1:
             # TODO: only assertion error is bound in C++ compilation right now
             raise ParhlException(
-                "The size of tensor a {} must match the size of tensor b ("
-                "{}) at non-singleton dimension {}".format(sizeA, sizeB, i)
+                "The size of tensor a {} must match the size of tensor b "
+                "{} at non-singleton dimension {}".format(sizeA, sizeB, i)
             )
 
         expandedSizes.append(sizeB if sizeA == 1 else sizeA)
