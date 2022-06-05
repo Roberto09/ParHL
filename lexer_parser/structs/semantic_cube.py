@@ -68,11 +68,11 @@ class SemanticCube():
                 'GPU_BOOL_T' : 'GPU_BOOL_T',
             },
             'STRING_T': {
-                'STRING_T' : 'GPU_BOOL_T',
+                'STRING_T' : 'BOOL_T',
             },
-            'GPU_INT_T':_produce_all_same('GPU_BOOL_T'),
-            'GPU_FLOAT_T':_produce_all_same('GPU_BOOL_T'),
-            'GPU_BOOL_T':_produce_all_same('GPU_BOOL_T'),
+            'GPU_INT_T':_produce_all_same('GPU_BOOL_T', 'STRING_T'),
+            'GPU_FLOAT_T':_produce_all_same('GPU_BOOL_T', 'STRING_T'),
+            'GPU_BOOL_T':_produce_all_same('GPU_BOOL_T', 'STRING_T'),
         }
         basic_comp_ops_bin = {
             'INT_T':{
