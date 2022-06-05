@@ -113,6 +113,7 @@ def matmul(tensor1: List[int], tensor2: List[int]):
         assert False, "both  arguments to matmul need to be at least 1D"
 
 def matpow(tensor1: List[int], _: List[int]):
+    assert len(tensor1) == 2, "matrix should be squared"
     return matmul(tensor1, tensor1)
 
 def mv(self: List[int], vec: List[int]):
