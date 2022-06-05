@@ -212,12 +212,13 @@ def print_op(q, mem: MemoryManager):
 
 def mmult_op(q, mem):
     if len(q[1]) == 2: # We are dealing with tensors
-        if (q[1][0][3] == 4 or q[2][0][3] == 4 or # (GPU_INT_T, GPU_INT_T)
-            (q[1][0][3] == 1 ^ q[2][0][3] == 1)): # (CPU_INT_T, GPU_INT_T) or (GPU_INT_T, CPU_INT_T)
+        result_type = q[3][0][3] if len(q[3]) == 2 else q[3][3] # Depends on if resultn is primitive or tensor
+        if result_type == 1 or result_type == 4: # if result is INT_T or GPU_INT_T
             _bin_op_tens(q, mem,
+                lambda x,y: torch.matmul(x.double(), y.double()).long())
+        else: # else it  is FLOAT_T or GPU_FLOAT_T
+            _bin_op_tens(q, mem, 
                 lambda x,y: torch.matmul(x.double(), y.double()))
-        else:
-            _bin_op_tens(q, mem, torch.matmul)
     else:
         _bin_op_reg(q, mem, lambda x,y:x*y)
 
