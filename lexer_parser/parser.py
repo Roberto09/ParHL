@@ -261,9 +261,13 @@ class ParhlParser(Parser):
             return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2][1]))
         return Seq(p.lineno, VarDecl(p.lineno, Id(p.lineno, p[0]), p[2][1]), p[4])
 
-    @_('const_type', 'VOID')
+    @_('const_type', 'func_type_void')
     def func_type(self, p):
         return p[0][1]
+
+    @_('VOID')
+    def func_type_void(self, p):
+        return p.lineno, p[0]
 
     @_('RETURN expr')
     def ret(self, p):
