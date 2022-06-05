@@ -168,20 +168,19 @@ print("\tGPU([32,10,24]) ** [[3.2],[5.32],[12.3]] = ", giArrInitialized ** gfArr
 #gpu float
 print("\tGPU([3.2,5.32,12.3]) ** [[3.2],[5.32],[12.3]] = ", gfArrInitialized ** gfArrInverted, "\n")
 
-print("Exponent:\n")
-# print("\t[1,2,3] ^ [4,5,6] = ", [1,2,3] ^ [4,5,6], "\n")
-# print("\t[1,2,3] ^ [1.1,2.2,3.3] = ", [1,2,3] ^ [1.1,2.2,3.3], "\n")
-# print("\t[1,2,3] ^ GPU([32,10,24]) = ", [1,2,3] ^ giArrInitialized, "\n")
-# print("\t[1,2,3] ^ GPU([3.2,5.32,12.3]) = ", [1,2,3] ^ gfArrInitialized, "\n")
+let gpuExponent : int := 3
+# print("Exponent:\n")
+# print("\t[1,2,3] ^ 3 = ", [1,2,3] ^ 3, "\n")
+# print("\t[1,2,3] ^ GPU(3) = ", [1,2,3] ^ gpuExponent, "\n")
 # #floats
-# print("\t[1.1,2.2,3.3] ^ [3.2,5.32,12.3] = ", [1.1,2.2,3.3] ^ [3.2,5.32,12.3], "\n")
-# print("\t[1.1,2.2,3.3] ^ GPU([32,10,24]) = ", [1.1,2.2,3.3] ^ giArrInitialized, "\n")
-# print("\t[1.1,2.2,3.3] ^ GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] ^ gfArrInitialized, "\n")
+# print("\t[1.1,2.2,3.3] ^ 3 = ", [1.1,2.2,3.3] ^ 3, "\n")
+# print("\t[1.1,2.2,3.3] ^ GPU(3) = ", [1.1,2.2,3.3] ^ gpuExponent, "\n")
 # #gpu int
-# print("\tGPU([32,10,24]) ^ GPU([32,10,24]) = ", giArrInitialized ^ giArrInitialized, "\n")
-# print("\tGPU([32,10,24]) ^ GPU([3.2,5.32,12.3]) = ", giArrInitialized ^ gfArrInitialized, "\n")
+# print("\tGPU([32,10,24]) ^ 3 = ", giArrInitialized ^ 3, "\n")
+# print("\tGPU([32,10,24]) ^ GPU(3) = ", giArrInitialized ^ gpuExponent, "\n")
 # #gpu float
-# print("\tGPU([3.2,5.32,12.3]) ^ GPU([3.2,5.32,12.3]) = ", gfArrInitialized ^ gfArrInitialized, "\n")
+# print("\tGPU([3.2,5.32,12.3]) ^ 3 = ", gfArrInitialized ^ 3, "\n")
+# print("\tGPU([3.2,5.32,12.3]) ^ GPU(3) = ", gfArrInitialized ^ gpuExponent, "\n")
 
 print("Modulus:\n")
 #int
