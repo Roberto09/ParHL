@@ -169,18 +169,20 @@ print("\tGPU([32,10,24]) ** [[3.2],[5.32],[12.3]] = ", giArrInitialized ** gfArr
 print("\tGPU([3.2,5.32,12.3]) ** [[3.2],[5.32],[12.3]] = ", gfArrInitialized ** gfArrInverted, "\n")
 
 let gpuExponent : int := 3
-# print("Exponent:\n")
-# print("\t[1,2,3] ^ 3 = ", [1,2,3] ^ 3, "\n")
-# print("\t[1,2,3] ^ GPU(3) = ", [1,2,3] ^ gpuExponent, "\n")
-# #floats
-# print("\t[1.1,2.2,3.3] ^ 3 = ", [1.1,2.2,3.3] ^ 3, "\n")
-# print("\t[1.1,2.2,3.3] ^ GPU(3) = ", [1.1,2.2,3.3] ^ gpuExponent, "\n")
-# #gpu int
-# print("\tGPU([32,10,24]) ^ 3 = ", giArrInitialized ^ 3, "\n")
-# print("\tGPU([32,10,24]) ^ GPU(3) = ", giArrInitialized ^ gpuExponent, "\n")
-# #gpu float
-# print("\tGPU([3.2,5.32,12.3]) ^ 3 = ", gfArrInitialized ^ 3, "\n")
-# print("\tGPU([3.2,5.32,12.3]) ^ GPU(3) = ", gfArrInitialized ^ gpuExponent, "\n")
+print("Exponent:\n")
+print("\t[[1,2], [1,2]] ^ 3 = ", [[1,2], [1,2]]  ^ 3, "\n")
+print("\t[[1,2], [1,2]]  ^ GPU(3) = ", [[1,2], [1,2]]  ^ gpuExponent, "\n")
+#floats
+print("\t[[1.1,2.2], [1.1,2.2]] ^ 3 = ", [[1.1,2.2], [1.1,2.2]] ^ 3, "\n")
+print("\t[[1.1,2.2], [1.1,2.2]] ^ GPU(3) = ", [[1.1,2.2], [1.1,2.2]] ^ gpuExponent, "\n")
+#gpu int
+let squaredIntMat[2][2]:int := [[32, 10], [24,2]]
+print("\tGPU([[32, 10], [24,2]]) ^ 3 = ", squaredIntMat ^ 3, "\n")
+print("\tGPU([[32, 10], [24,2]]) ^ GPU(3) = ", squaredIntMat ^ gpuExponent, "\n")
+#gpu float
+let squaredFloatMat[2][2]:float := [[3.2, 5.32], [1.1, 2.2]]
+print("\tGPU([[3.2, 5.32], [1.1, 2.2]]) ^ 3 = ", squaredFloatMat ^ 3, "\n")
+print("\tGPU([[3.2, 5.32], [1.1, 2.2]]) ^ GPU(3) = ", squaredFloatMat ^ gpuExponent, "\n")
 
 print("Modulus:\n")
 #int
