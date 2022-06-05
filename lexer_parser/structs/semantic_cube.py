@@ -52,25 +52,23 @@ class SemanticCube():
             'GPU_FLOAT_T':'GPU_FLOAT_T',
         }
         basic_equality_ops_bin = {
-            'INT_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T'}) | {
+            'INT_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T', 'STRING_T'}) | {
                 'GPU_INT_T': 'GPU_BOOL_T',
                 'GPU_FLOAT_T': 'GPU_BOOL_T',
                 'GPU_BOOL_T' : 'GPU_BOOL_T',
             },
-            'BOOL_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T'}) | {
+            'BOOL_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T', 'STRING_T'}) | {
                 'GPU_INT_T': 'GPU_BOOL_T',
                 'GPU_FLOAT_T': 'GPU_BOOL_T',
                 'GPU_BOOL_T' : 'GPU_BOOL_T',
             },
-            'FLOAT_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T'}) | {
+            'FLOAT_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T', 'STRING_T'}) | {
                 'GPU_INT_T': 'GPU_BOOL_T',
                 'GPU_FLOAT_T': 'GPU_BOOL_T',
                 'GPU_BOOL_T' : 'GPU_BOOL_T',
             },
-            'STRING_T': _produce_all_same('BOOL_T', but={'GPU_BOOL_T', 'GPU_FLOAT_T', 'GPU_INT_T'}) | {
-                'GPU_INT_T': 'GPU_BOOL_T',
-                'GPU_FLOAT_T': 'GPU_BOOL_T',
-                'GPU_BOOL_T' : 'GPU_BOOL_T',
+            'STRING_T': {
+                'STRING_T' : 'GPU_BOOL_T',
             },
             'GPU_INT_T':_produce_all_same('GPU_BOOL_T'),
             'GPU_FLOAT_T':_produce_all_same('GPU_BOOL_T'),
