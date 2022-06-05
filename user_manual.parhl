@@ -1,71 +1,24 @@
-# PARHL
-
-## To start conda:
-
-```
-$ conda env create -f environment.yml
-$ conda activate parhl
-```
-
-## To test
-
-```
-$ pytest
-```
-
-## Progress
-
-Finished implementation for:
-
-- Lexer
-- Parser
-- Function Directory
-- Variable Directory
-- Const tables
-- If-elsif-else conditionals
-- while/for loops
-- function declaration and instantiation
-- array declaration and accessing
-- virtual machine, most quadruples
-
-Missing implementation for
-
-- virtual machine, read_line, read_file, write_file
-- handle gpu types and gpu operations
-
----
-# PARHL USER MANUAL
-**In this section we reference the file ./user_manual.parhl file.**
-
-## CPU Variable Declaration:
-Code:
-```
+# CPU variable declaration
 let x : int := 5
 let y : float := 2.91
 let z : bool
 z := True
 let q : string := "parhl string!"
-```
 
-## GPU Variable Declaration:
-Code:
-```
+
+# GPU variable declaration
 let g_x : gpu_int := 8
 let g_y : gpu_float := 3.14, g_z : gpu_bool := False
-```
 
-## Tensor Declatation (GPU and CPU):
-Code:
-```
+
+# Tensor declaration (CPU and GPU)
 let tens_x[2][3] : int := [[1, 2, 3], [4, 5, 6]]
 let tens_g_y[2][2] : gpu_float := [[1.5, 2.1], [3.14, 2.91]]
 let tens_g_z[2] : gpu_bool := [True, False]
 let tens_q[1][2] : string := [["parhl", "tensor"]]
-```
 
-## Operations With Primitives:
-Code:
-```
+
+# Operations in primitives
 x := 10
 
 let x1 : int := x + 3 * 5 ^ 2 / 2.5 + y + (x%2)
@@ -80,21 +33,10 @@ print(g_x2, "\n")
 print(x3, "\n")
 print(g_x4, "\n")
 print(x5, "\n")
-```
-Stdout:
-```
-10
-42
-GPU(43.14)
-False
-GPU(True)
-parhl string! concatenated
-```
 
-## Operations With Tensors:
-Code:
-```
+# Operations in tensors
 tens_g_y[0][0] := 3
+
 let tens_g_y1[2][2] : gpu_float := tens_g_y ^ 3
 let tens_g_y2[2][3] : gpu_float := tens_g_y1 ** [[1.0, 2.3, 3.2], [-5.1, 2.8, 3.9]]
 let tens_y3[2][1] : int := tens_x ** [[1],[2],[3]] + [[1000], [2000]]
@@ -103,18 +45,8 @@ print(g_y, "\n")
 print(tens_g_y1, "\n")
 print(tens_g_y2, "\n")
 print(tens_y3, "\n")
-```
-Stdout:
-```
-GPU(3.14)
-GPU([[85.75254000000001, 68.86341000000002], [102.967194, 82.80125100000001]])
-GPU([[-265.45085100000006, 390.04839000000004, 542.9754270000001], [-319.3191861, 468.668049, 652.4198997000001]])
-[[1014], [2032]]
-```
 
-### Broadcasting:
-Code:
-```
+## Broadcasting
 let tens_y4[2][2] : int := [1000, 2000] + [[1, 2], [3, 4]]
 let tens_y5[2][2] : bool := tens_y4 <= 100000
 let tens_y6[2][2]: gpu_bool := tens_g_z or [[True, False], [False, True]]
@@ -122,18 +54,8 @@ let tens_y6[2][2]: gpu_bool := tens_g_z or [[True, False], [False, True]]
 print(tens_y4, "\n")
 print(tens_y5, "\n")
 print(tens_y6, "\n")
-```
-Stdout:
-```
-[[1001, 2002], [1003, 2004]]
-[[True, True], [False, False]]
-GPU([[True, False], [True, True]])
-```
 
-
-## Conditionals:
-Code:
-```
+# Conditionals
 if(True){
     print("We got True", "\n")
 }
@@ -147,16 +69,9 @@ if(tens_y6[0][0]){
 else if((not tens_y6[0][0] and False) or True){
     print("not tens_y6[0][0] and False) or True \t evaluated to: True", "\n")
 }
-```
-Stdout:
-```
-We got True
-tens_y6[0][0] is True
-```
 
-## Loops:
-Code:
-```
+
+# Loops
 let i : int := 0
 while(i < 5){
     # do whatever you want here
@@ -174,28 +89,9 @@ for(let i : int := 0; i < 2; i := i+1){
         print("tens_g_y1[", i, "]","[", j, "] =", tens_g_y1[i][j], "\n")
     }
 }
-```
-Stdout:
-```
-i is worth: 0
-i is worth: 1
-i is worth: 2
-i is worth: 3
-i is worth: 4
-
-i is worth:GPU([[0, 1], [2, 3]])
-i is worth:GPU([[2, 3], [6, 11]])
-
-tens_g_y1[0][0] =GPU(85.75254000000001)
-tens_g_y1[0][1] =GPU(68.86341000000002)
-tens_g_y1[1][0] =GPU(102.967194)
-tens_g_y1[1][1] =GPU(82.80125100000001)
-```
 
 
-## Functions:
-Code:
-```
+# Functions
 let gpu_fibo (n : int) : void {
     let nested_func(n : int) : gpu_float {
         print("inner scope n =", n, "\n")
@@ -217,83 +113,18 @@ let plain_old_rec_fibo (n : int) : int {
 }
 let fibo_10 : int := plain_old_rec_fibo(10)
 print("plain_old_rec_fibo(", 10, ")=", fibo_10, "\n")
-```
-Stdout:
-```
-inner scope n =123
-GPU(3.14)
-fibo(10) = GPU(55)
-plain_old_rec_fibo(10)=89
-```
 
-## Special IO Functinos
 
-Code:
-```
+# Special IO functions
 print("doing a print", "\n")
-```
-Stdout:
-```
-print("doing a print", "\n")
-```
 
-</br>
-
-Code:
-```
 let tens_readline[2][2] : float := read_line(float[2][2])
 print(tens_readline, "\n")
-```
-Stdin:
-```
-[[1.1, 1.2],[1.3,1.4]]
-```
-Stdout:
-```
-[[1.100000023841858, 1.2000000476837158], [1.2999999523162842, 1.399999976158142]]
-```
 
-</br>
-
-Code:
-```
 let prim_readline : int := read_line(int)
 print(prim_readline, "\n")
-```
-Stdin:
-```
-3
-```
-Stdout:
-```
-3
-```
 
-
-</br>
-
-Code:
-```
 write_file("my_output_file", tens_readline)
-```
-my_output_file:
-```
-[[1.100000023841858, 1.2000000476837158], [1.2999999523162842, 1.399999976158142]]
-```
 
-
-</br>
-
-Code:
-```
 let tens_readfile[3][3] : gpu_bool := read_file(bool[3][3], "my_input_file")
 print(tens_readfile, "\n")
-```
-my_input_file:
-```
-[[True, False, True], [False, True, False], [True, True, True]]
-```
-Stdout:
-```
-GPU([[True, False, True], [False, True, False], [True, True, True]])
-```
