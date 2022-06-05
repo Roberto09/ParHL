@@ -58,6 +58,8 @@ class BinExpr(Expression):
             dims_res_func = matpow
         try:
             res_dims = dims_res_func(left_dims, right_dims)
+        except ParhlException as e:
+            raise e
         except Exception:
             raise ParhlException(f"Can not perform {op_name} in tensors with dims {left_dims} and {right_dims}")
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
