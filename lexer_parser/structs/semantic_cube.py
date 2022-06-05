@@ -145,13 +145,16 @@ class SemanticCube():
             'GEQT_BIN': basic_comp_ops_bin,
             'LEQT_BIN': basic_comp_ops_bin,
         }
-    
+
+    def raise_type_error(t_arg1, operator, t_arg2=None):
+        if t_arg2 is not None:
+            raise ParhlException(f"Unsupported binary operation {t_arg1} {operator} {t_arg2}")
+        raise ParhlException(f"Unsupported unary operation {operator} {t_arg1}")
+
     def get_type(self, operator, t_arg1, t_arg2=None):
         try:
             if t_arg2 is not None:
                 return self.semantic_cube[f"{operator}_BIN"][t_arg1][t_arg2]
             return self.semantic_cube[f"{operator}_UN"][t_arg1]
         except:
-            if t_arg2 is not None:
-                raise ParhlException(f"Unsupported binary operation {t_arg1} {operator} {t_arg2}")
-            raise ParhlException(f"Unsupported unary operation {operator} {t_arg1}")
+            SemanticCube.raise_type_error(t_arg1, operator, t_arg2)
