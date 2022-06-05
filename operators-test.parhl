@@ -96,6 +96,7 @@ print("\t1.2 + GPU(4.4) = ", 1.2+gpufVarInit, "\n")
 #gpu int
 let gpuiArithmeticTest : gpu_int := 1
 print("\tGPU(1) + GPU(3) = ", gpuiArithmeticTest + gpuiVarInit, "\n")
+print("\tGPU(1) + GPU(4.4) = ", gpuiArithmeticTest+gpufVarInit, "\n")
 #gpu float
 let gpufArithmeticTest : gpu_float := 1.2
 print("\tGPU(1.2) + GPU(4.4) = ", gpufArithmeticTest + gpufVarInit, "\n")
@@ -103,10 +104,10 @@ print("\tGPU(1.2) + GPU(4.4) = ", gpufArithmeticTest + gpufVarInit, "\n")
 print("\t'hello ' + 'world!' = '", "hello " + "world!", "'\n")
 
 print("Unary Sum:\n")
-print("\t+1", +1, "\n")
-print("\t+1.2", +1.2, "\n")
-print("\t+GPU(1)", +gpuiArithmeticTest, "\n")
-print("\t+GPI(1.2)", +gpufArithmeticTest, "\n")
+print("\t+1 = ", +1, "\n")
+print("\t+1.2 = ", +1.2, "\n")
+print("\t+GPU(1) = ", +gpuiArithmeticTest, "\n")
+print("\t+GPI(1.2) = ", +gpufArithmeticTest, "\n")
 
 print("Binary Minus:\n")
 print("\t3 - 2 = ", 3-2, "\n")
@@ -211,26 +212,34 @@ print("\t1 = True : ", 1 = True, "\n")
 print("\t1 = 'hello' : ", 1 = "hello", "\n")
 print("\t1 = GPU(1) : ", 1 = gpuiArithmeticTest, "\n")
 print("\t1 = GPU(1.2) : ", 1 = gpufArithmeticTest, "\n")
+print("\t1 = GPU(True) : ", 1 = gpubVarInit, "\n")
 #float
 print("\t1.2 = 1.2 : ", 1.2 = 1.2, "\n")
 print("\t1.2 = 'hello' : ", 1.2 = "hello", "\n")
 print("\t1.2 = GPU(1) : ", 1.2 = gpuiArithmeticTest, "\n")
 print("\t1.2 = GPU(1.2) : ", 1.2 = gpufArithmeticTest, "\n")
 print("\t1.0 = True : ", 1.0 = True, "\n")
+print("\t1.0 = GPU(True) : ", 1.0 = gpubVarInit, "\n")
 #bool
 print("\tTrue = 'hello' : ", True = "hello", "\n")
 print("\tTrue = GPU(1) : ", True = gpuiArithmeticTest, "\n")
 print("\tTrue = GPU(1.2) : ", True = gpufArithmeticTest, "\n")
 print("\tTrue = True : ", True = True, "\n")
+print("\tTrue = GPU(True) : ", True = gpubVarInit, "\n")
 #string
 print("\t'hello' = 'hello' : ", "hello" = "hello", "\n")
 print("\t'hello' = GPU(1) : ", "hello" = gpuiArithmeticTest, "\n")
 print("\t'hello' = GPU(1.2) : ", "hello" = gpufArithmeticTest, "\n")
+print("\t'hello' = GPU(True) : ", 'hello' = gpubVarInit, "\n")
 #gpu_int
 print("\tGPU(1) = GPU(1) : ", gpuiArithmeticTest = gpuiArithmeticTest, "\n")
 print("\tGPU(1) = GPU(1.2) : ", gpuiArithmeticTest = gpufArithmeticTest, "\n")
+print("\tGPU(1) = GPU(True) : ", gpuiArithmeticTest = gpubVarInit, "\n")
 #gpu_float
 print("\tGPU(1.2) = GPU(1.2) : ", gpufArithmeticTest = gpufArithmeticTest, "\n")
+print("\tGPU(1.2) = GPU(True) : ", gpuArithmeticTest = gpubVarInit, "\n")
+#gpu_bool
+print("\tGPU(True) = GPU(True) : ", gpubVarInit = gpubVarInit, "\n")
 
 print("Not equals:\n")
 #int
@@ -240,26 +249,34 @@ print("\t1 <> True : ", 1 <> True, "\n")
 print("\t1 <> 'hello' : ", 1 <> "hello", "\n")
 print("\t1 <> GPU(1) : ", 1 <> gpuiArithmeticTest, "\n")
 print("\t1 <> GPU(1.2) : ", 1 <> gpufArithmeticTest, "\n")
+print("\t1 <> GPU(True) : ", 1 <> gpubVarInit, "\n")
 #float
 print("\t1.2 <> 1.2 : ", 1.2 <> 1.2, "\n")
+print("\t1.2 <> True : ", 1.2 <> True, "\n")
 print("\t1.2 <> 'hello' : ", 1.2 <> "hello", "\n")
 print("\t1.2 <> GPU(1) : ", 1.2 <> gpuiArithmeticTest, "\n")
 print("\t1.2 <> GPU(1.2) : ", 1.2 <> gpufArithmeticTest, "\n")
-print("\t1.2 <> True : ", 1.2 <> True, "\n")
+print("\t1.2 <> GPU(True) : ", 1.2 <> gpubVarInit, "\n")
 #bool
 print("\tTrue <> 'hello' : ", True <> "hello", "\n")
+print("\tTrue <> True : ", True <> True, "\n")
 print("\tTrue <> GPU(1) : ", True <> gpuiArithmeticTest, "\n")
 print("\tTrue <> GPU(1.2) : ", True <> gpufArithmeticTest, "\n")
-print("\tTrue <> True : ", True <> True, "\n")
+print("\tTrue <> GPU(True) : ", True <> gpubVarInit, "\n")
 #string
 print("\t'hello' <> 'hello' : ", "hello" <> "hello", "\n")
 print("\t'hello' <> GPU(1) : ", "hello" <> gpuiArithmeticTest, "\n")
 print("\t'hello' <> GPU(1.2) : ", "hello" <> gpufArithmeticTest, "\n")
+print("\t'hello' <> GPU(True) : ", 'hello' <> gpubVarInit, "\n")
 #gpu_int
 print("\tGPU(1) <> GPU(1) : ", gpuiArithmeticTest <> gpuiArithmeticTest, "\n")
 print("\tGPU(1) <> GPU(1.2) : ", gpuiArithmeticTest <> gpufArithmeticTest, "\n")
+print("\tGPU(1) <> GPU(True) : ", gpuiArithmeticTest <> gpubVarInit, "\n")
 #gpu_float
 print("\tGPU(1.2) <> GPU(1.2) : ", gpufArithmeticTest <> gpufArithmeticTest, "\n")
+print("\tGPU(1.2) <> GPU(True) : ", gpuArithmeticTest <> gpubVarInit, "\n")
+#gpu_bool
+print("\tGPU(True) <> GPU(True) : ", gpubVarInit  <> gpubVarInit, "\n")
 
 print("Greater than:\n")
 print("\t2 > 1 : ", 2 > 1, "\n")

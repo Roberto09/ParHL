@@ -5,6 +5,8 @@ Original code comes from: https://github.com/pytorch/pytorch
 """
 
 from typing import List, TypeVar, Union
+
+from .parhl_exceptions import ParhlException
 number = TypeVar('number', bound=Union[int, float])
 
 def broadcast(a: List[int], b: List[int]):
@@ -22,7 +24,7 @@ def broadcast(a: List[int], b: List[int]):
 
         if sizeA != sizeB and sizeA != 1 and sizeB != 1:
             # TODO: only assertion error is bound in C++ compilation right now
-            raise AssertionError(
+            raise ParhlException(
                 "The size of tensor a {} must match the size of tensor b ("
                 "{}) at non-singleton dimension {}".format(sizeA, sizeB, i)
             )
@@ -110,10 +112,10 @@ def matmul(tensor1: List[int], tensor2: List[int]):
 
         return output_shape
     else:
-        assert False, "both  arguments to matmul need to be at least 1D"
+        raise ParhlException("Both  arguments to matmul need to be at least 1D")
 
 def matpow(tensor1: List[int], _: List[int]):
-    assert len(tensor1) == 2, "matrix should be squared"
+    if len(tensor1) != 2: raise ParhlException("Matrix should be squared")
     return matmul(tensor1, tensor1)
 
 def mv(self: List[int], vec: List[int]):
@@ -123,8 +125,8 @@ def mv(self: List[int], vec: List[int]):
     return [self[0]]
 
 def mm(self: List[int], mat2: List[int]):
-    assert len(self) == 2, "self must be a matrix"
-    assert len(mat2) == 2, "mat2 must be a matrix"
+    if len(self) != 2: raise ParhlException("Operand 1 must be a matrix")
+    if len(mat2) != 2: raise ParhlException("Operand 2 must be a matrix")
 
     assert self[1] == mat2[0]
     return [self[0], mat2[1]]
