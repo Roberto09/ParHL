@@ -56,7 +56,10 @@ class BinExpr(Expression):
         except Exception:
             raise ParhlException(f"Can not perform {op_name} in tensors with dims {left_dims} and {right_dims}")
         new_type = ctx.semantic_cube.get_type(op_name, left_var.type, right_var.type)
-        temp_var = ctx.func_dir.new_tens_temp(new_type, res_dims)
+        if len(res_dims) == 0:
+            temp_var = ctx.func_dir.new_temp(new_type)
+        else:
+            temp_var = ctx.func_dir.new_tens_temp(new_type, res_dims)
         ctx.add_quadruple(Quadruple(op_name, (left_var.mem_dir, left_dims), (right_var.mem_dir, right_dims), temp_var.mem_dir))
         return temp_var
 

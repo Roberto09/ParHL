@@ -96,6 +96,7 @@ print("\t1.2 + GPU(4.4) = ", 1.2+gpufVarInit, "\n")
 #gpu int
 let gpuiArithmeticTest : gpu_int := 1
 print("\tGPU(1) + GPU(3) = ", gpuiArithmeticTest + gpuiVarInit, "\n")
+print("\tGPU(1) + GPU(4.4) = ", gpuiArithmeticTest+gpufVarInit, "\n")
 #gpu float
 let gpufArithmeticTest : gpu_float := 1.2
 print("\tGPU(1.2) + GPU(4.4) = ", gpufArithmeticTest + gpufVarInit, "\n")
@@ -103,10 +104,10 @@ print("\tGPU(1.2) + GPU(4.4) = ", gpufArithmeticTest + gpufVarInit, "\n")
 print("\t'hello ' + 'world!' = '", "hello " + "world!", "'\n")
 
 print("Unary Sum:\n")
-print("\t+1", +1, "\n")
-print("\t+1.2", +1.2, "\n")
-print("\t+GPU(1)", +gpuiArithmeticTest, "\n")
-print("\t+GPI(1.2)", +gpufArithmeticTest, "\n")
+print("\t+1 = ", +1, "\n")
+print("\t+1.2 = ", +1.2, "\n")
+print("\t+GPU(1) = ", +gpuiArithmeticTest, "\n")
+print("\t+GPI(1.2) = ", +gpufArithmeticTest, "\n")
 
 print("Binary Minus:\n")
 print("\t3 - 2 = ", 3-2, "\n")

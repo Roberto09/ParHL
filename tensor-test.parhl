@@ -50,4 +50,123 @@ print("Printing gpu_int 2D tensor: ", giMatrix, "\n")
 print("Printing gpu_float 2D tensor: ", gfMatrix, "\n")
 print("Printing gpu_bool 2D tensor: ", gbMatrix, "\n")
 
+print("\n-----ARITHMETIC OPERATORS-----\n")
+print("Binary Sum:\n")
+#int
+print("\t[1,2,3] + [4,5,6] = ", [1,2,3] + [4,5,6], "\n")
+print("\t[1,2,3] + [1.1,2.2,3.3] = ", [1,2,3] + [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] + GPU([32,10,24]) = ", [1,2,3] + giArrInitialized, "\n")
+print("\t[1,2,3] + GPU([3.2,5.32,12.3]) = ", [1,2,3] + gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] + [3.2,5.32,12.3] = ", [1.1,2.2,3.3] + [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] + GPU([32,10,24]) = ", [1.1,2.2,3.3] + giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] + GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] + gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) + GPU([32,10,24]) = ", giArrInitialized + giArrInitialized, "\n")
+print("\tGPU([32,10,24]) + GPU([3.2,5.32,12.3]) = ", giArrInitialized + gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) + GPU([3.2,5.32,12.3]) = ", gfArrInitialized + gfArrInitialized, "\n")
+
+print("Unary Sum:\n")
+print("\t+[1,2,3] = ", +[1,2,3], "\n")
+print("\t+[1.1,2.2,3.3] = ", +[1.1,2.2,3.3], "\n")
+print("\t+GPU([32,10,24]) = ", +giArrInitialized, "\n")
+print("\t+GPU([3.2,5.32,12.3]) = ", +gfArrInitialized, "\n")
+
+print("Binary Minus:\n")
+#int
+print("\t[1,2,3] - [4,5,6] = ", [1,2,3] - [4,5,6], "\n")
+print("\t[1,2,3] - [1.1,2.2,3.3] = ", [1,2,3] - [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] - GPU([32,10,24]) = ", [1,2,3] - giArrInitialized, "\n")
+print("\t[1,2,3] - GPU([3.2,5.32,12.3]) = ", [1,2,3] - gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] - [3.2,5.32,12.3] = ", [1.1,2.2,3.3] - [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] - GPU([32,10,24]) = ", [1.1,2.2,3.3] - giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] - GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] - gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) - GPU([32,10,24]) = ", giArrInitialized - giArrInitialized, "\n")
+print("\tGPU([32,10,24]) - GPU([3.2,5.32,12.3]) = ", giArrInitialized - gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) - GPU([3.2,5.32,12.3]) = ", gfArrInitialized - gfArrInitialized, "\n")
+
+print("Unary Minus:\n")
+print("\t-[1,2,3] = ", -[1,2,3], "\n")
+print("\t-[1.1,2.2,3.3] = ", -[1.1,2.2,3.3], "\n")
+print("\t-GPU([32,10,24]) = ", -giArrInitialized, "\n")
+print("\t-GPU([3.2,5.32,12.3]) = ", -gfArrInitialized, "\n")
+
+print("Division:\n")
+#int
+print("\t[1,2,3] / [4,5,6] = ", [1,2,3] / [4,5,6], "\n")
+print("\t[1,2,3] / [1.1,2.2,3.3] = ", [1,2,3] / [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] / GPU([32,10,24]) = ", [1,2,3] / giArrInitialized, "\n")
+print("\t[1,2,3] / GPU([3.2,5.32,12.3]) = ", [1,2,3] / gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] / [1,2,3] = ", [1.1,2.2,3.3] / [1,2,3], "\n")
+print("\t[1.1,2.2,3.3] / [3.2,5.32,12.3] = ", [1.1,2.2,3.3] / [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] / GPU([32,10,24]) = ", [1.1,2.2,3.3] / giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] / GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] / gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) / [1,2,3] = ", giArrInitialized / [1,2,3], "\n")
+print("\tGPU([32,10,24]) / [1.1, 2.2, 3.3] = ", giArrInitialized / [1.1, 2.2, 3.3], "\n")
+print("\tGPU([32,10,24]) / GPU([32,10,24]) = ", giArrInitialized / giArrInitialized, "\n")
+print("\tGPU([32,10,24]) / GPU([3.2,5.32,12.3]) = ", giArrInitialized / gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3] / [1,2,3] = ", gfArrInitialized / [1,2,3], "\n")
+print("\tGPU([3.2,5.32,12.3] / [1.1, 2.2, 3.3] = ", gfArrInitialized / [1.1, 2.2, 3.3], "\n")
+print("\tGPU([3.2,5.32,12.3] / GPU([32,10,24]) = ", gfArrInitialized / giArrInitialized, "\n")
+print("\tGPU([3.2,5.32,12.3]) / GPU([3.2,5.32,12.3]) = ", gfArrInitialized / gfArrInitialized, "\n")
+
+print("Multiplication:\n")
+#int
+print("\t[1,2,3] * [4,5,6] = ", [1,2,3] * [4,5,6], "\n")
+print("\t[1,2,3] * [1.1,2.2,3.3] = ", [1,2,3] * [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] * GPU([32,10,24]) = ", [1,2,3] * giArrInitialized, "\n")
+print("\t[1,2,3] * GPU([3.2,5.32,12.3]) = ", [1,2,3] * gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] * [3.2,5.32,12.3] = ", [1.1,2.2,3.3] * [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] * GPU([32,10,24]) = ", [1.1,2.2,3.3] * giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] * GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] * gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) * GPU([32,10,24]) = ", giArrInitialized * giArrInitialized, "\n")
+print("\tGPU([32,10,24]) * GPU([3.2,5.32,12.3]) = ", giArrInitialized * gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) * GPU([3.2,5.32,12.3]) = ", gfArrInitialized * gfArrInitialized, "\n")
+
+print("MMult (same dims):\n")
+#int
+print("\t[1,2,3] ** [4,5,6] = ", [1,2,3] ** [4,5,6], "\n")
+print("\t[1,2,3] ** [1.1,2.2,3.3] = ", [1,2,3] ** [1.1,2.2,3.3], "\n")
+print("\t[1,2,3] ** GPU([32,10,24]) = ", [1,2,3] ** giArrInitialized, "\n")
+print("\t[1,2,3] ** GPU([3.2,5.32,12.3]) = ", [1,2,3] ** gfArrInitialized, "\n")
+#floats
+print("\t[1.1,2.2,3.3] ** [3.2,5.32,12.3] = ", [1.1,2.2,3.3] ** [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] ** GPU([32,10,24]) = ", [1.1,2.2,3.3] ** giArrInitialized, "\n")
+print("\t[1.1,2.2,3.3] ** GPU([3.2,5.32,12.3]) = ", [1.1,2.2,3.3] ** gfArrInitialized, "\n")
+#gpu int
+print("\tGPU([32,10,24]) ** GPU([32,10,24]) = ", giArrInitialized ** giArrInitialized, "\n")
+print("\tGPU([32,10,24]) ** GPU([3.2,5.32,12.3]) = ", giArrInitialized ** gfArrInitialized, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) ** GPU([3.2,5.32,12.3]) = ", gfArrInitialized ** gfArrInitialized, "\n")
+
+print("MMult (inverted dims):\n")
+let giArrInverted[3][1] : gpu_int := [[32],[10],[24]]
+let gfArrInverted[3][1] : gpu_float := [[3.2],[5.32],[12.3]]
+
+#int
+print("\t[1,2,3] ** [[4],[5],[6]] = ", [1,2,3] ** [[4],[5],[6]], "\n")
+print("\t[1,2,3] ** [[1.1],[2.2],[3.3]] = ", [1,2,3] ** [[1.1],[2.2],[3.3]], "\n")
+print("\t[1,2,3] ** GPU([[32],[10],[24]]) = ", [1,2,3] ** giArrInverted, "\n")
+print("\t[1,2,3] ** [[3.2],[5.32],[12.3]] = ", [1,2,3] ** gfArrInverted, "\n")
+#floats
+print("\t[1.1,2.2,3.3] ** [3.2,5.32,12.3] = ", [1.1,2.2,3.3] ** [3.2,5.32,12.3], "\n")
+print("\t[1.1,2.2,3.3] ** GPU([[32],[10],[24]]) = ", [1.1,2.2,3.3] ** giArrInverted, "\n")
+print("\t[1.1,2.2,3.3] ** [[3.2],[5.32],[12.3]] = ", [1.1,2.2,3.3] ** gfArrInverted, "\n")
+#gpu int
+print("\tGPU([32,10,24]) ** GPU([[32],[10],[24]]) = ", giArrInitialized ** giArrInverted, "\n")
+print("\tGPU([32,10,24]) ** [[3.2],[5.32],[12.3]] = ", giArrInitialized ** gfArrInverted, "\n")
+#gpu float
+print("\tGPU([3.2,5.32,12.3]) ** [[3.2],[5.32],[12.3]] = ", gfArrInitialized ** gfArrInverted, "\n")
+
+
 print("\nDone.")
