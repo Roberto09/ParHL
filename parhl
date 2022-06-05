@@ -86,12 +86,14 @@ class MemoryManager():
         self.mem_stack[fid][-1][tid][idx:last] = tens_w_vals
 
 def _bin_op_tens(q, mem, op):
+    dev_to_use = DEVICE if q[1][0][3] >= 4 or q[2][0][3] >= 4 else 'cpu'
     l_dir, l_dims = q[1]
     r_dir, r_dims = q[2]
     l_size = reduce(lambda x,y : x*y, l_dims + [1])
     r_size = reduce(lambda x,y : x*y, r_dims + [1])
-    l_tens = mem.get_mem(l_dir, l_size).view(l_dims)
-    r_tens = mem.get_mem(r_dir, r_size).view(r_dims)
+    # .to(dev_to_use) does not cause a new malloc unless the device is different
+    l_tens = mem.get_mem(l_dir, l_size).view(l_dims).to(dev_to_use)
+    r_tens = mem.get_mem(r_dir, r_size).view(r_dims).to(dev_to_use)
     res_tens = op(l_tens, r_tens).view(-1) # back to 1d
     mem.set_mem_w_val(q[3], res_tens, len(res_tens))
 
@@ -210,9 +212,10 @@ def print_op(q, mem: MemoryManager):
 
 def mmult_op(q, mem):
     if len(q[1]) == 2: # We are dealing with tensors
-        if q[1][0][3] == 4: # GPU_INT_T
+        if (q[1][0][3] == 4 or q[2][0][3] == 4 or # (GPU_INT_T, GPU_INT_T)
+            (q[1][0][3] == 1 ^ q[2][0][3] == 1)): # (CPU_INT_T, GPU_INT_T) or (GPU_INT_T, CPU_INT_T)
             _bin_op_tens(q, mem,
-                lambda x,y: torch.matmul(x.double(), y.double()).long())
+                lambda x,y: torch.matmul(x.double(), y.double()))
         else:
             _bin_op_tens(q, mem, torch.matmul)
     else:
@@ -222,7 +225,7 @@ def exp_op(q, mem):
     if len(q[1]) == 2: # We are dealing with tensors
         if q[1][0][3] == 4: # GPU_INT_T
             _bin_op_tens(q, mem,
-                lambda x,y: torch.matrix_power(x.double(), y).long())
+                lambda x,y: torch.matrix_power(x.double(), y))
         else:
             _bin_op_tens(q, mem, torch.matrix_power)
     else:

@@ -41,6 +41,12 @@ def maybe_wrap_dim(dim: int, dim_post_expr: int, wrap_scalar: bool = True):
         dim += dim_post_expr
     return dim
 
+def _copy(self: List[int]):
+    out: List[int] = []
+    for elem in self:
+        out.append(elem)
+    return out
+
 def unsqueeze(li: List[int], dim: int):
     dim = maybe_wrap_dim(dim, len(li) + 1)
     out = _copy(li)
