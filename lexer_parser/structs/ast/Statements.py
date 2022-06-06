@@ -246,7 +246,8 @@ class Ret(Statement):
     def gen_impl(self, ctx: ParseContext):
         expr_var = self.expr.gen(ctx)
         curr_func = ctx.func_dir.curr_func
-        
+        if curr_func.name == 'glob':
+            raise ParhlException(f"Cannot return outside of function")
         if curr_func.type == 'VOID':
             raise ParhlException(f"Function {curr_func.name} is of type void, cannot return value")
         var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
