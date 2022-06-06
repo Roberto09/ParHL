@@ -6,6 +6,9 @@ import torch
 
 DEVICE = "cpu"
 
+"""
+Handles memory allocation, setting and retreiving values from memory.
+"""
 class MemoryManager():
     def __init__(self, func_dir):
         # track memory relevant information
@@ -347,6 +350,7 @@ def main():
         ir = ir_file.read()
         compiler_dict = json.loads(ir)
     func_dir = compiler_dict["func_dir"]
+    print(func_dir)
     quads = compiler_dict["quads"]
     setup_device()
     run_global(func_dir, quads)
