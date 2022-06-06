@@ -269,8 +269,10 @@ class ParhlParser(Parser):
     def func_type_void(self, p):
         return p.lineno, p[0]
 
-    @_('RETURN expr')
+    @_('RETURN expr', 'RETURN')
     def ret(self, p):
+        if len(p) == 1:
+            return Ret(p.lineno)
         return Ret(p.lineno, p[1])
 
     @_('statements eos', 'block_statements')

@@ -239,7 +239,7 @@ class FuncDecl(Statement):
         ctx.set_goto_position(goto_index) # fill goto
 
 class Ret(Statement):
-    def __init__(self, line, expr):
+    def __init__(self, line, expr=Empty()):
         super().__init__(line)
         self.expr = expr
 
@@ -249,11 +249,16 @@ class Ret(Statement):
         if curr_func.name == 'glob':
             raise ParhlException(f"Cannot return outside of function")
         if curr_func.type == 'VOID':
-            raise ParhlException(f"Function {curr_func.name} is of type void, cannot return value")
-        var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
+            if expr_var != None:
+               raise ParhlException(f"Function {curr_func.name} is of type void, cannot return value")
+            ctx.add_quadruple(Quadruple('ENDFUNC'))
+        else:
+            if expr_var == None:
+                raise ParhlException(f"Must return value of type {curr_func.type}")
+            var_type = ctx.semantic_cube.get_type('ASSIG', curr_func.type, expr_var.type)
+            # If not void, curr_func.func_var must exist
+            ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=curr_func.func_var.mem_dir))
 
-        # If not void, curr_func.func_var must exist
-        ctx.add_quadruple(Quadruple('RETURN', expr_var.mem_dir, result=curr_func.func_var.mem_dir))
 
 class FuncCall(Statement):
     def __init__(self, line, id, args_seq):
