@@ -74,7 +74,7 @@ parhl string! concatenated
 
 Here we would like to note some of the interesting features of the compiler as we allow special operations with tensors:
 - We can do matrix multiplication of 2 tensors using the ** operator.
-- We can do emelmentwise multiplication of 2 tensors using the * operator.
+- We can do elementwise multiplication of 2 tensors using the * operator.
 - We can raise matrices to a given integer scalar by using the ^ operator
 - In general we can do all elementwise operations among tensors such as +, -, /, %, *, as long as the dimensions of this tensors allow it.
 
